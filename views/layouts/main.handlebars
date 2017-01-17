@@ -1,3 +1,21 @@
-<script>
-  window.top.location.href = 'http://{{shop}}/admin/oauth/authorize?client_id={{apiKey}}&scope={{scope}}&redirect_uri=https://{{appUrl}}/compliancy-connector/auth&state={{nonce}}'
-</script>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Ship Compliant</title>
+  <link href="/css/uptown.css" rel="stylesheet" />
+  <script src="//cdn.shopify.com/s/assets/external/app.js"></script>
+  <script type="text/javascript">
+    ShopifyApp.init({
+      apiKey: "{{apiKey}}",
+      shopOrigin: "https://{{shop}}",
+      debug: true
+    });
+  </script>
+</head>
+
+<body>
+  {{{body}}}
+  <script src="/js/app.js"></script>
+</body>
+</html>

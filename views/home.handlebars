@@ -1,12 +1,33 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Example App</title>
-</head>
-<body>
+<main>
+  <header>
+    <h1>Compliancy Connector</h1>
+  </header>
+  <section class="full-width">
+    <div class="column two">
 
-    {{{body}}}
+    </div>
+    <article class="column eight">
+      <div class="card">
+        <form action="/add-credentials" method="POST">
+          <div class="row">
+            <label for="username">Username: </label>
+            <input type="text" name="username" value="">
+          </div>
+          <div class="row">
+            <label for="password">Password: </label>
+            <input type="password" name="password" value="">
+          </div>
+          <div class="row">
+            <label for="partnerKey">Partner key: </label>
+            <input type="text" name="partnerKey" value="">
+          </div>
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </article>
+    <div class="column two">
 
-</body>
-</html>
+    </div>
+  </section>
+  <footer></footer>
+</main>

@@ -1,7 +1,9 @@
 const express = require('express');
 const app = express();
 const crypto = require('crypto');
+const path = require('path');
 const rp = require('request-promise');
+const bodyParser = require('body-parser')
 const Shopify = require('shopify-api-node');
 const soap = require('soap');
 const parseString = require('xml2js').parseString;
@@ -15,6 +17,8 @@ app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('views', './views')
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(express.static(path.join(__dirname, 'public')));
 
 const shopify = new Shopify({
   shopName: 'UWA-dev',
@@ -29,8 +33,8 @@ soap.createClient(url, function (err, client) {
 
 })
 
-app.get('/compliancy-connector/', function(req, res) {
-  res.send('hello');
+app.get('/', function(req, res) {
+  res.render('home')
 })
 
 app.get('/compliancy-connector/install', function (req, res) {
@@ -38,9 +42,9 @@ app.get('/compliancy-connector/install', function (req, res) {
   const scopes = "read_orders,read_products,write_orders"
   const nonce = crypto.randomBytes(48).toString('hex')
   app.set('nonce', nonce);
-  // const install_url =
-  //   `http://${shop}/admin/oauth/authorize?client_id=${config.API_KEY}&scope=${scopes}&redirect_uri=https://${app_url}/compliancy-connector/auth&state=${nonce}`
-    res.render('home', {shop: shop, apiKey: config.API_KEY, scope: scopes, appUrl: app_url, nonce:nonce})
+  const install_url =
+    'http://' + shop + '/admin/oauth/authorize?client_id=' + config.API_KEY + '&scope=' + scopes + '&redirect_uri=https://' + app_url + '/compliancy-connector/auth&state=' + nonce
+    res.render('iframe', { layout: false, url: install_url })
 })
 
 app.get('/compliancy-connector/auth', function (req, res) {
@@ -72,17 +76,19 @@ app.get('/compliancy-connector/auth', function (req, res) {
       body: reqBody
     })
     .then(function (body) {
-      console.log('access', body.access_token);
+      const token = body.access_token
       app.set('access_token', body.access_token);
-    })
-    .catch(function(err) {
-      throw err
+      const shopify = new Shopify({
+        shopName: `${shop}`,
+        accessToken: `${token}`
+      });
     })
   }
+  res.render('home', {apiKey: config.API_KEY, shop: shop})
+})
 
-  res.redirect(`http://${shop}/admin/apps/compliancy-connector`)
-
-  res.end()
+app.post('/add-credentials', function(req, res) {
+  console.log(req.body);
 })
 
 
