@@ -1,0 +1,25 @@
+{
+  "name": "ship-compliant",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.0",
+    "express-handlebars": "^3.0.0",
+    "js2xmlparser": "^2.0.2",
+    "oauth": "^0.9.15",
+    "request": "^2.79.0",
+    "request-promise": "^4.1.1",
+    "shopify-api-node": "^2.3.0",
+    "shopify-token": "^3.0.0",
+    "xml2js": "^0.4.17"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}
