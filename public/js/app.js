@@ -1,3 +1,5 @@
 ShopifyApp.ready(function(){
-  // alert("Ready");
+  ShopifyApp.Bar.initialize({
+      title: 'Compliancy Connector',
+    });
 });
