@@ -12,6 +12,7 @@ const soap = require('soap');
 const parseString = require('xml2js').parseString;
 const js2xmlparser = require("js2xmlparser");
 const config = require('./.config')
+const constants = require('./constants')
 
 // TODO: move to config file
 const app_url = 'cbd13b69.ngrok.io'
@@ -213,8 +214,22 @@ app.post('/add-credentials', function(req, res) {
 
 app.post('/compliancy-connector/checkouts', function (req, res) {
   console.log('we got an order');
-  console.log(req.body);
+  console.log(req.body );
   res.sendStatus(200).end();
+})
+
+app.post('/compliancy-connector/zip-check', function (req, res) {
+  const zip = req.body.zip
+  rp({
+    url: `https://maps.googleapis.com/maps/api/geocode/json?address=${zip}&key=${config.GM_API_KEY}`,
+    method: 'GET',
+    json: true
+  })
+  .then(function(response) {
+    const state = response.results[0]["address_components"][4]["short_name"]
+    console.log(state);
+    constants.states.indexOf(state) !== -1 && res.sendStatus(200).end();
+  })
 })
 
 app.listen(3030, function () {

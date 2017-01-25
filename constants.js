@@ -60,3 +60,5 @@ const req = {
     }
   }
 }
+
+const states = ['AK', 'CA', 'CO', 'DC', 'FL', 'HI', 'IA', 'ID', 'IN', 'KS', 'LA', 'MA', 'MD', 'ME', 'MN', 'MO', 'MT', 'NC', 'ND', 'NE', 'NH', 'NJ', 'NM', 'NV', 'OR', 'SC', 'TN', 'VA', 'VT', 'WA', 'WI', 'WV', 'WY']
