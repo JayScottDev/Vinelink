@@ -284,10 +284,6 @@ app.post('/compliancy-connector/checkouts', function (req, res) {
     }
 
     soap.createClient(scUrl, function(err, client) {
-       client.setSecurity(new soap.BasicAuthSecurity(
-         'vin65ws@universalwinealliance.com',
-         'Vin65SC'
-       ));
        client
        .CoreService
        .CoreServiceSoap12
@@ -305,7 +301,7 @@ app.post('/compliancy-connector/checkouts', function (req, res) {
 //ZIP CHECK
 
 app.get('/compliancy-connector/zip-check', function (req, res) {
-  res.render('zipcheck', { layout: false})
+  res.sendFile(path.join(__dirname, 'public/zipcheck.html'))
 })
 
 app.post('/compliancy-connector/zip-check', function (req, res) {
