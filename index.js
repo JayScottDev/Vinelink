@@ -15,27 +15,27 @@ const config = require('./.config')
 const constants = require('./constants')
 
 // TODO: move to config file
-const app_url = '7729516d.ngrok.io'
+const app_url = 'compliancy-connector.herokuapp.com'
 const scUrl = 'https://ws-dev.shipcompliant.com/services/1.2/coreservice.asmx?WSDL'
 
-const dbConfig = {
-  user: 'admin',
-  database: 'compliancy-connector',
-  password: 'm3t0nymy!',
-  host: 'localhost',
-  port: 5432,
-  max: 10,
-  idleTimeoutMillis: 30000,
-}
-
-const client = new pg.Client(dbConfig);
-
-client.connect(function(err) {
-  if (err) {
-    throw err
-  }
-  console.log('we connected');
-})
+// const dbConfig = {
+//   user: 'admin',
+//   database: 'compliancy-connector',
+//   password: 'm3t0nymy!',
+//   host: 'localhost',
+//   port: 5432,
+//   max: 10,
+//   idleTimeoutMillis: 30000,
+// }
+//
+// const client = new pg.Client(dbConfig);
+//
+// client.connect(function(err) {
+//   if (err) {
+//     throw err
+//   }
+//   console.log('we connected');
+// })
 
 
 
@@ -230,8 +230,8 @@ app.post('/compliancy-connector/checkouts', function (req, res) {
       Request: {
         Security: {
           PartnerKey: 'XXXXXXXX-XXXX-XXXX-XXXXXXXXXXXXXXXX',
-          Password: password,
-          Username: username,
+          Password: 'Password1',
+          Username: 'metonymyws@shipcompliant.com',
         },
         AddressOption: {
           RejectIfAddessSuggested: false,
@@ -318,6 +318,6 @@ app.post('/compliancy-connector/zip-check', function (req, res) {
   })
 })
 
-app.listen(3030, function () {
+app.listen(process.env.PORT || 3030 , function () {
   console.log('Listening on port 3030...');
 })
