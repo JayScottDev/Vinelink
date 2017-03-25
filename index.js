@@ -13,6 +13,7 @@ const parseString = require('xml2js').parseString;
 const js2xmlparser = require("js2xmlparser");
 const config = require('./.config')
 const constants = require('./constants')
+const utils = require('./utls')
 
 // TODO: move to config file
 const app_url = 'compliancy-connector.herokuapp.com'
@@ -37,7 +38,7 @@ const scUrl = 'https://ws-dev.shipcompliant.com/services/1.2/coreservice.asmx?WS
 //   console.log('we connected');
 // })
 
-
+utils.generateDOB()
 
 //VIEW
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));

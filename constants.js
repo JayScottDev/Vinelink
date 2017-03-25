@@ -62,6 +62,11 @@ const items = {
   },
 }
 
+const ages = {
+  max: 820454400000
+  min: -725846400000
+}
+
 module.exports = {
   states: ['AK', 'CA', 'CO', 'DC', 'FL', 'HI', 'IA', 'ID', 'IN', 'KS', 'LA', 'MA', 'MD', 'ME', 'MN', 'MO', 'MT', 'NC', 'ND', 'NE', 'NH', 'NJ', 'NM', 'NV', 'OR', 'PA', 'SC', 'TN', 'VA', 'VT', 'WA', 'WI', 'WV', 'WY']
 }
