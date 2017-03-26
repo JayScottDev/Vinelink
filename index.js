@@ -13,11 +13,13 @@ const parseString = require('xml2js').parseString;
 const js2xmlparser = require("js2xmlparser");
 const config = require('./.config')
 const constants = require('./constants')
-const utils = require('./utls')
+const utils = require('./utils')
 
 // TODO: move to config file
-const app_url = 'compliancy-connector.herokuapp.com'
+const app_url = 'c623b0cc.ngrok.io'
 const scUrl = 'https://ws-dev.shipcompliant.com/services/1.2/coreservice.asmx?WSDL'
+const user = 'metonymyws@shipcompliant.com'
+const pass = 'Password1'
 
 // const dbConfig = {
 //   user: 'admin',
@@ -38,7 +40,6 @@ const scUrl = 'https://ws-dev.shipcompliant.com/services/1.2/coreservice.asmx?WS
 //   console.log('we connected');
 // })
 
-utils.generateDOB()
 
 //VIEW
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
@@ -57,7 +58,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/compliancy-connector/install', function (req, res) {
   const shop = req.query.shop;
-  const scopes = "read_orders,read_products,write_orders"
+  const scopes = "read_orders,read_products,write_orders, write_products"
   const nonce = crypto.randomBytes(48).toString('hex')
   app.set('nonce', nonce);
   const install_url =
@@ -118,71 +119,71 @@ app.get('/compliancy-connector', function(req, res) {
     accessToken: access
   })
 
-  rp({
-    url: 'https://uwa-dev.myshopify.com/admin/webhooks/452591629.json',
-    method: 'GET',
-    headers: {
-      'X-Shopify-Access-Token': access,
-    },
-    json: true,
-  })
-
-
-  rp({
-    url: 'https://uwa-dev.myshopify.com/admin/webhooks.json',
-    method: 'GET',
-    headers: {
-      'X-Shopify-Access-Token': access,
-    },
-    json: true,
-    // body: {
-    //   "webhook": {
-    //     "topic": "orders/paid",
-    //     "address": `https://${app_url}/compliancy-connector/checkouts`,
-    //     "format": "json"
-    //   }
-    // }
-  }).then(function(response) {
-    console.log('webhooks', response);
-    const webhooks = response.webhooks
-    const orders = false
-
-    webhooks.forEach(function (webhook) {
-      console.log(webhook.topic);
-      if (webhook.topic === "orders/create") {
-        orders = true
-      }
-    })
-
-    if (!orders) {
-      rp({
-        url: 'https://uwa-dev.myshopify.com/admin/webhooks.json',
-        method: 'GET',
-        headers: {
-          'X-Shopify-Access-Token': access,
-        },
-        json: true,
-        body: {
-          "webhook": {
-            "topic": "orders/create",
-            "address": `https://${app_url}/compliancy-connector/checkouts`,
-            "format": "json"
-          }
-        }
-      })
-      .then(function (response) {
-        console.log('orders webhook created.', response);
-      })
-      .catch(function (err) {
-        throw err;
-      })
-    }
-  })
-  .catch(function (err) {
-    if (err) {
-      console.log(err);
-    }
-  })
+  // rp({
+  //   url: 'https://ship-compliant-dev.myshopify.com/admin/webhooks/452591629.json',
+  //   method: 'GET',
+  //   headers: {
+  //     'X-Shopify-Access-Token': access,
+  //   },
+  //   json: true,
+  // })
+  //
+  //
+  // rp({
+  //   url: 'https://ship-compliant-dev.myshopify.com/admin/webhooks.json',
+  //   method: 'GET',
+  //   headers: {
+  //     'X-Shopify-Access-Token': access,
+  //   },
+  //   json: true,
+  //   // body: {
+  //   //   "webhook": {
+  //   //     "topic": "orders/paid",
+  //   //     "address": `https://${app_url}/compliancy-connector/checkouts`,
+  //   //     "format": "json"
+  //   //   }
+  //   // }
+  // }).then(function(response) {
+  //   console.log('webhooks', response);
+  //   const webhooks = response.webhooks
+  //   const orders = false
+  //
+  //   webhooks.forEach(function (webhook) {
+  //     console.log(webhook.topic);
+  //     if (webhook.topic === "orders/create") {
+  //       orders = true
+  //     }
+  //   })
+  //
+  //   if (!orders) {
+  //     rp({
+  //       url: 'https://ship-compliant-dev.myshopify.com/admin/webhooks.json',
+  //       method: 'GET',
+  //       headers: {
+  //         'X-Shopify-Access-Token': access,
+  //       },
+  //       json: true,
+  //       body: {
+  //         "webhook": {
+  //           "topic": "orders/create",
+  //           "address": `https://${app_url}/compliancy-connector/checkouts`,
+  //           "format": "json"
+  //         }
+  //       }
+  //     })
+  //     .then(function (response) {
+  //       console.log('orders webhook created.', response);
+  //     })
+  //     .catch(function (err) {
+  //       throw err;
+  //     })
+  //   }
+  // })
+  // .catch(function (err) {
+  //   if (err) {
+  //     console.log(err);
+  //   }
+  // })
 
   res.render('home', {apiKey: config.API_KEY, shop: app.get('shop') })
 })
@@ -230,7 +231,7 @@ app.post('/compliancy-connector/checkouts', function (req, res) {
     const req = {
       Request: {
         Security: {
-          PartnerKey: 'XXXXXXXX-XXXX-XXXX-XXXXXXXXXXXXXXXX',
+          PartnerKey: '', //leave blank for development
           Password: 'Password1',
           Username: 'metonymyws@shipcompliant.com',
         },
@@ -245,7 +246,7 @@ app.post('/compliancy-connector/checkouts', function (req, res) {
             City: result.billing_address.city,
             Company: result.billing_address.company,
             Country: result.billing_address.country_code,
-            DateOfBirth: '', //Unix Timestamp,
+            DateOfBirth: utils.generateDOB(),
             Email: '',
             FirstName: result.billing_address.first_name,
             LastName: result.billing_address.last_name,
@@ -256,14 +257,14 @@ app.post('/compliancy-connector/checkouts', function (req, res) {
             Zip1: result.billing_address.zip,
           },
           CustomerKey: result.customer.id,
-          FulfillmentType: '', //club or daily
+          FulfillmentType: 'club', //club or daily
           OrderType: 'Internet',
           PurchaseDate: result.created_at, //Unix time stamp
           SalesOrderKey: result.order_number,
           Shipments: {
             Shipment: {
               LicenseRelationship: 'SupplierToConsumer',
-              ShipDate: '', //Unix Timestamp, this field is required, but unknown
+              ShipDate: Date.now(), //Unix Timestamp, this field is required, but unknown, setting to current date for dev only
               shipmentItems: items,
               ShipmentKey: result.shipping_lines.id,
               ShipmentStatus: 'PaymentAccepted',
@@ -299,25 +300,130 @@ app.post('/compliancy-connector/checkouts', function (req, res) {
   })
 })
 
-//ZIP CHECK
+// UWA ZIP CHECK
 
-app.get('/compliancy-connector/zip-check', function (req, res) {
-  res.sendFile(path.join(__dirname, 'public/zipcheck.html'))
+// app.get('/compliancy-connector/zip-check', function (req, res) {
+//   res.sendFile(path.join(__dirname, 'public/zipcheck.html'))
+// })
+//
+// app.post('/compliancy-connector/zip-check', function (req, res) {
+//   const zip = req.body.zip
+//   rp({
+//     url: `https://maps.googleapis.com/maps/api/geocode/json?address=${zip}&key=${config.GM_API_KEY}`,
+//     method: 'GET',
+//     json: true
+//   })
+//   .then(function(response) {
+//     const state = response.results[0]["address_components"][3]["short_name"]
+//     console.log(state);
+//     constants.states.indexOf(state) !== -1 ? res.render('zipcheck', { layout: false, data:{state: state, success:true}}) : res.render('zipcheck', { layout: false, data:{state: state, failure:true}})
+//   })
+// })
+
+//APP ZIP CHECK
+
+app.post('/compliancy-connector/zip-chcek', function(req, res) {
+  console.log('request for zip check');
+  console.log(req.body.total);
+  const total = parseInt(req.body.total)
+  console.log('total', total);
+  const supplierReq = {
+    Request: {
+      Security: {
+        PartnerKey: '',
+        Password: pass,
+        Username: user,
+      },
+      Address: {
+        Zip1: req.body.zip,
+      },
+      SaleType: 'Offsite'
+    }
+  }
+
+  const taxReq= {
+    Request: {
+      Security: {
+        PartnerKey: '',
+        Password: pass,
+        Username: user,
+      },
+      Address: {
+        Zip1: req.body.zip,
+      },
+      TaxSaleType: 'Offsite'
+    }
+  }
+
+  res.set({
+    'Access-Control-Allow-Origin': '*'
+  })
+  soap.createClient(constants.urls.supplierService, function(err, client) {
+     client
+     .SupplierService
+     .SupplierServiceSoap12
+     .IsShippingAvailable(supplierReq, function(err, result) {
+       if (err) {
+        throw err;
+        res.sendStatus(500)
+      } else if (!result.IsShippingAvailableResult.IsShippingAvailable) {
+        console.log('unable to ship');
+        res.json({
+          success: false,
+          message: "shipping unavailable to this address"
+        }).end()
+      }
+
+      soap.createClient(constants.urls.taxService, function(err, client) {
+         client
+         .TaxService
+         .TaxServiceSoap12
+         .GetSalesTaxRatesByAddress(taxReq, function(err, result) {
+           if (err) {
+            throw err;
+           }
+           var tax = result.GetSalesTaxRatesByAddressResult.TaxRates.WineSalesTaxPercent
+           console.log('tax', tax);
+           var afterTax = (tax * 0.01) * (total * .01)
+           console.log('after tax', afterTax);
+           console.log(app.get('access_token'));
+           const access = app.get('access_token')
+           rp({
+             method: 'POST',
+             url: 'https://ship-compliant-dev.myshopify.com/admin/products.json',
+             headers: {
+               'X-Shopify-Access-Token': access,
+             },
+             json: true,
+             body: {
+               "product": {
+                "title": "Compliancy Fee",
+                "body_html": "<strong>Compliancy Fee<\/strong>",
+                "vendor": "NA",
+                "product_type": "FEE",
+                "variants": [
+                  {
+                    "option1": "State Name",
+                    "price": afterTax,
+                    "sku": "123"
+                  }
+                ]
+              }
+            }
+          }).then(function(result) {
+            console.log(result.product.variants[0].id);
+            const variantID = result.product.variants[0].id
+            res.json({
+              id: variantID
+            })
+          })
+         })
+      });
+
+     })
+  });
 })
 
-app.post('/compliancy-connector/zip-check', function (req, res) {
-  const zip = req.body.zip
-  rp({
-    url: `https://maps.googleapis.com/maps/api/geocode/json?address=${zip}&key=${config.GM_API_KEY}`,
-    method: 'GET',
-    json: true
-  })
-  .then(function(response) {
-    const state = response.results[0]["address_components"][3]["short_name"]
-    console.log(state);
-    constants.states.indexOf(state) !== -1 ? res.render('zipcheck', { layout: false, data:{state: state, success:true}}) : res.render('zipcheck', { layout: false, data:{state: state, failure:true}})
-  })
-})
 
 app.listen(process.env.PORT || 3030 , function () {
   console.log('Listening on port 3030...');
