@@ -318,7 +318,7 @@ app.post('/compliancy-connector/zip-chcek', function(req, res) {
       })
     }
   })
-      //if shipping is available get tax rate based on zip
+      //if shipping is available get tax rate based on zip - moving this to its own function and promisifying it.
       soap.createClient(constants.urls.taxService, function(err, client) {
          client
          .TaxService
