@@ -3,6 +3,7 @@ const app = express();
 const exphbs  = require('express-handlebars');
 const morgan = require('morgan')
 const path = require('path');
+const Promise = require('promise')
 const bodyParser = require('body-parser')
 const crypto = require('crypto');
 const rp = require('request-promise');
@@ -14,31 +15,38 @@ const js2xmlparser = require("js2xmlparser");
 const config = require('./.config')
 const constants = require('./constants')
 const utils = require('./utils')
+const shipcompliant = require('./shipcompliantmethods')
 
 // TODO: move to config file
-const app_url = 'c623b0cc.ngrok.io'
+//change app url to whatever ngrok gives you, also need to change the url in shopify app settings
+const app_url = 'e8962486.ngrok.io'
 const scUrl = 'https://ws-dev.shipcompliant.com/services/1.2/coreservice.asmx?WSDL'
 const user = 'metonymyws@shipcompliant.com'
 const pass = 'Password1'
+const auth = {
+  PartnerKey: '',
+  Password: pass,
+  Username: user,
+}
 
-// const dbConfig = {
-//   user: 'admin',
-//   database: 'compliancy-connector',
-//   password: 'm3t0nymy!',
-//   host: 'localhost',
-//   port: 5432,
-//   max: 10,
-//   idleTimeoutMillis: 30000,
-// }
-//
-// const client = new pg.Client(dbConfig);
-//
-// client.connect(function(err) {
-//   if (err) {
-//     throw err
-//   }
-//   console.log('we connected');
-// })
+const dbConfig = {
+  user: 'admin',
+  database: 'compliancy-connector',
+  password: 'm3t0nymy!',
+  host: 'localhost',
+  port: 5432,
+  max: 10,
+  idleTimeoutMillis: 30000,
+}
+
+const client = new pg.Client(dbConfig);
+
+client.connect(function(err) {
+  if (err) {
+    throw err
+  }
+  console.log('we connected');
+})
 
 
 //VIEW
@@ -108,7 +116,7 @@ app.get('/compliancy-connector/auth', function (req, res) {
 })
 
 
-//APP ROOT
+//APP PAGES
 
 app.get('/compliancy-connector', function(req, res) {
   const shop = app.get('shop').split('.')[0]
@@ -119,75 +127,20 @@ app.get('/compliancy-connector', function(req, res) {
     accessToken: access
   })
 
-  // rp({
-  //   url: 'https://ship-compliant-dev.myshopify.com/admin/webhooks/452591629.json',
-  //   method: 'GET',
-  //   headers: {
-  //     'X-Shopify-Access-Token': access,
-  //   },
-  //   json: true,
-  // })
-  //
-  //
-  // rp({
-  //   url: 'https://ship-compliant-dev.myshopify.com/admin/webhooks.json',
-  //   method: 'GET',
-  //   headers: {
-  //     'X-Shopify-Access-Token': access,
-  //   },
-  //   json: true,
-  //   // body: {
-  //   //   "webhook": {
-  //   //     "topic": "orders/paid",
-  //   //     "address": `https://${app_url}/compliancy-connector/checkouts`,
-  //   //     "format": "json"
-  //   //   }
-  //   // }
-  // }).then(function(response) {
-  //   console.log('webhooks', response);
-  //   const webhooks = response.webhooks
-  //   const orders = false
-  //
-  //   webhooks.forEach(function (webhook) {
-  //     console.log(webhook.topic);
-  //     if (webhook.topic === "orders/create") {
-  //       orders = true
-  //     }
-  //   })
-  //
-  //   if (!orders) {
-  //     rp({
-  //       url: 'https://ship-compliant-dev.myshopify.com/admin/webhooks.json',
-  //       method: 'GET',
-  //       headers: {
-  //         'X-Shopify-Access-Token': access,
-  //       },
-  //       json: true,
-  //       body: {
-  //         "webhook": {
-  //           "topic": "orders/create",
-  //           "address": `https://${app_url}/compliancy-connector/checkouts`,
-  //           "format": "json"
-  //         }
-  //       }
-  //     })
-  //     .then(function (response) {
-  //       console.log('orders webhook created.', response);
-  //     })
-  //     .catch(function (err) {
-  //       throw err;
-  //     })
-  //   }
-  // })
-  // .catch(function (err) {
-  //   if (err) {
-  //     console.log(err);
-  //   }
-  // })
-
   res.render('home', {apiKey: config.API_KEY, shop: app.get('shop') })
 })
 
+app.get('/compliancy-connector/reports', function(req, res) {
+  res.render('reports', { title: 'reports' })
+})
+
+app.get('/compliancy-connector/install-instructions', function(req, res) {
+  res.render('install-instructions', { title: 'install instructions' })
+})
+
+app.get('/compliancy-connector/settings', function(req, res) {
+  res.render('settings', { title: 'settings' })
+})
 
 
 //ADD SHIP COMPLIANT CREDENTIALS
@@ -195,6 +148,8 @@ app.get('/compliancy-connector', function(req, res) {
 app.post('/add-credentials', function(req, res) {
   const username = req.body.username
   const password = req.body.password
+
+  //add user ship compliant creditials to db, still needs encryption
 
   const queryConfig = {
     text: 'INSERT INTO client_info (store_name, username, password) VALUES ($1, $2, $3',
@@ -211,7 +166,9 @@ app.post('/add-credentials', function(req, res) {
   })
 })
 
-//SEND ORDER TO SHIP COMPLIANT
+/*SEND ORDER TO SHIP COMPLIANT -
+  We're using a webhook here, so when a customer completes a checkout, we'll send that to ship compliant
+*/
 
 app.post('/compliancy-connector/checkouts', function (req, res) {
   const result = req.body
@@ -285,6 +242,8 @@ app.post('/compliancy-connector/checkouts', function (req, res) {
       }
     }
 
+    //PersistSalesOrder forces the order sans compliance, will be switching to CommitSalesOrder
+
     soap.createClient(scUrl, function(err, client) {
        client
        .CoreService
@@ -323,17 +282,11 @@ app.post('/compliancy-connector/checkouts', function (req, res) {
 //APP ZIP CHECK
 
 app.post('/compliancy-connector/zip-chcek', function(req, res) {
-  console.log('request for zip check');
-  console.log(req.body.total);
   const total = parseInt(req.body.total)
-  console.log('total', total);
+  //Request bodies for the two api calls
   const supplierReq = {
     Request: {
-      Security: {
-        PartnerKey: '',
-        Password: pass,
-        Username: user,
-      },
+      Security: auth
       Address: {
         Zip1: req.body.zip,
       },
@@ -343,11 +296,7 @@ app.post('/compliancy-connector/zip-chcek', function(req, res) {
 
   const taxReq= {
     Request: {
-      Security: {
-        PartnerKey: '',
-        Password: pass,
-        Username: user,
-      },
+      Security: auth
       Address: {
         Zip1: req.body.zip,
       },
@@ -358,22 +307,18 @@ app.post('/compliancy-connector/zip-chcek', function(req, res) {
   res.set({
     'Access-Control-Allow-Origin': '*'
   })
-  soap.createClient(constants.urls.supplierService, function(err, client) {
-     client
-     .SupplierService
-     .SupplierServiceSoap12
-     .IsShippingAvailable(supplierReq, function(err, result) {
-       if (err) {
-        throw err;
-        res.sendStatus(500)
-      } else if (!result.IsShippingAvailableResult.IsShippingAvailable) {
-        console.log('unable to ship');
-        res.json({
-          success: false,
-          message: "shipping unavailable to this address"
-        }).end()
-      }
 
+  //check if shipping is available
+  shipcompliant.isShippingAvailable(supplierReq)
+  .then(function(result) {
+    if (!result.IsShippingAvailableResult.IsShippingAvailable) {
+      res.json({
+        success: false,
+        message: "shipping unavailable to this address"
+      })
+    }
+  })
+      //if shipping is available get tax rate based on zip
       soap.createClient(constants.urls.taxService, function(err, client) {
          client
          .TaxService
@@ -383,11 +328,11 @@ app.post('/compliancy-connector/zip-chcek', function(req, res) {
             throw err;
            }
            var tax = result.GetSalesTaxRatesByAddressResult.TaxRates.WineSalesTaxPercent
-           console.log('tax', tax);
+           //convert to dollar amount
            var afterTax = (tax * 0.01) * (total * .01)
-           console.log('after tax', afterTax);
-           console.log(app.get('access_token'));
            const access = app.get('access_token')
+
+           //create product in shopify store
            rp({
              method: 'POST',
              url: 'https://ship-compliant-dev.myshopify.com/admin/products.json',
@@ -411,6 +356,7 @@ app.post('/compliancy-connector/zip-chcek', function(req, res) {
               }
             }
           }).then(function(result) {
+            //send the product id to the front end to add to cart
             console.log(result.product.variants[0].id);
             const variantID = result.product.variants[0].id
             res.json({

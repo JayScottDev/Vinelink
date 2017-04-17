@@ -4,6 +4,7 @@
 <head>
   <title>Ship Compliant</title>
   <link href="/css/uptown.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/main.css">
   <script src="//cdn.shopify.com/s/assets/external/app.js"></script>
   <script type="text/javascript">
     ShopifyApp.init({
@@ -15,7 +16,15 @@
 </head>
 
 <body>
-  {{{body}}}
+
+  <main>
+    <header>
+      <h1>Compliancy Connector</h1>
+    </header>
+    {{> nav }}
+    {{{body}}}
+  </main>
+  <footer></footer>
   <script src="/js/app.js"></script>
 </body>
 </html>

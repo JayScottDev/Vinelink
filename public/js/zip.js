@@ -5,8 +5,6 @@ $(function() {
   var placeholder = $('#main')
   var states = ['AK', 'CA', 'CO', 'DC', 'FL', 'HI', 'IA', 'ID', 'IN', 'KS', 'LA', 'MA', 'MD', 'ME', 'MN', 'MO', 'MT', 'NC', 'ND', 'NE', 'NH', 'NJ', 'NM', 'NV', 'OR', 'PA', 'SC', 'TN', 'VA', 'VT', 'WA', 'WI', 'WV', 'WY']
 
-
-  console.log(source);
   $('#confirm').on('click', function(e) {
     e.preventDefault()
     placeholder.empty();
