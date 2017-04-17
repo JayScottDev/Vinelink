@@ -312,13 +312,16 @@ app.post('/compliancy-connector/zip-chcek', function(req, res) {
   shipcompliant.isShippingAvailable(supplierReq)
   .then(function(result) {
     if (!result.IsShippingAvailableResult.IsShippingAvailable) {
+      //record failed attempt with time stamp, cart total, and state
       res.json({
         success: false,
         message: "shipping unavailable to this address"
       })
     }
   })
-      //if shipping is available get tax rate based on zip - moving this to its own function and promisifying it.
+      //if shipping is available get tax rate based on zip - moving this to its own function and promisifying it. Also need to record successful compliance check with tax rate. Commented out code above for the uwa zip check has api call to google built to convert zip to state.
+
+      //given we are writting to a database and trying to handle an api call here, theres probably a point were the database writes will need to get handled by a queue.
       soap.createClient(constants.urls.taxService, function(err, client) {
          client
          .TaxService
