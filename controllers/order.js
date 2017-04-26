@@ -1,3 +1,8 @@
+'use strict';
+
+const utils = require('../utils');
+const constants = require('../constants');
+
 module.exports.sendToSC = async function sendToSC (ctx, next) {
   const result = req.body;
   const shop = ctx.req.headers['x-shopify-shop-domain'];

@@ -54,6 +54,7 @@ router.post('/compliancy-connector/checkouts', controllers.order.sendToSC);
 // })
 
 //APP ZIP CHECK
+const constants = require('./constants');
 
 router.post('/compliancy-connector/zip-chcek', function (req, res) {
   const total = parseInt(req.body.total);
