@@ -4,17 +4,17 @@ const soap = require('soap');
 const parseString = require('xml2js').parseString;
 const js2xmlparser = require('js2xmlparser');
 
-const taxService = 'https://ws-dev.shipcompliant.com/services/1.2/TaxService.asmx?WSDL'
+const taxService = 'https://ws-dev.shipcompliant.com/services/1.2/TaxService.asmx?WSDL';
 
-const supplierService = 'https://ws-dev.shipcompliant.com/services/1.2/SupplierService.asmx?WSDL'
+const supplierService = 'https://ws-dev.shipcompliant.com/services/1.2/SupplierService.asmx?WSDL';
 
-const coreService = "https://ws-dev.shipcompliant.com/services/1.2/coreservice.asmx?WSDL"
+const coreService = 'https://ws-dev.shipcompliant.com/services/1.2/coreservice.asmx?WSDL';
 
-const user = 'metonymyws@shipcompliant.com'
-const pass = 'Password1'
+const user = 'metonymyws@shipcompliant.com';
+const pass = 'Password1';
 
-const max = 820454400000
-const min = -725846400000
+const max = 820454400000;
+const min = -725846400000;
 
 // const age = Math.floor(Math.random() * (max - min)) + min
 var age = 0;
@@ -29,9 +29,9 @@ var age = 0;
 const urls = {
   tax: '/services/1.2/taxservice.asmx',
   supplier: 'services/1.2/SupplierService.asmx'
-}
+};
 
-const taxReq= {
+const taxReq = {
   Request: {
     Security: {
       PartnerKey: '',
@@ -43,7 +43,7 @@ const taxReq= {
     },
     TaxSaleType: 'Offsite'
   }
-}
+};
 
 const supplierReq = {
   Request: {
@@ -57,7 +57,7 @@ const supplierReq = {
     },
     SaleType: 'Offsite'
   }
-}
+};
 
 const inventoryReq = {
   Request: {
@@ -67,7 +67,7 @@ const inventoryReq = {
       Username: user
     }
   }
-}
+};
 
 // IsShippingAvailable
 // GetSalesTaxRatesByAddress
@@ -104,16 +104,16 @@ const inventoryReq = {
 //    })
 // });
 
-soap.createClient(coreService, function(err, client) {
-   client
+soap.createClient(coreService, function (err, client) {
+  client
    .CoreService
    .CoreServiceSoap12
-   .GetInventoryDetails(supplierReq, function(err, result) {
+   .GetInventoryDetails(supplierReq, function (err, result) {
      if (err || result.GetInventoryDetailsResult.Errors) {
-      throw err;
+       throw err;
      }
      console.log(
        result.GetInventoryDetailsResult
      );
-   })
+   });
 });

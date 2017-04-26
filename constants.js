@@ -65,11 +65,11 @@
 const ages = {
   max: 820454400000,
   min: -725846400000
-}
+};
 
-const taxService = 'https://ws-dev.shipcompliant.com/services/1.2/TaxService.asmx?WSDL'
+const taxService = 'https://ws-dev.shipcompliant.com/services/1.2/TaxService.asmx?WSDL';
 
-const supplierService = 'https://ws-dev.shipcompliant.com/services/1.2/SupplierService.asmx?WSDL'
+const supplierService = 'https://ws-dev.shipcompliant.com/services/1.2/SupplierService.asmx?WSDL';
 
 module.exports = {
   states: ['AK', 'CA', 'CO', 'DC', 'FL', 'HI', 'IA', 'ID', 'IN', 'KS', 'LA', 'MA', 'MD', 'ME', 'MN', 'MO', 'MT', 'NC', 'ND', 'NE', 'NH', 'NJ', 'NM', 'NV', 'OR', 'PA', 'SC', 'TN', 'VA', 'VT', 'WA', 'WI', 'WV', 'WY'],
@@ -77,4 +77,4 @@ module.exports = {
     taxService: 'https://ws-dev.shipcompliant.com/services/1.2/TaxService.asmx?WSDL',
     supplierService: 'https://ws-dev.shipcompliant.com/services/1.2/SupplierService.asmx?WSDL'
   }
-}
+};

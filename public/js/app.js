@@ -1,7 +1,7 @@
-ShopifyApp.ready(function(){
+ShopifyApp.ready(function () {
   ShopifyApp.Bar.initialize({
-      title: 'Compliancy Connector',
-    });
+    title: 'Compliancy Connector',
+  });
 
   //kosta put yo shit here
 
