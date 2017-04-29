@@ -6,9 +6,14 @@
 - Redis
 
 ### Configuration
-`cp config/index.env config/local.env`
+```bash
+cp config/index.env config/local.env
+```
+
 Edit local configuration in `local.env`
 
 ### Run
-`npm install`
-`npm run dev`
+```bash
+npm install
+npm run dev
+```
