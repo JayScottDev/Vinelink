@@ -28,6 +28,7 @@ app.use(postgres.middleware);
 app.use(redis.middleware);
 
 //change app url to whatever ngrok gives you, also need to change the url in shopify app settings
+console.log(process.env.APP_URL);
 
 //VIEW
 app.use(hbs.middleware({

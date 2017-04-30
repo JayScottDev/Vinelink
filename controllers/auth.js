@@ -9,7 +9,7 @@ module.exports.install = async function (ctx, next) {
   const nonce = crypto.randomBytes(48).toString('hex');
   app.set('nonce', nonce);
   const install_url =
-    'http://' + shop + '/admin/oauth/authorize?client_id=' + config.API_KEY + '&scope=' + scopes + '&redirect_uri=https://' + app_url + '/compliancy-connector/auth&state=' + nonce;
+    'http://' + shop + '/admin/oauth/authorize?client_id=' + process.env.API_KEY + '&scope=' + scopes + '&redirect_uri=https://' + app_url + '/compliancy-connector/auth&state=' + nonce;
   await ctx.render('iframe', { layout: false, url: install_url });
 };
 
@@ -19,7 +19,7 @@ module.exports.auth = async function auth (ctx, next) {
   const code = params.code;
   const state = params.state;
   const shop = params.shop;
-  const verify = crypto.createHmac('sha256', config.API_SECRET);
+  const verify = crypto.createHmac('sha256', process.env.API_SECRET);
   const data = Object.keys(params).map(function (key) {
     return key !== 'hmac' && `${key}=${params[key]}`;
   }).filter(Boolean).join('&');
@@ -29,8 +29,8 @@ module.exports.auth = async function auth (ctx, next) {
   const re =  /(([a-z])|([0-9])|\.|-)+(.myshopify.com)/g;
   const validShop = re.test(shop);
   const reqBody = {
-    client_id: config.API_KEY,
-    client_secret: config.API_SECRET,
+    client_id: process.env.API_KEY,
+    client_secret: process.env.API_SECRET,
     code: code
   };
 
