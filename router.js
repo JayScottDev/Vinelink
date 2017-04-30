@@ -5,6 +5,7 @@ const controllers = require('./controllers');
 
 const router = new Router();
 
+
 // OAUTH
 
 router.get('/compliancy-connector/install', controllers.auth.install);
@@ -26,6 +27,13 @@ router.get('/compliancy-connector/settings', controllers.pages.settings);
 //ADD SHIP COMPLIANT CREDENTIALS
 
 router.post('/add-credentials', controllers.shop.addSCCredentials);
+
+router.post('/test/shop', controllers.shop.test);
+
+
+// CHECK ORDER COMPLIANCE
+
+router.post('/compliance/check', controllers.compliance.checkOrderCompliance);
 
 /*SEND ORDER TO SHIP COMPLIANT -
   We're using a webhook here, so when a customer completes a checkout, we'll send that to ship compliant

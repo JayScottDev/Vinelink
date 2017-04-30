@@ -16,6 +16,9 @@ const js2xmlparser = require('js2xmlparser');
 const shipcompliant = require('./shipcompliantmethods');
 const router = require('./router');
 
+<<<<<<< HEAD
+console.log(`${__dirname}/views`);
+=======
 // ERROR HANDLER
 app.use(async (ctx, next) => {
   try {
@@ -30,12 +33,13 @@ app.use(async (ctx, next) => {
     console.error(e);
   }
 });
+>>>>>>> develop
 
 // LOGGER
 app.use(logger());
 
-//CONNECT DBs
-// start postgres client
+// CONNECT DBs
+// start postgres client and sync models
 const postgres = require('./lib/postgres');
 // start redis client
 const redis = require('./lib/redis');
@@ -44,17 +48,25 @@ const redis = require('./lib/redis');
 app.keys = [process.env.SESSION_KEY]
 app.use(postgres.middleware);
 app.use(redis.middleware);
+<<<<<<< HEAD
+app.use(session({}, app))
 //VIEW
+=======
+
+// change app url to whatever ngrok gives you, also need to change the url in shopify app settings
+
+// VIEW
+>>>>>>> develop
 app.use(hbs.middleware({
   viewPath: `${__dirname}/views`,
   partialsPath: `${__dirname}/views/partials`,
   layoutsPath: `${__dirname}/views/layouts`,
   defaultLayout: `main`,
+  extname: `.handlebars`
 }));
 
 // MIDDLEWARE
 app.use(bodyparser());
-app.use(session({}, app))
 app.use(serve('public'));
 
 // Add ctx.respond function
