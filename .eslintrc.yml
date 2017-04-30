@@ -59,8 +59,8 @@ rules:
     keyword-spacing:
         - 2
     semi:
-        - 2
-        - always
+        - 0
+        - never
     linebreak-style:
         - 2
         - unix

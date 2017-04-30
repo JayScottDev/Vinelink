@@ -9,7 +9,7 @@ module.exports.install = async function (ctx, next) {
   const nonce = crypto.randomBytes(48).toString('hex');
   app.set('nonce', nonce);
   const install_url =
-    'http://' + shop + '/admin/oauth/authorize?client_id=' + process.env.API_KEY + '&scope=' + scopes + '&redirect_uri=https://' + app_url + '/compliancy-connector/auth&state=' + nonce;
+    'http://' + shop + '/admin/oauth/authorize?client_id=' + process.env.API_KEY + '&scope=' + scopes + '&redirect_uri=https://' + process.env.APP_URL + '/compliancy-connector/auth&state=' + nonce;
   await ctx.render('iframe', { layout: false, url: install_url });
 };
 
