@@ -44,6 +44,9 @@ module.exports = (sequelize) => {
       type: Sequelize.BOOLEAN,
       defaultValue: false
     },
+    last_login: {
+      type: Sequelize.DATE
+    }
   }, {
     freezeTableName: true,
     paranoid: true,

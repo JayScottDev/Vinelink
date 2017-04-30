@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
 module.exports = (sequelize) => {
-  const ComplianceLogs = sequelize.define('compliance_logs', {
+  const ComplianceLog = sequelize.define('compliance_log', {
     shop_id: {
       type: Sequelize.INTEGER,
     },
@@ -14,9 +14,12 @@ module.exports = (sequelize) => {
       allowNull: false,
       defaultValue: 'USD'
     },
-    compliancy: {
-      type: Sequelize.STRING,
+    compliant: {
+      type: Sequelize.BOOLEAN,
       allowNull: false
+    },
+    override: {
+      type: Sequelize.ENUM('manual', 'auto')
     },
     tax_percent: {
       type: Sequelize.FLOAT
@@ -33,7 +36,7 @@ module.exports = (sequelize) => {
       allowNull: false
     },
     checked_at: {
-      type: Sequelize.STRING
+      type: Sequelize.DATE
     },
   }, {
     freezeTableName: true,

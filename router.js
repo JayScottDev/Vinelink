@@ -9,31 +9,36 @@ const router = new Router();
 // OAUTH
 
 router.get('/compliancy-connector/install', controllers.auth.install);
-
 router.get('/compliancy-connector/auth', controllers.auth.auth);
 
 
 // PAGES
 
 router.get('/compliancy-connector', controllers.pages.main);
-
 router.get('/compliancy-connector/reports', controllers.pages.reports);
-
 router.get('/compliancy-connector/install-instructions', controllers.pages.instructions);
-
 router.get('/compliancy-connector/settings', controllers.pages.settings);
 
 
 //ADD SHIP COMPLIANT CREDENTIALS
 
 router.post('/add-credentials', controllers.shop.addSCCredentials);
-
 router.post('/test/shop', controllers.shop.test);
 
 
-// CHECK ORDER COMPLIANCE
+// ORDER COMPLIANCE AND LOGS
 
-router.post('/compliance/check', controllers.compliance.checkOrderCompliance);
+router.post('/compliance/check', controllers.comp_logs.checkOrderCompliance);
+router.get('/compliance/logs', controllers.comp_logs.getComplianceLogs);
+router.get('/compliance/logs/export', controllers.comp_logs.generateLogExport);
+
+
+// SHOP COMPLIANCE
+
+router.get('/compliance/list', controllers.compliance.listShopCompliance);
+router.post('/compliance/sync', controllers.compliance.syncShopCompliance);
+router.put('/compliance', controllers.compliance.updateShopCompliance);
+
 
 /*SEND ORDER TO SHIP COMPLIANT -
   We're using a webhook here, so when a customer completes a checkout, we'll send that to ship compliant

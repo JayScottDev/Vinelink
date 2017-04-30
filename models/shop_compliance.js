@@ -4,17 +4,22 @@ module.exports = (sequelize) => {
   sequelize.define('shop_compliance', {
     shop_id: {
       type: Sequelize.INTEGER,
+      unique: 'shop_state'
     },
-    compliancy: {
-      type: Sequelize.STRING,
+    compliant: {
+      type: Sequelize.BOOLEAN,
       allowNull: false
+    },
+    override: {
+      type: Sequelize.ENUM('manual', 'auto')
     },
     state: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
+      unique: 'shop_state'
     },
     checked_at: {
-      type: Sequelize.STRING
+      type: Sequelize.DATE
     },
   }, {
     freezeTableName: true,

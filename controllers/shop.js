@@ -1,6 +1,8 @@
 'use strict';
 
-const Shop = require('../lib/postgres').models.shop;
+const models = require('../lib/postgres').models;
+const Shop = models.shop;
+const Compliance = models.shop_compliance;
 
 module.exports.addSCCredentials = async (ctx, next) => {
   const username = ctx.req.body.username;
@@ -34,5 +36,11 @@ module.exports.test = async (ctx, next) => {
     shopify_shop_id: 'fasdfsa',
     myshopify_domain: 'fadsfs'
   });
-  ctx.respond(200, shop);
+  const comp = await Compliance.create({
+    shop_id: shop.id,
+    compliant: true,
+    override: null,
+    state: 'CA'
+  });
+  ctx.respond(200, [shop, comp]);
 };
