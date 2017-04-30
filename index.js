@@ -8,7 +8,6 @@ const logger = require('koa-logger');
 const session = require('koa-session')
 
 const bodyparser = require('koa-bodyparser');
-const Shopify = require('shopify-api-node');
 const soap = require('soap');
 const parseString = require('xml2js').parseString;
 const js2xmlparser = require('js2xmlparser');
