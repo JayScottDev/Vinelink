@@ -5,6 +5,7 @@ const app = new Koa();
 const hbs = require('koa-hbs');
 const serve = require('koa-static');
 const logger = require('koa-logger');
+const session = require('koa-session')
 
 const bodyparser = require('koa-bodyparser');
 const Shopify = require('shopify-api-node');
@@ -15,6 +16,8 @@ const js2xmlparser = require('js2xmlparser');
 const shipcompliant = require('./shipcompliantmethods');
 const router = require('./router');
 
+console.log(`${__dirname}/views`);
+
 // LOGGER
 app.use(logger());
 
@@ -24,12 +27,11 @@ const postgres = require('./lib/postgres');
 // start redis client
 const redis = require('./lib/redis');
 // add middleware
+
+app.keys = [process.env.SESSION_KEY]
 app.use(postgres.middleware);
 app.use(redis.middleware);
-
-//change app url to whatever ngrok gives you, also need to change the url in shopify app settings
-console.log(process.env.APP_URL);
-
+app.use(session({}, app))
 //VIEW
 app.use(hbs.middleware({
   viewPath: `${__dirname}/views`,
