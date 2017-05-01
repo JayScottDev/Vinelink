@@ -13,7 +13,7 @@ router.get('/compliancy-connector/auth', controllers.auth.auth);
 
 
 // PAGES
-
+router.post('/compliancy-connector/setup', controllers.pages.setup);
 router.get('/compliancy-connector', controllers.pages.main);
 router.get('/compliancy-connector/reports', controllers.pages.reports);
 router.get('/compliancy-connector/install-instructions', controllers.pages.instructions);

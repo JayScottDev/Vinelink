@@ -15,7 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.15.2",
+    "bcrypt": "^1.0.2",
     "js2xmlparser": "^2.0.2",
     "koa": "^2.2.0",
     "koa-bodyparser": "^4.2.0",

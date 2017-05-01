@@ -2,10 +2,12 @@ ShopifyApp.ready(function () {
   ShopifyApp.Bar.initialize({
     title: 'Compliancy Connector',
   });
-
   //kosta put yo shit here
 
 });
+
+$(() => {
+})
 
 //if you're down here you're doing it wrong
 
