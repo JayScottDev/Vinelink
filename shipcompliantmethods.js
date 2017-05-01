@@ -1,3 +1,6 @@
+const constants = require('./constants')
+const soap = require('soap');
+
 module.exports = {
   isShippingAvailable: function (data) {
     return new Promise(function (resolve, reject) {

@@ -46,7 +46,16 @@ module.exports = (sequelize) => {
     },
     last_login: {
       type: Sequelize.DATE
-    }
+    },
+    sc_username: {
+      type: Sequelize.STRING,
+      unique: true,
+      allowNull: true
+    },
+    sc_password: {
+      type: Sequelize.STRING,
+      allowNull: true
+    },
   }, {
     freezeTableName: true,
     paranoid: true,

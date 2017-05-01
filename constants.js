@@ -72,9 +72,8 @@ const taxService = 'https://ws-dev.shipcompliant.com/services/1.2/TaxService.asm
 const supplierService = 'https://ws-dev.shipcompliant.com/services/1.2/SupplierService.asmx?WSDL';
 
 module.exports = {
-  states: ['AK', 'CA', 'CO', 'DC', 'FL', 'HI', 'IA', 'ID', 'IN', 'KS', 'LA', 'MA', 'MD', 'ME', 'MN', 'MO', 'MT', 'NC', 'ND', 'NE', 'NH', 'NJ', 'NM', 'NV', 'OR', 'PA', 'SC', 'TN', 'VA', 'VT', 'WA', 'WI', 'WV', 'WY'],
   urls: {
-    taxService: 'https://ws-dev.shipcompliant.com/services/1.2/TaxService.asmx?WSDL',
-    supplierService: 'https://ws-dev.shipcompliant.com/services/1.2/SupplierService.asmx?WSDL'
+    taxService,
+    supplierService
   }
 };

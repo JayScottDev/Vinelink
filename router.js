@@ -14,6 +14,9 @@ router.get('/compliancy-connector/auth', controllers.auth.auth);
 
 // PAGES
 router.post('/compliancy-connector/setup', controllers.pages.setup);
+router.get('/compliancy-connector/add-ship-compliant', controllers.pages.addsc)
+router.post('/compliancy-connector/add-ship-compliant', controllers.pages.addscp)
+router.get('/compliancy-connector/home', controllers.pages.home);
 router.get('/compliancy-connector', controllers.pages.main);
 router.get('/compliancy-connector/reports', controllers.pages.reports);
 router.get('/compliancy-connector/install-instructions', controllers.pages.instructions);
@@ -22,7 +25,6 @@ router.get('/compliancy-connector/settings', controllers.pages.settings);
 
 //ADD SHIP COMPLIANT CREDENTIALS
 
-router.post('/add-credentials', controllers.shop.addSCCredentials);
 router.post('/test/shop', controllers.shop.test);
 
 
@@ -82,15 +84,7 @@ router.post('/compliancy-connector/zip-chcek', function (req, res) {
     }
   };
 
-  const taxReq = {
-    Request: {
-      Security: auth,
-      Address: {
-        Zip1: req.body.zip,
-      },
-      TaxSaleType: 'Offsite'
-    }
-  };
+
 
   res.set({
     'Access-Control-Allow-Origin': '*'
