@@ -35,7 +35,7 @@ router.get('/compliance/logs', controllers.comp_logs.getComplianceLogs);
 router.get('/compliance/logs/export', controllers.comp_logs.generateLogExport);
 
 
-// SHOP COMPLIANCE
+// SHOP-STATE COMPLIANCE
 
 router.get('/compliance/list', controllers.compliance.listShopCompliance);
 router.post('/compliance/sync', controllers.compliance.syncShopCompliance);

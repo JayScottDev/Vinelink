@@ -19,7 +19,8 @@ module.exports = (sequelize) => {
       unique: 'shop_state'
     },
     checked_at: {
-      type: Sequelize.DATE
+      type: Sequelize.DATE,
+      allowNull: false
     },
   }, {
     freezeTableName: true,

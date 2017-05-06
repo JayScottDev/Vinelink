@@ -38,9 +38,11 @@ app.use(logger());
 const postgres = require('./lib/postgres');
 // start redis client
 const redis = require('./lib/redis');
-// add middleware
 
-app.keys = [process.env.SESSION_KEY]
+// Connect to Ship Compliant
+require('./lib/ship_compliant');
+
+// add middleware
 app.use(postgres.middleware);
 app.use(redis.middleware);
 //VIEW
@@ -52,8 +54,9 @@ app.use(hbs.middleware({
 }));
 
 // MIDDLEWARE
+app.keys = [process.env.SESSION_KEY];
+app.use(session({}, app));
 app.use(bodyparser());
-app.use(session({}, app))
 app.use(serve('public'));
 
 // Add ctx.respond function
