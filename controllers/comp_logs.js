@@ -2,6 +2,7 @@
 
 const zipToState = require('../lib/zip_to_state');
 const models = require('../lib/postgres').models;
+const request = require('request-promise')
 const getSalesTax = require('../shipcompliantmethods.js').getSalesTax
 const Shop = models.shop;
 const ShopCompliance = models.shop_compliance;
@@ -53,11 +54,27 @@ module.exports.checkOrderCompliance = async (ctx, next) => {
   const tax = await getSalesTax(taxReq)
   const taxPerectange = tax.GetSalesTaxRatesByAddressResult.TaxRates.WineSalesTaxPercent
   const totalAfterTax = (taxPerectange * 0.01) * (total * .01);
-  const createProduct = await rp({
+
+  // }
+
+  // const log = await ComplianceLog.create({
+  //   shop_id: shopId,
+  //   cart_total: total,
+  //   compliant: true, //compliance.compliant,
+  //   override: false, //compliance.override,
+  //   tax_percent: taxPercent,
+  //   tax_value: taxValue,
+  //   location_state: state,
+  //   location_zip: zip,
+  //   checked_at: Date.now()
+  // });
+
+
+  const createProduct = await request({
     method: 'POST',
     url: 'https://ship-compliant-dev.myshopify.com/admin/products.json',
     headers: {
-      'X-Shopify-Access-Token': access,
+      'X-Shopify-Access-Token': ctx.session.access_token,
     },
     json: true,
     body: {
@@ -76,26 +93,13 @@ module.exports.checkOrderCompliance = async (ctx, next) => {
       }
     }
   })
-  console.log(tax)
 
-  // }
+  const variantID = createProduct.product.variants[0].id
+  ctx.body = {
+    id: variantID
+  }
+  await next()
 
-  // const log = await ComplianceLog.create({
-  //   shop_id: shopId,
-  //   cart_total: total,
-  //   compliant: true, //compliance.compliant,
-  //   override: false, //compliance.override,
-  //   tax_percent: taxPercent,
-  //   tax_value: taxValue,
-  //   location_state: state,
-  //   location_zip: zip,
-  //   checked_at: Date.now()
-  // });
-
-  // TODO: TAX => Shopify Tax Item
-
-  // TODO: Respond with Tax Item
-  return ctx.respond(200, 'NOT IMPLEMENTED');
 };
 
 module.exports.getComplianceLogs = async (ctx, next) => {

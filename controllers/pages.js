@@ -5,7 +5,7 @@ const request = require('request-promise')
 var bcrypt = require('bcrypt');
 const models = require('../lib/postgres').models;
 const Shop = models.shop
-const shippingMethods = require('../shipcompliantmethods.js')
+
 
 module.exports.setup = async (ctx, next) => {
   const { first_name, last_name, email, username, password } = ctx.request.body
@@ -40,9 +40,7 @@ module.exports.addsc = async (ctx, next) => {
 
 module.exports.addscp = async (ctx, next) => {
   const { sc_username, sc_password } = ctx.request.body
-  console.log(sc_username, sc_password);
   const hash = await bcrypt.hash(sc_password, 10)
-  console.log(hash)
   const update = await Shop.update({
     sc_username,
     sc_password: hash
@@ -66,6 +64,7 @@ module.exports.main = async (ctx, next) => {
 };
 
 module.exports.home = async (ctx, next) => {
+  ctx.session.access_token = ''
   await ctx.render('home')
 }
 
@@ -78,5 +77,5 @@ module.exports.instructions = async (ctx, next) => {
 };
 
 module.exports.settings = async (ctx, next) => {
-  await ctx.render('settings', { title: 'settings' });
+  await ctx.render('settings', { title: 'greetings' });
 };

@@ -36,7 +36,7 @@ module.exports.auth = async function auth (ctx, next) {
       json: true,
       body: reqBody
     })
-    ctx.session.access_token = body.access_token
+    // ctx.session.access_token = body.access_token
     ctx.session.shop = shop
     ctx.redirect('/compliancy-connector')
   }
