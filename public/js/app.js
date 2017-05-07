@@ -6,7 +6,7 @@ ShopifyApp.ready(function () {
 
 });
 
-$(() => { 
+$(() => {
 })
 
 //if you're down here you're doing it wrong
