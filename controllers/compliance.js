@@ -15,6 +15,9 @@ module.exports.syncShopCompliance = async (ctx, next) => {
 
   try {
     const scClient = await shipCompliant.createClient(shop.sc_username, shop.sc_password);
+    if (!scClient) {
+      throw 'Cannot connect to ShipCompliant';
+    }
     const compByState = await scClient.getStateCompliancies();
     for (let state in compByState) {
       const comp = compByState[state];
