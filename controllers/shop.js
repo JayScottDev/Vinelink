@@ -13,7 +13,9 @@ module.exports.test = async (ctx, next) => {
     username: 'fasfasfddas',
     shopify_shop_name: 'fasdf',
     shopify_shop_id: 'fasdfsa',
-    myshopify_domain: 'fadsfs'
+    myshopify_domain: 'fadsfs',
+    sc_username: process.env.SC_USER,
+    sc_password: process.env.SC_PASSWORD
   });
   const comp = await Compliance.create({
     shop_id: shop.id,
