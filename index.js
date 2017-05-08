@@ -53,9 +53,11 @@ app.use(logger());
 const postgres = require('./lib/postgres');
 // start redis client
 const redis = require('./lib/redis');
-// add middleware
 
-app.keys = [process.env.SESSION_KEY]
+// Connect to Ship Compliant
+require('./lib/ship_compliant');
+
+// add middleware
 app.use(postgres.middleware);
 app.use(redis.middleware);
 app.use(webpackDevMiddleware(compiler, WEBPACK_CONFIG))
@@ -68,9 +70,15 @@ app.use(hbs.middleware({
 }));
 
 // MIDDLEWARE
+app.keys = [process.env.SESSION_KEY];
+app.use(session({}, app));
 app.use(bodyparser());
+<<<<<<< HEAD
 app.use(session({}, app))
 app.use(serve(path.resolve(__dirname, 'dist')));
+=======
+app.use(serve('public'));
+>>>>>>> develop
 
 // Add ctx.respond function
 app.use(async (ctx, next) => {
