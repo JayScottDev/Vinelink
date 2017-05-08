@@ -5,15 +5,30 @@ const app = new Koa();
 const hbs = require('koa-hbs');
 const serve = require('koa-static');
 const logger = require('koa-logger');
-const session = require('koa-session')
+const session = require('koa-session');
+const send = require('koa-send');
 
 const bodyparser = require('koa-bodyparser');
 const soap = require('soap');
 const parseString = require('xml2js').parseString;
 const js2xmlparser = require('js2xmlparser');
+const path = require('path')
 
 const shipcompliant = require('./shipcompliantmethods');
 const router = require('./router');
+
+const webpackDevMiddleware = require('koa-webpack-dev-middleware');
+const webpack = require('webpack');
+const config = require('./webpack.config');
+
+const compiler = webpack(config);
+
+const WEBPACK_CONFIG = {
+  history: true,
+  noInfo: true,
+  publicPath: '/',
+  contentBase: path.resolve(__dirname, 'dist')
+}
 
 // ERROR HANDLER
 app.use(async (ctx, next) => {
@@ -43,6 +58,7 @@ const redis = require('./lib/redis');
 app.keys = [process.env.SESSION_KEY]
 app.use(postgres.middleware);
 app.use(redis.middleware);
+app.use(webpackDevMiddleware(compiler, WEBPACK_CONFIG))
 //VIEW
 app.use(hbs.middleware({
   viewPath: `${__dirname}/views`,
@@ -54,7 +70,7 @@ app.use(hbs.middleware({
 // MIDDLEWARE
 app.use(bodyparser());
 app.use(session({}, app))
-app.use(serve('public'));
+app.use(serve(path.resolve(__dirname, 'dist')));
 
 // Add ctx.respond function
 app.use(async (ctx, next) => {

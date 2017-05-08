@@ -1,8 +1,15 @@
 env:
     node: true
+    browser: true
+    es6: true
 parserOptions:
     ecmaVersion: 2017
-    source-type: strict
+    sourceType: module
+    ecmaFeatures:
+        - jsx: true
+        - arrowFunctions: true
+        - classes: true
+        - modules: true
 rules:
     no-empty:
         - 2

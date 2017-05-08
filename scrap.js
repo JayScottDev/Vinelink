@@ -69,6 +69,22 @@ const inventoryReq = {
   }
 };
 
+
+// ShopifyApp.ready(function () {
+//   ShopifyApp.Bar.initialize({
+//     title: 'Compliancy Connector',
+//   });
+//
+//
+//   <script type="text/javascript">
+//     ShopifyApp.init({
+//       apiKey: "",
+//       shopOrigin: "https://",
+//       debug: true
+//     });
+//   </script>
+
+
 // IsShippingAvailable
 // GetSalesTaxRatesByAddress
 // SupplierService

@@ -1,26 +1,25 @@
-ShopifyApp.ready(function () {
-  ShopifyApp.Bar.initialize({
-    title: 'Compliancy Connector',
-  });
-  //kosta put yo shit here
+import React from 'react'
+import { Route, Link } from 'react-router-dom'
+import Home from './pages/Home'
+import Install from './pages/Install'
+import Settings from './pages/Settings'
+import Export from './pages/Export'
+import Profile from './pages/Profile'
 
-});
+import Nav from './site/Nav'
 
-$(() => { 
-})
+const App = (props) => {
+  return (
+    <div className="app">
+      <Nav />
+      <div className="app__container">
+        <Route exact path="/" component={Home}/>
+        <Route path="/settings" component={Settings}/>
+        <Route path="/export" component={Export}/>
+        <Route path="/install" component={Install} />
+      </div>
+    </div>
+  )
+}
 
-//if you're down here you're doing it wrong
-
-/*
-  $.ajax({
-    method: '' //GET or POST,
-    url: '',
-    data: {} //if POST
-  }).then(function(data) {
-    //do something with data
-  }).catch(function(err) {
-    //shit went wrong!
-    throw err;
-  })
-
-*/
+export default App

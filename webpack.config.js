@@ -1,5 +1,8 @@
 const webpack = require('webpack')
-const path = require('PATHS')
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
+
 
 const PATHS = {
   src: path.resolve(__dirname, 'src'),
@@ -8,17 +11,18 @@ const PATHS = {
 
 module.exports = {
   devtool: 'cheap-source-map',
-  
+
   entry: path.resolve(PATHS.src, 'js/index.js'),
   output: {
     path: PATHS.dist,
-    filename: 'app.js',
+    filename: 'index.js',
     publicPath: '/'
   },
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
         use: 'babel-loader',
       },
       {
@@ -52,7 +56,15 @@ module.exports = {
       {
         test: /\.(jpg|png)$/,
         loader: 'file-loader',
-      }
+      },
+      { test: /\.hbs$/, loader: 'handlebars-loader' }
     ]
-  }
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './views/layouts/main.hbs',
+      alwaysWriteToDisk: true,
+    }),
+    new HtmlWebpackHarddiskPlugin()
+  ]
 }

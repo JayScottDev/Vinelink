@@ -2,6 +2,8 @@
 
 const Shopify = require('shopify-api-node')
 const request = require('request-promise')
+const send = require('koa-send');
+const path = require('path')
 var bcrypt = require('bcrypt');
 const models = require('../lib/postgres').models;
 const Shop = models.shop
@@ -65,7 +67,7 @@ module.exports.main = async (ctx, next) => {
 
 module.exports.home = async (ctx, next) => {
   ctx.session.access_token = ''
-  await ctx.render('home')
+  await send(ctx, path.resolve(__dirname, '../dist/index.html'))
 }
 
 module.exports.reports = async (ctx, next) => {
