@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 class Profile extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       first: '',
@@ -14,7 +14,7 @@ class Profile extends Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  handleChange(e) {
+  handleChange (e) {
     const target = e.target
     const value = target.value
     const name = target.name
@@ -24,13 +24,13 @@ class Profile extends Component {
     })
   }
 
-  handleSubmit(e) {
+  handleSubmit (e) {
     e.preventDefault()
     const { first, last, email } = this.state
     console.log('submitting', first, last, email)
   }
 
-  render() {
+  render () {
     return (
       <div className="profile">
         <h1>Profile Details</h1>

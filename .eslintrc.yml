@@ -6,10 +6,10 @@ parserOptions:
     ecmaVersion: 2017
     sourceType: module
     ecmaFeatures:
-        - jsx: true
-        - arrowFunctions: true
-        - classes: true
-        - modules: true
+      jsx: true
+      arrowFunctions: true
+      classes: true
+      modules: true
 rules:
     no-empty:
         - 2

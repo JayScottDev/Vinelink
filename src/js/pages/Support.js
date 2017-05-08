@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 
 class Support extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       first: '',
@@ -14,7 +14,7 @@ class Support extends Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  handleChange(e) {
+  handleChange (e) {
     const target = e.target
     const value = target.value
     const name = target.name
@@ -24,13 +24,13 @@ class Support extends Component {
     })
   }
 
-  handleSubmit(e) {
+  handleSubmit (e) {
     e.preventDefault()
     const { first, last, email } = this.state
     console.log('submitting', first, last, email)
   }
 
-  render() {
+  render () {
     return (
       <div className="support">
         <h1>Support details</h1>

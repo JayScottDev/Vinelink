@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 class Account extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       currentPassword: '',
@@ -12,7 +12,7 @@ class Account extends Component {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  handleChange(e) {
+  handleChange (e) {
     const target = e.target
     const value = target.value
     const name = target.name
@@ -22,13 +22,13 @@ class Account extends Component {
     })
   }
 
-  handleSubmit(e) {
+  handleSubmit (e) {
     e.preventDefault()
     const { first, last, email } = this.state
     console.log('submitting', first, last, email)
   }
 
-  render() {
+  render () {
     return (
       <div className="account">
         <h1>Account details</h1>
