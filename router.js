@@ -32,7 +32,10 @@ router.post('/test/shop', controllers.shop.test);
 
 router.post('/compliance/check', controllers.comp_logs.checkOrderCompliance);
 router.get('/compliance/logs', controllers.comp_logs.getComplianceLogs);
-router.get('/compliance/logs/export', controllers.comp_logs.generateLogExport);
+router.get('/compliance/logs/report/state', controllers.comp_logs.logsReportByState);
+router.get('/compliance/logs/report/date', controllers.comp_logs.logsReportByDate);
+router.get('/compliance/logs/report/total', controllers.comp_logs.logsAggregateTotal);
+router.post('/compliance/logs/export', controllers.comp_logs.generateLogExport);
 
 
 // SHOP-STATE COMPLIANCE
