@@ -29,6 +29,9 @@ module.exports.auth = async function auth (ctx, next) {
     code: code
   }
 
+
+  console.log();
+
   if (validHmac && validNonce && validShop) {
     const body = await rp({
       url: `https://${shop}/admin/oauth/access_token`,
@@ -36,7 +39,8 @@ module.exports.auth = async function auth (ctx, next) {
       json: true,
       body: reqBody
     })
-    // ctx.session.access_token = body.access_token
+    ctx.session.access_token = body.access_token
+    console.log('WERWE HERE');
     ctx.session.shop = shop
     ctx.redirect('/compliancy-connector')
   }

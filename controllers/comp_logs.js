@@ -27,78 +27,80 @@ module.exports.checkOrderCompliance = async (ctx, next) => {
   }
   const shopId = shop.dataValues.shopify_shop_id
 
-  // const compliances = await shop.getCompliance({ where: { state } });
-  // if (!compliances.length) {
-  //   return ctx.respond(500, 'Compliance for this shop and state not found.');
-  // }
-  //
-  // const compliance = compliances[0];
+  const compliances = await shop.getCompliance({ where: { state } });
+  if (!compliances.length) {
+    return ctx.respond(500, 'Compliance for this shop and state not found.');
+  }
+
+  const compliance = compliances[0];
 
   let taxPercent;
   let taxValue;
-  // if (compliance.compliant || compliance.override) {
-  const taxReq = {
-    Request: {
-      Security: {
-        PartnerKey: '',
-        Password: process.env.SC_PASSWORD,
-        Username: process.env.SC_USER,
-      },
-      Address: {
-        Zip1: zip,
-      },
-      TaxSaleType: 'Offsite'
-    }
-  };
-
-  const tax = await getSalesTax(taxReq)
-  const taxPerectange = tax.GetSalesTaxRatesByAddressResult.TaxRates.WineSalesTaxPercent
-  const totalAfterTax = (taxPerectange * 0.01) * (total * .01);
-
-  // }
-
-  // const log = await ComplianceLog.create({
-  //   shop_id: shopId,
-  //   cart_total: total,
-  //   compliant: true, //compliance.compliant,
-  //   override: false, //compliance.override,
-  //   tax_percent: taxPercent,
-  //   tax_value: taxValue,
-  //   location_state: state,
-  //   location_zip: zip,
-  //   checked_at: Date.now()
-  // });
-
-
-  const createProduct = await request({
-    method: 'POST',
-    url: 'https://ship-compliant-dev.myshopify.com/admin/products.json',
-    headers: {
-      'X-Shopify-Access-Token': ctx.session.access_token,
-    },
-    json: true,
-    body: {
-      product: {
-        title: 'Compliancy Fee',
-        body_html: '<strong>Compliancy Fee<\/strong>',
-        vendor: 'NA',
-        product_type: 'FEE',
-        variants: [
-         {
-           option1: 'State Name',
-           price: afterTax,
-           sku: '123'
-         }
-        ]
+  if (compliance.compliant || compliance.override) {
+    const taxReq = {
+      Request: {
+        Security: {
+          PartnerKey: '',
+          Password: process.env.SC_PASSWORD,
+          Username: process.env.SC_USER,
+        },
+        Address: {
+          Zip1: zip,
+        },
+        TaxSaleType: 'Offsite'
       }
-    }
-  })
+    };
 
-  const variantID = createProduct.product.variants[0].id
-  ctx.body = {
-    id: variantID
+    const tax = await getSalesTax(taxReq)
+    const taxPercent = tax.GetSalesTaxRatesByAddressResult.TaxRates.WineSalesTaxPercent
+    const totalTax = await (taxPercent * 0.01) * (total * .01);
+    console.log('total after tax', totalTax);
+
+    const log = await ComplianceLog.create({
+      shopify_shop_id: shopId,
+      cart_total: total,
+      compliant: compliance.compliant,
+      override: compliance.override,
+      tax_percent: taxPercent,
+      tax_value: totalTax,
+      location_state: state,
+      location_zip: zip,
+      checked_at: Date.now()
+    });
+    console.log(ctx.session.access_token);
+    const createProduct = await request({
+      method: 'POST',
+      url: 'https://ship-compliant-dev.myshopify.com/admin/products.json',
+      headers: {
+        'X-Shopify-Access-Token': ctx.session.access_token,
+      },
+      json: true,
+      body: {
+        product: {
+          title: 'Compliancy Fee',
+          body_html: '<strong>Compliancy Fee<\/strong>',
+          vendor: 'NA',
+          product_type: 'FEE',
+          variants: [
+           {
+             option1: 'State Name',
+             price: totalTax,
+             sku: 'TAX'
+           }
+          ]
+        }
+      }
+    })
+
+    const variantID = createProduct.product.variants[0].id
+    ctx.body = {
+      id: variantID
+    }
+    await next()
   }
-  await next()
+
+
+
 
 };
 

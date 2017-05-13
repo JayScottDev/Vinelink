@@ -73,12 +73,8 @@ app.use(hbs.middleware({
 app.keys = [process.env.SESSION_KEY];
 app.use(session({}, app));
 app.use(bodyparser());
-<<<<<<< HEAD
-app.use(session({}, app))
 app.use(serve(path.resolve(__dirname, 'dist')));
-=======
-app.use(serve('public'));
->>>>>>> develop
+
 
 // Add ctx.respond function
 app.use(async (ctx, next) => {
@@ -97,6 +93,10 @@ app.use(async (ctx, next) => {
 // ROUTING
 app.use(router.routes());
 app.use(router.allowedMethods());
+
+app.use(function *(ctx) {
+  send(ctx, path.resolve(__dirname, '../dist/index.html'))
+});
 
 app.listen(process.env.PORT, function () {
   console.log(`Listening on port ${process.env.PORT}...`);

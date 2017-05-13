@@ -25,7 +25,7 @@ router.get('/compliancy-connector/settings', controllers.pages.settings);
 
 //ADD SHIP COMPLIANT CREDENTIALS
 
-router.post('/test/shop', controllers.shop.test);
+router.get('/test/shop', controllers.shop.test);
 
 
 // ORDER COMPLIANCE AND LOGS
@@ -47,7 +47,7 @@ router.put('/compliance', controllers.compliance.updateShopCompliance);
 */
 
 router.post('/compliancy-connector/checkouts', controllers.order.sendToSC);
-router.get('*', controllers.pages.home)
+
 
 
 // UWA ZIP CHECK
