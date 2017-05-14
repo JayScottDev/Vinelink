@@ -6,7 +6,6 @@ module.exports = (sequelize) => {
       type: Sequelize.STRING,
       validate: { isEmail: true },
       allowNull: false,
-      unique: true
     },
     password: {
       type: Sequelize.STRING,
@@ -49,13 +48,17 @@ module.exports = (sequelize) => {
     },
     sc_username: {
       type: Sequelize.STRING,
-      unique: true,
-      allowNull: true
+      allowNull: false,
     },
     sc_password: {
       type: Sequelize.STRING,
-      allowNull: true
+      allowNull: false,
     },
+    shopify_access_token: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      unique: true,
+    }
   }, {
     freezeTableName: true,
     paranoid: true,

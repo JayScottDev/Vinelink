@@ -2,8 +2,8 @@
   <article>
     <div class="card">
       <h1>{{title}}</h1>
-      <h2>Step 1</h2>
-      <form action="/compliancy-connector/setup" method="POST">
+      <h2>VineLink Info</h2>
+      <form action="/compliancy-connector/signup" method="POST">
         <div class="row">
           <label>First name: </label>
           <input type="text" name="first_name" placeholder="first name" />
@@ -27,6 +27,18 @@
         <div class="row">
           <label>Confirm password: </label>
           <input type="password" name="password_confirm" placeholder="confirm password" />
+        </div>
+        <button type="submit" class="secondary">Submit</button>
+
+        <h2>Ship Compliant Info</h2>
+
+        <div class="row">
+          <label>Ship Compliant username: </label>
+          <input type="text" name="sc_username" placeholder="ship compliant username" />
+        </div>
+        <div class="row">
+          <label>Ship Compliant password: </label>
+          <input type="password" name="sc_password" placeholder="ship compliant password" />
         </div>
         <button type="submit" class="secondary">Submit</button>
       </form>

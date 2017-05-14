@@ -9,15 +9,16 @@ const states = process.env.STATES_LIST.split(',');
 module.exports.syncShopCompliance = async (ctx, next) => {
   // TODO: get shopId
 
-  const shopId = 3; // TEST ONLY
+  const shopId = 1; // TEST ONLY
 
   const shop = await Shop.findOne({ where: { id: shopId }});
-  console.log(process.env.SC_USER, process.env.SC_PASSWORD);
+
   try {
-    const scClient = await shipCompliant.createClient(process.env.SC_USER, process.env.SC_PASSWORD);
-    console.log('SC CLIENT', scClient);
+    const scClient = await shipCompliant.createClient(shop.sc_username, shop.sc_password);
+    if (!scClient) {
+      throw 'Cannot connect to ShipCompliant';
+    }
     const compByState = await scClient.getStateCompliancies();
-    console.log('COMP BY STATE', compByState);
     for (let state in compByState) {
       const comp = compByState[state];
       await ShopCompliance.upsert({

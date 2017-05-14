@@ -1,5 +1,7 @@
 const webpack = require('webpack')
 const path = require('path')
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 
@@ -27,19 +29,17 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        use: [
-          { loader: 'style-loader' },
-          { loader: 'css-loader' },
-          { loader: 'postcss-loader' },
-          {
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: ['css-loader', 'postcss-loader', {
             loader: 'sass-loader',
             options: {
               sourceMap: true,
               outputStyle: 'expanded',
               sourceMapContents: true,
-            }
-          }
-        ]
+            },
+          }],
+        }),
       },
       {
         test: /\.css$/,
@@ -61,8 +61,9 @@ module.exports = {
     ]
   },
   plugins: [
+    new ExtractTextPlugin('main.css'),
     new HtmlWebpackPlugin({
-      template: './views/layouts/main.hbs',
+      template: './views/layouts/authorized.hbs',
       alwaysWriteToDisk: true,
     }),
     new HtmlWebpackHarddiskPlugin()

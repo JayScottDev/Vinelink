@@ -3,26 +3,21 @@
 const models = require('../lib/postgres').models;
 const Shop = models.shop;
 const Compliance = models.shop_compliance;
+const Log = models.compliance_log;
+const moment = require('moment');
 
 // test endpoint to create shop entry in the db
 // can mess with it or get rid of it
 module.exports.test = async (ctx, next) => {
-  const shop = await Shop.create({
-    email: 'soimeemail@gmail.com',
-    password: 'fsadfasdfads',
-    username: 'fasfasfddas',
-    shopify_shop_name: 'fasdf',
-    shopify_shop_id: 12345,
-    myshopify_domain: 'ship-compliant-dev.myshopify.com',
-    sc_username: process.env.SC_USER,
-    sc_password: process.env.SC_PASSWORD
+  const log = await Log.create({
+    shop_id: 1,
+    location_state: 'MI',
+    location_zip: '54344',
+    currency: 'USD',
+    cart_total: 8767.10,
+    checked_at: moment().subtract(1, 'day'),
+    compliant: false,
+    override: 'manual'
   });
-  // const comp = await Compliance.create({
-  //   shop_id: shop.id,
-  //   compliant: true,
-  //   override: null,
-  //   state: 'CA',
-  //   checked_at: Date.now()
-  // });
-  ctx.respond(200, [shop, comp]);
+  ctx.respond(200, log);
 };

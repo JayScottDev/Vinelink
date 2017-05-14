@@ -94,8 +94,9 @@ app.use(async (ctx, next) => {
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-app.use(function *(ctx) {
-  send(ctx, path.resolve(__dirname, '../dist/index.html'))
+app.use(async (ctx) => {
+  console.log('can anyone hear me?');
+  await send(ctx, 'index.html', { root: __dirname + '/dist' })
 });
 
 app.listen(process.env.PORT, function () {

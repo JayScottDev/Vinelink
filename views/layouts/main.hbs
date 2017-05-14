@@ -6,7 +6,7 @@
   <script src="https://cdn.shopify.com/s/assets/external/app.js"></script>
   <script type="text/javascript">
       ShopifyApp.init({
-        apiKey: "cc4a45f80b5b09aa143cab3065972dd1",
+        apiKey: '{{apiKey}}',
         shopOrigin: "https://ship-compliant-dev.myshopify.com",
         debug: true
       });
@@ -16,10 +16,12 @@
         });
       });
   </script>
+  <link rel="stylesheet" href="main.css">
 </head>
 
 <body>
-  <div id="root"></div>
+
+  {{{body}}}
 
 </body>
 </html>

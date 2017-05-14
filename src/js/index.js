@@ -6,7 +6,7 @@ import App from './App.js'
 const el = document.getElementById('root')
 
 render(
-  <BrowserRouter>
+  <BrowserRouter basename="/compliancy-connector">
     <App />
   </BrowserRouter>,
   el
