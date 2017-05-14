@@ -2,7 +2,7 @@
 
 const crypto = require('crypto');
 var bcrypt = require('bcrypt');
-const rp = require('request-promise');
+const request = require('request-promise');
 const models = require('../lib/postgres').models;
 const Shop = models.shop;
 const shipCompliant = require('../lib/ship_compliant');
@@ -34,7 +34,7 @@ module.exports.auth = async function auth (ctx, next) {
   };
 
   if (validHmac && validNonce && validShop) {
-    const body = await rp({
+    const body = await request({
       url: `https://${shop}/admin/oauth/access_token`,
       method: 'POST',
       json: true,
@@ -52,7 +52,7 @@ module.exports.login = async function (ctx, next) {
   if (!shop) {
     return ctx.respond(404, 'Incorrect username or password');
   }
-  const appPasswordHash = await bcrypt.hash(password, 10)
+  const appPasswordHash = await bcrypt.hash(password, 10);
   console.log(shop.dataValues.password);
   //Check if password matches one stored in db
   const validPassword = await bcrypt.compare(password, shop.dataValues.password)
@@ -66,29 +66,39 @@ module.exports.login = async function (ctx, next) {
 }
 
 module.exports.signup = async function (ctx, next) {
-  const { first_name, last_name, email, username, password, sc_username, sc_password } = ctx.request.body;
+  const {
+    first_name,
+    last_name,
+    email,
+    username,
+    password,
+    sc_username,
+    sc_password } = ctx.request.body;
 
   const scClient = await shipCompliant.createClient(sc_username, sc_password);
   if (!scClient) {
     return ctx.respond(500, 'Could not connect to ship compliant');
   }
 
-  const validCredentials = await scClient.test()
+  const validCredentials = await scClient.test();
 
   if (!validCredentials) {
-    return ctx.respond(404, 'We could not reach ship compliante with credentials provided');
+    return ctx.respond(404, 'We could not reach ship compliant with credentials provided');
   }
-  
+
   const body = await request({
     uri: `https://${ctx.session.shop}/admin/shop.json`,
     headers: {
       'X-Shopify-Access-Token': ctx.session.access_token,
     }
-  })
-  const { shop } = JSON.parse(body)
+  });
+
+  console.log(ctx.session.access_token);
+
+  const { shop } = JSON.parse(body);
   ctx.session.store_id = shop.id
-  const appPasswordHash = await bcrypt.hash(password, 10)
-  const scPasswordHash = await bcrypt.hash(sc_password, 10)
+  const appPasswordHash = await bcrypt.hash(password, 10);
+  const scPasswordHash = await bcrypt.hash(sc_password, 10);
   const newShop = await Shop.create({
     email,
     password: appPasswordHash,
@@ -101,8 +111,8 @@ module.exports.signup = async function (ctx, next) {
     last_name,
     sc_username,
     sc_password: scPasswordHash,
-    shop_access_token: ctx.session.access_token,
-  })
+    shopify_access_token: ctx.session.access_token,
+  });
   ctx.redirect('/compliancy-connector/dashboard');
 
 

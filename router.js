@@ -14,15 +14,9 @@ router.get('/compliancy-connector/auth', controllers.auth.auth);
 
 
 // PAGES
-router.post('/compliancy-connector/setup', controllers.pages.setup);
-router.get('/compliancy-connector/add-ship-compliant', controllers.pages.addsc)
-router.post('/compliancy-connector/add-ship-compliant', controllers.pages.addscp)
-router.get('/compliancy-connector', controllers.pages.main);
-router.get('/compliancy-connector/reports', controllers.pages.reports);
-router.get('/compliancy-connector/install-instructions', controllers.pages.instructions);
-router.get('/compliancy-connector/settings', controllers.pages.settings);
 router.get('/compliancy-connector/login', controllers.pages.login);
 router.get('/compliancy-connector/signup', controllers.pages.signup);
+router.get('/compliancy-connector', controllers.pages.main);
 // LOGIN AND Signup
 
 router.post('/compliancy-connector/login', controllers.auth.login);
