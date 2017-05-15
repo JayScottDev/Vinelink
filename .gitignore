@@ -3,3 +3,4 @@ node_modules
 .git
 local.env
 dist
+*.orig
