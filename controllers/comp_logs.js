@@ -3,8 +3,17 @@
 const request = require('request-promise')
 const moment = require('moment');
 const Sequelize = require('sequelize');
+const _ = require('lodash');
+const json2csv = require('json2csv');
+const uuid = require('uuid/v4');
+
+const gcs = require('@google-cloud/storage')({
+  projectId: process.env.GCS_PROJECT_ID,
+  keyFilename: process.env.GCS_KEYFILE
+});
 
 const zipToState = require('../lib/zip_to_state');
+const email = require('../lib/email');
 const models = require('../lib/postgres').models;
 const getSalesTax = require('../shipcompliantmethods.js').getSalesTax
 const Shop = models.shop;
@@ -213,15 +222,50 @@ module.exports.logsAggregateTotal = async ctx => {
 module.exports.generateLogExport = async ctx => {
   // TODO: get shopId
   const shopId = 1; // ctx.session.shop_id; // FOR TEST ONLY
-  const { start_at: start, end_at: end } = ctx.request.body;
+  const { start = moment().subtract(1, 'year').toDate(), end = moment().toDate() } = ctx.request.body;
 
   generateAndEmailLogExport(shopId, start, end);
   return ctx.respond(200, 'Export process started.');
 };
 
 async function generateAndEmailLogExport (shopId, start, end) {
-  // TODO: Generate CSV file
-  // TODO: Upload file to cloud
-  // TODO: Generate download link
-  // TODO: Send link via email
+  try {
+    // Retrieve all logs from DB
+    const logs = await ComplianceLog.findAll({
+      where: {
+        shop_id: shopId,
+        checked_at: {
+          $between: [start, end]
+        }
+      }
+    });
+
+    // Format to CSV
+    const headers = logs ? Object.keys(logs[0].dataValues) : null;
+    const logsData = logs.map(log => log.dataValues);
+    const csv = json2csv({ data: logsData, fields: headers })
+
+    // Upload to storage
+    const myBucket = gcs.bucket('vinelink');
+    const file = myBucket.file(`compliance_checks_${moment(end).format('YYYYMMDD')}_${uuid().replace(/-/g, '')}.csv`);
+    await file.save(csv);
+    const urls = await file.getSignedUrl({
+      action: 'read',
+      expires: moment().add(process.env.LOGS_EXPORT_EXPIRY_DAYS, 'days').toISOString()
+    });
+
+    // Send email
+    const shop = await Shop.findById(shopId);
+    email.sendEmail({
+      to_email: shop.email,
+      to_name: `${shop.first_name} ${shop.last_name}`,
+      type: 'logs_export',
+      params: {
+        file_url: urls[0]
+      }
+    });
+
+  } catch (e) {
+    console.error(e);
+  }
 }

@@ -15,6 +15,8 @@ const js2xmlparser = require('js2xmlparser');
 const shipcompliant = require('./shipcompliantmethods');
 const router = require('./router');
 
+
+const sg = require('./lib/email');
 // ERROR HANDLER
 app.use(async (ctx, next) => {
   try {
