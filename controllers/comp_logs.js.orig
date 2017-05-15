@@ -234,9 +234,14 @@ module.exports.logsAggregateTotal = async (ctx, next) => {
 };
 
 module.exports.generateLogExport = async ctx => {
+<<<<<<< HEAD
+  const shopId = ctx.session.shop_id;
+  const { start_at: start, end_at: end } = ctx.request.body;
+=======
   // TODO: get shopId
   const shopId = 1; // ctx.session.shop_id; // FOR TEST ONLY
   const { start = moment().subtract(1, 'year').toDate(), end = moment().toDate() } = ctx.request.body;
+>>>>>>> c2199a4e5d3872c42d1f0e596347df3b4dd2d39b
 
   generateAndEmailLogExport(shopId, start, end);
   return ctx.respond(200, 'Export process started.');

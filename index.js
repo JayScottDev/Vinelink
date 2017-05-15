@@ -17,6 +17,8 @@ const path = require('path')
 const shipcompliant = require('./shipcompliantmethods');
 const router = require('./router');
 
+
+const sg = require('./lib/email');
 const webpackDevMiddleware = require('koa-webpack-dev-middleware');
 const webpack = require('webpack');
 const config = require('./webpack.config');
