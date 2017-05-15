@@ -41,6 +41,8 @@ module.exports.checkOrderCompliance = async (ctx, next) => {
   const shopId = shop.dataValues.id;
   const accessToken = shop.dataValues.shopify_access_token;
 
+  console.log('SHOP ID ------------>', shopId);
+
   const compliances = await shop.getCompliance({ where: { state } });
   if (!compliances.length) {
     return ctx.respond(500, 'Compliance for this shop and state not found.');
@@ -51,7 +53,7 @@ module.exports.checkOrderCompliance = async (ctx, next) => {
   if (!compliance.compliant && !compliance.override) {
     console.log('SHITS NOT COMPLIANT');
     const log = await ComplianceLog.create({
-      shopify_shop_id: shopId,
+      shop_id: shopId,
       cart_total: total,
       compliant: compliance.compliant,
       override: compliance.override,
@@ -84,7 +86,7 @@ module.exports.checkOrderCompliance = async (ctx, next) => {
   const totalTax = await (taxPercent * 0.01) * (total * .01);
 
   const log = await ComplianceLog.create({
-    shopify_shop_id: shopId,
+    shop_id: shopId,
     cart_total: total,
     compliant: compliance.compliant,
     override: compliance.override,
@@ -230,7 +232,7 @@ module.exports.logsAggregateTotal = async (ctx, next) => {
 
   console.log('REPORT =====>', report);
 
-  return ctx.respond(200, report);
+  return ctx.respond(200, report.dataValues);
 };
 
 module.exports.generateLogExport = async ctx => {

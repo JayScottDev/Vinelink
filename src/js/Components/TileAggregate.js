@@ -1,5 +1,4 @@
 import React from 'react'
-import ApiWrapper from '../Containers/ApiWrapper'
 
 const TileAggregate = (props) => {
   const compliant = {
@@ -17,15 +16,26 @@ const TileAggregate = (props) => {
   const titles = props.success ? compliant : nonCompliant
 
   console.log('data', props.data);
+  const { compliant_count, compliant_cart_total, noncompliant_count, noncompliant_cart_total } = props.data
   return (
     <div className='tile-aggregate'>
-      <h3>{titles.title}</h3>
-      <p>{titles.totalCarts}</p>
-      <p>{titles.totalRevenue}</p>
+    {props.success &&
+      <div className='tile-aggregate__content'>
+        <h3>{titles.title}</h3>
+        <p>{titles.totalCarts}: {compliant_count}</p>
+        <p>{titles.totalRevenue}: ${compliant_cart_total}</p>
+      </div>
+    }
+    {!props.success &&
+      <div className='tile-aggregate__content'>
+        <h3>{titles.title}</h3>
+        <p>{titles.totalCarts}: {noncompliant_count}</p>
+        <p>{titles.totalRevenue}: ${noncompliant_cart_total}</p>
+      </div>
+    }
     </div>
-
   )
 }
 
 
-export default ApiWrapper(TileAggregate)
+export default TileAggregate
