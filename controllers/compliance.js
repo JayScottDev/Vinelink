@@ -6,10 +6,9 @@ const Shop = models.shop;
 const ShopCompliance = models.shop_compliance;
 const states = process.env.STATES_LIST.split(',');
 
-module.exports.syncShopCompliance = async (ctx, next) => {
-  // TODO: get shopId
+module.exports.syncShopCompliance = async (ctx = {}, next = {}, ...args) => {
 
-  const shopId = 1; // TEST ONLY
+  const shopId = args[0].toString();
 
   const shop = await Shop.findOne({ where: { id: shopId }});
 
@@ -44,7 +43,7 @@ module.exports.listShopCompliance = async (ctx, next) => {
     return ctx.respond(400, 'Query parameter order must be "ASC" or "DESC"');
   }
 
-  const shopId = 1; // TEST ONLY
+  const shopId = ctx.session.shop_id;
   const compliances = await ShopCompliance.findAll({
     where: { shop_id: shopId },
     order: [[sort, order], ['state', 'ASC']],
@@ -57,7 +56,7 @@ module.exports.listShopCompliance = async (ctx, next) => {
 module.exports.updateShopCompliance = async (ctx, next) => {
   // TODO: get shopId
 
-  const shopId = 1; // TEST ONLY
+  const shopId = ctx.session.shop_id;
   const { state, override } = ctx.request.body;
 
   // Input validation

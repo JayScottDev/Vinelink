@@ -16,6 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^1.0.2",
+    "fetch": "^1.1.0",
     "js2xmlparser": "^2.0.2",
     "koa": "^2.2.0",
     "koa-bodyparser": "^4.2.0",

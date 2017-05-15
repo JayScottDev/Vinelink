@@ -114,7 +114,7 @@ module.exports.getComplianceLogs = async ctx => {
   }
 
   // TODO: get shopId
-  const shopId = 1; // TEST ONLY
+  const shopId = ctx.session.store_id;
   const logs = await ComplianceLog.findAll({
     where: { shop_id: shopId },
     order: [[sort, order], ['created_at', 'DESC']],
@@ -137,7 +137,7 @@ module.exports.logsReportByState = async ctx => {
   }
 
   // TODO: get shopId
-  const shopId = 1; // TEST ONLY
+  const shopId = ctx.session.shop_id; // TEST ONLY
 
   // generate report of aggregate logs by state
   const report = await ComplianceLog.findAll({
@@ -166,7 +166,7 @@ module.exports.logsReportByDate = async ctx => {
   }
 
   // TODO: get shopId
-  const shopId = 1; // TEST ONLY
+  const shopId = ctx.session.shop_id; // TEST ONLY
 
   // generate report of aggregate logs by date (for graphing)
   const report = await ComplianceLog.findAll({
@@ -191,7 +191,7 @@ module.exports.logsAggregateTotal = async ctx => {
   const { start = moment().subtract(90, 'days').toDate(), end = moment().toDate() } = ctx.request.query;
 
   // TODO: get shopId
-  const shopId = 1; // TEST ONLY
+  const shopId = ctx.session.shop_id; // TEST ONLY
 
   const report = await ComplianceLog.findOne({
     where: {
@@ -214,7 +214,7 @@ module.exports.logsAggregateTotal = async ctx => {
 
 module.exports.generateLogExport = async ctx => {
   // TODO: get shopId
-  const shopId = 1; // ctx.session.shop_id; // FOR TEST ONLY
+  const shopId = ctx.session.shop_id; // ctx.session.shop_id; // FOR TEST ONLY
   const { start_at: start, end_at: end } = ctx.request.body;
 
   generateAndEmailLogExport(shopId, start, end);

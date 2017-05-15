@@ -6,6 +6,7 @@ const request = require('request-promise');
 const models = require('../lib/postgres').models;
 const Shop = models.shop;
 const shipCompliant = require('../lib/ship_compliant');
+const sync = require('./compliance').syncShopCompliance
 
 module.exports.install = async function (ctx, next) {
   const shop = ctx.query.shop;
@@ -46,24 +47,33 @@ module.exports.auth = async function auth (ctx, next) {
   }
 }
 
+// LOGIN
+
 module.exports.login = async function (ctx, next) {
   const { username, password } = ctx.request.body;
   const shop = await Shop.findOne({username});
   if (!shop) {
     return ctx.respond(404, 'Incorrect username or password');
   }
+
+  console.log('SHOP', shop);
+  console.log('PASSWORD', shop.dataValues.password);
+
+  // Check if password matches one stored in db
   const appPasswordHash = await bcrypt.hash(password, 10);
-  console.log(shop.dataValues.password);
-  //Check if password matches one stored in db
   const validPassword = await bcrypt.compare(password, shop.dataValues.password)
   if (!validPassword) {
     return ctx.respond(404, 'Incorrect username or password');
   }
 
-  // if valid username and password, store the shop id in a session and redirec to the dashboard
-  ctx.session.store_id = shop.dataValues.shopify_shop_id
+  // if valid username and password, store the shop id and store id in a session and redirectto the dashboard
+  ctx.session.shopify_store_id = shop.dataValues.shopify_shop_id
+  ctx.session.shop_id = shop.dataValues.id
   ctx.redirect('/compliancy-connector/dashboard');
 }
+
+
+// SIGNUP
 
 module.exports.signup = async function (ctx, next) {
   const {
@@ -75,17 +85,20 @@ module.exports.signup = async function (ctx, next) {
     sc_username,
     sc_password } = ctx.request.body;
 
+  // validate ship compliant credentials
   const scClient = await shipCompliant.createClient(sc_username, sc_password);
   if (!scClient) {
     return ctx.respond(500, 'Could not connect to ship compliant');
   }
 
   const validCredentials = await scClient.test();
+  console.log(validCredentials);
 
   if (!validCredentials) {
     return ctx.respond(404, 'We could not reach ship compliant with credentials provided');
   }
 
+  // get store id
   const body = await request({
     uri: `https://${ctx.session.shop}/admin/shop.json`,
     headers: {
@@ -93,12 +106,12 @@ module.exports.signup = async function (ctx, next) {
     }
   });
 
-  console.log(ctx.session.access_token);
-
   const { shop } = JSON.parse(body);
-  ctx.session.store_id = shop.id
+  ctx.session.shopify_store_id = shop.id
   const appPasswordHash = await bcrypt.hash(password, 10);
   const scPasswordHash = await bcrypt.hash(sc_password, 10);
+
+  // create new shop
   const newShop = await Shop.create({
     email,
     password: appPasswordHash,
@@ -110,9 +123,14 @@ module.exports.signup = async function (ctx, next) {
     first_name,
     last_name,
     sc_username,
-    sc_password: scPasswordHash,
+    sc_password,
     shopify_access_token: ctx.session.access_token,
   });
+  ctx.session.shop_id = newShop.dataValues.id
+
+  // sync state compliance with ship compliant
+  const complianceSync = await sync(ctx, undefined, newShop.dataValues.id)
+  console.log(complianceSync);
   ctx.redirect('/compliancy-connector/dashboard');
 
 
