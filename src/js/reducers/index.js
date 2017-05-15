@@ -9,6 +9,9 @@ const FETCH_DATE_FAILURE = 'FETCH_DATE_FAILURE'
 const FETCH_TOTAL_REQUEST = 'FETCH_TOTAL_REQUEST'
 const FETCH_TOTAL_SUCCESS = 'FETCH_TOTAL_SUCCESS'
 const FETCH_TOTAL_FAILURE = 'FETCH_TOTAL_FAILURE'
+const FETCH_LOG_REQUEST = 'FETCH_LOG_REQUEST'
+const FETCH_LOG_SUCCESS = 'FETCH_LOG_SUCCESS'
+const FETCH_LOG_FAILURE = 'FETCH_LOG_FAILURE'
 
 const initialState = {
   isLoading: false,
@@ -99,7 +102,34 @@ const total = (state = initialState, action) => {
   return state;
 };
 
+const logHandlers = {
+  [FETCH_LOG_REQUEST]: (state, action) => {
+    return Object.assign({}, state, {
+      isLoading: true,
+    })
+  },
+  [FETCH_LOG_SUCCESS]: (state, action) => {
+    return Object.assign({}, state, {
+      isLoading: false,
+      data: action.response.data,
+    })
+  },
+  [FETCH_LOG_FAILURE]: (state, action) => {
+    return Object.assign({}, state, {
+      isLoading: false,
+      err: action.error,
+    })
+  }
+};
+
+const log = (state = initialState, action) => {
+  if (logHandlers[action.type]) {
+    return logHandlers[action.type](state, action)
+  }
+  return state;
+};
+
 
 export default combineReducers({
-  state, date, total
+  state, date, total, log
 })

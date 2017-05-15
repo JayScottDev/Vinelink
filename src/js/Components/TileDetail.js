@@ -13,14 +13,18 @@ const TileDetail = (props) => {
     colThree: 'Total dollar value',
   }
 
-  const titles = props.success ? compliant : nonComplian
+  const titles = props.success ? compliant : nonCompliant
   const rows = props.data && props.data.map((row, i) => {
-    <tr>
-      <td>{row.state}</td>
-    </tr>
+    console.log('row', row);
+    return (
+      <tr>
+        <td>{row.location_state}</td>
+        <td>{row.compliant_count || row.noncompliant_count}</td>
+        <td>${row.compliant_cart_total || row.noncompliant_cart_total}</td>
+      </tr>
+    )
   })
-
-  console.log('data', props.data);
+  console.log('DETAIL PROPS', rows);
   return (
     <div className='tile-aggregate'>
       <h3>{titles.title}</h3>
@@ -33,7 +37,7 @@ const TileDetail = (props) => {
           </tr>
         </thead>
         <tbody>
-          {}
+          {rows}
         </tbody>
       </table>
       <p>{titles.totalCarts}</p>
@@ -44,4 +48,4 @@ const TileDetail = (props) => {
 }
 
 
-export default TileDetial
+export default TileDetail

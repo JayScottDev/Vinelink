@@ -15,8 +15,7 @@ const TileAggregate = (props) => {
 
   const titles = props.success ? compliant : nonCompliant
 
-  console.log('data', props.data);
-  const { compliant_count, compliant_cart_total, noncompliant_count, noncompliant_cart_total } = props.data
+  const { compliant_count, compliant_cart_total, noncompliant_count, noncompliant_cart_total } = props.data ? props.data : {}
   return (
     <div className='tile-aggregate'>
     {props.success &&

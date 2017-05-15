@@ -22,11 +22,11 @@ class Totals extends Component {
   }
 
   render () {
-    console.log('rendering', props);
+    console.log('rendering', this.props);
     return (
       <div className="totals">
-        <TileAggregate success data={this.props.totals} />
-        <TileAggregate data={this.props.totals} />
+        <TileAggregate success data={this.props.totals.data} />
+        <TileAggregate data={this.props.totals.data} />
       </div>
     )
   }

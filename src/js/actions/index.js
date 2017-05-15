@@ -33,5 +33,16 @@ const fetchLogsTotal = (path) => {
   }
 }
 
+const fetchLogsLog = (path) => {
+  return {
+    types: ['FETCH_LOG_REQUEST', 'FETCH_LOG_SUCCESS', 'FETCH_LOG_FAILURE'],
+    shouldCallAPI: (state) => true,
+    callAPI: () => fetch(path, {
+      credentials: 'same-origin',
+    }),
+    payload: {}
+  }
+}
 
-export { fetchLogsState, fetchLogsDate, fetchLogsTotal }
+
+export { fetchLogsState, fetchLogsDate, fetchLogsTotal, fetchLogsLog }
