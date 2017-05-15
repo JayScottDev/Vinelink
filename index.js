@@ -60,6 +60,7 @@ require('./lib/ship_compliant');
 // add middleware
 app.use(postgres.middleware);
 app.use(redis.middleware);
+app.use(session({}, app));
 app.use(webpackDevMiddleware(compiler, WEBPACK_CONFIG))
 //VIEW
 app.use(hbs.middleware({
@@ -71,7 +72,7 @@ app.use(hbs.middleware({
 
 // MIDDLEWARE
 app.keys = [process.env.SESSION_KEY];
-app.use(session({}, app));
+
 app.use(bodyparser());
 app.use(serve(path.resolve(__dirname, 'dist')));
 
@@ -90,12 +91,17 @@ app.use(async (ctx, next) => {
   await next();
 });
 
+
+app.use(async (ctx, next) => {
+  console.log('INDEX SESSION !!!!!!!!!!!!!', ctx.session)
+  await next()
+})
+
 // ROUTING
 app.use(router.routes());
 app.use(router.allowedMethods());
 
 app.use(async (ctx) => {
-  console.log('can anyone hear me?');
   await send(ctx, 'index.html', { root: __dirname + '/dist' })
 });
 

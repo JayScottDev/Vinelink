@@ -14,6 +14,7 @@ const ComplianceLog = models.compliance_log;
 module.exports.checkOrderCompliance = async (ctx, next) => {
   const domain = ctx.header.origin.split('/')[2]
   const { zip, total } = ctx.request.body;
+  ctx.response.set('Access-Control-Allow-Origin', '*')
 
   if (!zip || !total) {
     return ctx.respond(400, 'Missing required body parameter(s)');
@@ -28,7 +29,8 @@ module.exports.checkOrderCompliance = async (ctx, next) => {
   if (!shop) {
     return ctx.respond(404, 'Shop by that ID not found');
   }
-  const shopId = shop.dataValues.shopify_shop_id
+  const shopId = shop.dataValues.id;
+  const accessToken = shop.dataValues.shopify_access_token;
 
   const compliances = await shop.getCompliance({ where: { state } });
   if (!compliances.length) {
@@ -37,73 +39,83 @@ module.exports.checkOrderCompliance = async (ctx, next) => {
 
   const compliance = compliances[0];
 
-  let taxPercent;
-  let taxValue;
-  if (compliance.compliant || compliance.override) {
-    const taxReq = {
-      Request: {
-        Security: {
-          PartnerKey: '',
-          Password: process.env.SC_PASSWORD,
-          Username: process.env.SC_USER,
-        },
-        Address: {
-          Zip1: zip,
-        },
-        TaxSaleType: 'Offsite'
-      }
-    };
-
-    const tax = await getSalesTax(taxReq)
-    const taxPercent = tax.GetSalesTaxRatesByAddressResult.TaxRates.WineSalesTaxPercent
-    const totalTax = await (taxPercent * 0.01) * (total * .01);
-    console.log('total after tax', totalTax);
-
+  if (!compliance.compliant && !compliance.override) {
+    console.log('SHITS NOT COMPLIANT');
     const log = await ComplianceLog.create({
       shopify_shop_id: shopId,
       cart_total: total,
       compliant: compliance.compliant,
       override: compliance.override,
-      tax_percent: taxPercent,
-      tax_value: totalTax,
+      tax_percent: 0,
+      tax_value: 0,
       location_state: state,
       location_zip: zip,
       checked_at: Date.now()
     });
-    console.log(ctx.session.access_token);
-    const createProduct = await request({
-      method: 'POST',
-      url: 'https://ship-compliant-dev.myshopify.com/admin/products.json',
-      headers: {
-        'X-Shopify-Access-Token': ctx.session.access_token,
-      },
-      json: true,
-      body: {
-        product: {
-          title: 'Compliancy Fee',
-          body_html: '<strong>Compliancy Fee<\/strong>',
-          vendor: 'NA',
-          product_type: 'FEE',
-          variants: [
-           {
-             option1: 'State Name',
-             price: totalTax,
-             sku: 'TAX'
-           }
-          ]
-        }
-      }
-    })
 
-    const variantID = createProduct.product.variants[0].id
-    ctx.body = {
-      id: variantID
-    }
-    await next()
+    return ctx.respond(200, { compliant: false })
   }
 
+  const taxReq = {
+    Request: {
+      Security: {
+        PartnerKey: '',
+        Password: process.env.SC_PASSWORD,
+        Username: process.env.SC_USER,
+      },
+      Address: {
+        Zip1: zip,
+      },
+      TaxSaleType: 'Offsite'
+    }
+  }
+
+  const tax = await getSalesTax(taxReq)
+  const taxPercent = tax.GetSalesTaxRatesByAddressResult.TaxRates.WineSalesTaxPercent
+  const totalTax = await (taxPercent * 0.01) * (total * .01);
+
+  const log = await ComplianceLog.create({
+    shopify_shop_id: shopId,
+    cart_total: total,
+    compliant: compliance.compliant,
+    override: compliance.override,
+    tax_percent: taxPercent,
+    tax_value: totalTax,
+    location_state: state,
+    location_zip: zip,
+    checked_at: Date.now()
+  });
 
 
+
+  const createProduct = await request({
+    method: 'POST',
+    url: 'https://ship-compliant-dev.myshopify.com/admin/products.json',
+    headers: {
+      'X-Shopify-Access-Token': accessToken,
+    },
+    json: true,
+    body: {
+      product: {
+        title: 'Compliancy Fee',
+        body_html: '<strong>Compliancy Fee<\/strong>',
+        vendor: 'NA',
+        product_type: 'FEE',
+        variants: [
+         {
+           option1: 'State Name',
+           price: totalTax,
+           sku: 'TAX'
+         }
+        ]
+      }
+    }
+  })
+  const variantID = createProduct.product.variants[0].id
+  ctx.body = {
+    id: variantID
+  }
+  ctx.respond(200, {id: variantID, compliant: true})
 
 };
 
@@ -113,7 +125,6 @@ module.exports.getComplianceLogs = async ctx => {
     return ctx.respond(400, 'Query parameter `order` must be "ASC" or "DESC"');
   }
 
-  // TODO: get shopId
   const shopId = ctx.session.store_id;
   const logs = await ComplianceLog.findAll({
     where: { shop_id: shopId },
@@ -136,8 +147,7 @@ module.exports.logsReportByState = async ctx => {
     return ctx.respond(400, `Query parameter "sort" must be one of ${JSON.stringify(sorts)}`);
   }
 
-  // TODO: get shopId
-  const shopId = ctx.session.shop_id; // TEST ONLY
+  const shopId = ctx.session.shop_id;
 
   // generate report of aggregate logs by state
   const report = await ComplianceLog.findAll({
@@ -165,8 +175,7 @@ module.exports.logsReportByDate = async ctx => {
     return ctx.respond(400, 'Query parameter `order` must be "ASC" or "DESC"');
   }
 
-  // TODO: get shopId
-  const shopId = ctx.session.shop_id; // TEST ONLY
+  const shopId = ctx.session.shop_id;
 
   // generate report of aggregate logs by date (for graphing)
   const report = await ComplianceLog.findAll({
@@ -187,12 +196,13 @@ module.exports.logsReportByDate = async ctx => {
   return ctx.respond(200, report);
 };
 
-module.exports.logsAggregateTotal = async ctx => {
+module.exports.logsAggregateTotal = async (ctx, next) => {
   const { start = moment().subtract(90, 'days').toDate(), end = moment().toDate() } = ctx.request.query;
 
-  // TODO: get shopId
-  const shopId = ctx.session.shop_id; // TEST ONLY
+  const shopId = ctx.session.shop_id;
+  console.log('SESSSION =========>', ctx.session);
 
+  console.log('SHOP ID ---------->', shopId);
   const report = await ComplianceLog.findOne({
     where: {
       shop_id: shopId,
@@ -209,12 +219,13 @@ module.exports.logsAggregateTotal = async ctx => {
     ]
   });
 
+  console.log('REPORT =====>', report);
+
   return ctx.respond(200, report);
 };
 
 module.exports.generateLogExport = async ctx => {
-  // TODO: get shopId
-  const shopId = ctx.session.shop_id; // ctx.session.shop_id; // FOR TEST ONLY
+  const shopId = ctx.session.shop_id;
   const { start_at: start, end_at: end } = ctx.request.body;
 
   generateAndEmailLogExport(shopId, start, end);

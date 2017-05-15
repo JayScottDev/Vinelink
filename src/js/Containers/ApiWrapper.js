@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import fetch from 'fetch'
+import fetch from 'isomorphic-fetch'
 
 function ApiWrapper (WrappedComponent) {
   return class extends Component {
@@ -11,7 +11,7 @@ function ApiWrapper (WrappedComponent) {
     }
 
     componentDidMount () {
-      fetch(this.props.endPoint)
+      fetch('/compliance/logs/report/total')
       .then((response) => {
         console.log(response);
       })
@@ -19,8 +19,10 @@ function ApiWrapper (WrappedComponent) {
 
     render () {
       return (
-        <WrappedComponent data={this.state.data} />
+        <WrappedComponent data={this.state.data} {...this.props} />
       )
     }
   }
 }
+
+export default ApiWrapper

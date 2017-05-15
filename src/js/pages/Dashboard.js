@@ -1,8 +1,12 @@
 import React from 'react'
+import TileAggregate from '../components/TileAggregate'
 
 const Home = (props) => {
   return (
-    <h1>Home</h1>
+    <div className='dashboard'>
+      <h1>Home</h1>
+      <TileAggregate success />
+      </div>
   )
 }
 
