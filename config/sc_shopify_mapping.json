@@ -1,0 +1,42 @@
+{
+  "order": {
+    "map": {
+      "Request.SalesOrder.BillTo.City": "billing_address.city",
+      "Request.SalesOrder.BillTo.Company": "billing_address.company",
+      "Request.SalesOrder.BillTo.Country": "billing_address.country",
+      "Request.SalesOrder.BillTo.FirstName": "billing_address.first_name",
+      "Request.SalesOrder.BillTo.LastName": "billing_address.last_name",
+      "Request.SalesOrder.BillTo.Phone": "billing_address.phone",
+      "Request.SalesOrder.BillTo.State": "billing_address.province_code",
+      "Request.SalesOrder.BillTo.Street1": "billing_address.address1",
+      "Request.SalesOrder.BillTo.Street2": "billing_address.address2",
+      "Request.SalesOrder.BillTo.Zip1": "billing_address.zip",
+      "Request.SalesOrder.ExternalCustomerKey": "customer.id",
+      "Request.SalesOrder.ExternalSalesOrderKey": "id",
+      "Request.SalesOrder.Payments[0].Amount": "total_price",
+      "Request.SalesOrder.Payments[0].Type": "processing_method",
+      "Request.SalesOrder.Payments[0].Type": "processing_method",
+      "Request.SalesOrder.Payments[0].TransactionID": "checkout_id",
+      "Request.SalesOrder.PurchaseDate": "created_at",
+      "Request.SalesOrder.Shipments[0].": "checkout_id",
+      "Request.SalesOrder.Shipments[0].City": "shipping_address.city",
+      "Request.SalesOrder.Shipments[0].Company": "shipping_address.company",
+      "Request.SalesOrder.Shipments[0].Country": "shipping_address.country",
+      "Request.SalesOrder.Shipments[0].FirstName": "shipping_address.first_name",
+      "Request.SalesOrder.Shipments[0].LastName": "shipping_address.last_name",
+      "Request.SalesOrder.Shipments[0].Phone": "shipping_address.phone",
+      "Request.SalesOrder.Shipments[0].State": "shipping_address.province_code",
+      "Request.SalesOrder.Shipments[0].Street1": "shipping_address.address1",
+      "Request.SalesOrder.Shipments[0].Street2": "shipping_address.address2",
+      "Request.SalesOrder.Shipments[0].Zip1": "shipping_address.zip",
+      "Request.SalesOrder.Shipments[0].Zip1": "shipping_address.zip"
+    },
+    "arrays": {
+      "Request.SalesOrder.Shipments[0].Zip1.ShipmentItems:line_items": {
+        "ProductKey": "product_id",
+        "ProductQuantity": "quantity",
+        "ProductUnitPrice": "price"
+      }
+    }
+  }
+}

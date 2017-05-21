@@ -211,9 +211,7 @@ module.exports.logsAggregateTotal = async (ctx, next) => {
   const { start = moment().subtract(90, 'days').toDate(), end = moment().toDate() } = ctx.request.query;
 
   const shopId = ctx.session.shop_id;
-  console.log('SESSSION =========>', ctx.session);
 
-  console.log('SHOP ID ---------->', shopId);
   const report = await ComplianceLog.findOne({
     where: {
       shop_id: shopId,
@@ -229,8 +227,6 @@ module.exports.logsAggregateTotal = async (ctx, next) => {
       [Sequelize.fn('COUNT', Sequelize.literal('CASE WHEN ("compliant" = false AND ("override" IS NULL)) THEN "shop_id" END')), 'noncompliant_count'],
     ]
   });
-
-  console.log('REPORT =====>', report);
 
   return ctx.respond(200, report.dataValues);
 };

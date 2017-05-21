@@ -59,6 +59,9 @@ const redis = require('./lib/redis');
 // Connect to Ship Compliant
 require('./lib/ship_compliant');
 
+// Register Shopify webhooks on startup
+require('./lib/shopify').registerWebhooks();
+
 // add middleware
 app.use(postgres.middleware);
 app.use(redis.middleware);
@@ -77,7 +80,6 @@ app.keys = [process.env.SESSION_KEY];
 
 app.use(bodyparser());
 app.use(serve(path.resolve(__dirname, 'dist')));
-
 
 // Add ctx.respond function
 app.use(async (ctx, next) => {
