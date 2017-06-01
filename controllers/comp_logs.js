@@ -41,8 +41,6 @@ module.exports.checkOrderCompliance = async (ctx, next) => {
   const shopId = shop.dataValues.id;
   const accessToken = shop.dataValues.shopify_access_token;
 
-  console.log('SHOP ID ------------>', shopId);
-
   const compliances = await shop.getCompliance({ where: { state } });
   if (!compliances.length) {
     return ctx.respond(500, 'Compliance for this shop and state not found.');
@@ -135,14 +133,14 @@ module.exports.getComplianceLogs = async ctx => {
   if (!['ASC', 'DESC'].includes(order)) {
     return ctx.respond(400, 'Query parameter `order` must be "ASC" or "DESC"');
   }
-
-  const shopId = ctx.session.store_id;
+  const shopId = ctx.session.shop_id;
   const logs = await ComplianceLog.findAll({
     where: { shop_id: shopId },
     order: [[sort, order], ['created_at', 'DESC']],
     limit: limit,
     offset: offset
   });
+
   return ctx.respond(200, logs);
 };
 
@@ -211,9 +209,7 @@ module.exports.logsAggregateTotal = async (ctx, next) => {
   const { start = moment().subtract(90, 'days').toDate(), end = moment().toDate() } = ctx.request.query;
 
   const shopId = ctx.session.shop_id;
-  console.log('SESSSION =========>', ctx.session);
 
-  console.log('SHOP ID ---------->', shopId);
   const report = await ComplianceLog.findOne({
     where: {
       shop_id: shopId,
@@ -229,8 +225,6 @@ module.exports.logsAggregateTotal = async (ctx, next) => {
       [Sequelize.fn('COUNT', Sequelize.literal('CASE WHEN ("compliant" = false AND ("override" IS NULL)) THEN "shop_id" END')), 'noncompliant_count'],
     ]
   });
-
-  console.log('REPORT =====>', report);
 
   return ctx.respond(200, report.dataValues);
 };

@@ -1,14 +1,14 @@
-const webpack = require('webpack')
-const path = require('path')
+const webpack = require('webpack');
+const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 
 const PATHS = {
   src: path.resolve(__dirname, 'src'),
   dist: path.resolve(__dirname, 'dist')
-}
+};
 
 module.exports = {
   devtool: 'cheap-source-map',
@@ -25,37 +25,43 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: 'babel-loader',
+        use: 'babel-loader'
       },
       {
         test: /\.scss$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          use: ['css-loader', 'postcss-loader', {
-            loader: 'sass-loader',
-            options: {
-              sourceMap: true,
-              outputStyle: 'expanded',
-              sourceMapContents: true,
+          use: [
+            'css-loader',
+            {
+              loader: 'postcss-loader',
+              options: {
+                plugins: loaders => [require('autoprefixer')()]
+              }
             },
-          }],
-        }),
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: true,
+                outputStyle: 'expanded',
+                sourceMapContents: true
+              }
+            }
+          ]
+        })
       },
       {
         test: /\.css$/,
-        use: [
-          { loader: 'style-loader' },
-          { loader: 'css-loader' },
-        ]
+        use: [{ loader: 'style-loader' }, { loader: 'css-loader' }]
       },
       {
         test: /\.(otf|ttf|eot|woff(2)?)(\?[a-z0-9]+)?$/,
         loader: 'file-loader',
-        options: '[path][name].[ext]',
+        options: '[path][name].[ext]'
       },
       {
         test: /\.(jpg|png)$/,
-        loader: 'file-loader',
+        loader: 'file-loader'
       },
       { test: /\.hbs$/, loader: 'handlebars-loader' }
     ]
@@ -64,9 +70,8 @@ module.exports = {
     new ExtractTextPlugin('main.css'),
     new HtmlWebpackPlugin({
       template: './views/layouts/authorized.hbs',
-      alwaysWriteToDisk: true,
+      alwaysWriteToDisk: true
     }),
     new HtmlWebpackHarddiskPlugin()
   ]
-
-}
+};

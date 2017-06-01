@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import moment from 'moment'
 import { fetchLogsLog } from '../actions/'
 import TileDetail from '../Components/TileDetail'
 
@@ -11,48 +12,61 @@ class Logs extends Component {
       compliant: {},
       noncompliant: {}
     }
+
+    this.formatDate = this.formatDate.bind(this)
   }
   componentDidMount () {
     this.props.fetchLogsLog('/compliance/logs')
   }
 
-  shouldComponentUpdate (nextProps, nextState) {
-    return this.props.logs.data !== nextProps.logs.data
+  // shouldComponentUpdate (nextProps, nextState) {
+  //   return this.props.logs !== nextProps.logs
+  // }
+
+  formatDate(date) {
+    return moment(date).format('MMM DD [@] h:mm a')
   }
 
   render () {
-    console.log(this.props.logs);
 
     const { data } = this.props.logs
-
-    const rows = data && data.map(row => {
+    console.log('DATA ------->', data);
+    const rows = data && data.map((row, i) => {
       const status = row.compliant ? 'compliant' : 'denied'
+      console.log('ROW------>', row);
       return (
-        <tr>
+        <tr key={i}>
           <td>{status}</td>
           <td>{row.location_state}</td>
           <td>{row.cart_total}</td>
           <td>{row.tax_value || 'n/a'}</td>
-          <td>{row.checked_at}</td>
+          <td>{this.formatDate(row.checked_at)}</td>
         </tr>
       )
     })
-
+    console.log('LOGS RENDER FUNCTION')
+    console.log('ROWS', rows);
     return (
-      <div className="logs">
-      <table>
-        <thead>
-          <tr>
-            <th>Status</th>
-            <th>State</th>
-            <th>Total Cart Value</th>
-            <th>Tax Addition</th>
-            <th>Date &amp; Time Stamp</th>
-          </tr>
-        </thead>
-        <tbody>{rows}</tbody>
-      </table>
-      </div>
+      <section className="logs">
+        <article>
+          <div className="card">
+            {rows &&
+              <table>
+                <thead>
+                  <tr>
+                    <th>Status</th>
+                    <th>State</th>
+                    <th>Total Cart Value</th>
+                    <th>Tax Addition</th>
+                    <th>Date &amp; Time Stamp</th>
+                  </tr>
+                </thead>
+                <tbody>{rows}</tbody>
+              </table>
+            }
+          </div>
+        </article>
+      </section>
     )
   }
 }

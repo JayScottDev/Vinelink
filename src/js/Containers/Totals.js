@@ -13,7 +13,7 @@ class Totals extends Component {
     }
   }
   componentDidMount () {
-    console.log('PROPS', this.props);
+
     this.props.fetchLogsTotal('/compliance/logs/report/total')
   }
 
@@ -22,12 +22,11 @@ class Totals extends Component {
   }
 
   render () {
-    console.log('rendering', this.props);
     return (
-      <div className="totals">
+      <section className="totals">
         <TileAggregate success data={this.props.totals.data} />
         <TileAggregate data={this.props.totals.data} />
-      </div>
+      </section>
     )
   }
 }

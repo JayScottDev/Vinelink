@@ -1,5 +1,7 @@
 import React from 'react'
 
+import '../../styles/tile-aggregate.scss'
+
 const TileAggregate = (props) => {
   const compliant = {
     title: 'Successful carts & revenue',
@@ -17,22 +19,35 @@ const TileAggregate = (props) => {
 
   const { compliant_count, compliant_cart_total, noncompliant_count, noncompliant_cart_total } = props.data ? props.data : {}
   return (
-    <div className='tile-aggregate'>
+    <article className='tile-aggregate'>
     {props.success &&
-      <div className='tile-aggregate__content'>
+      <div className='card tile-aggregate__compliant'>
         <h3>{titles.title}</h3>
-        <p>{titles.totalCarts}: {compliant_count}</p>
-        <p>{titles.totalRevenue}: ${compliant_cart_total}</p>
+        <div className="tile-aggregate__row">
+          <p>{titles.totalCarts}:</p>
+          <p className="tile-aggregate__digits">{compliant_count}</p>
+        </div>
+        <div className="tile-aggregate__row">
+          <p>{titles.totalRevenue}:</p>
+          <p className="tile-aggregate__digits">${compliant_cart_total}</p>
+        </div>
       </div>
     }
     {!props.success &&
-      <div className='tile-aggregate__content'>
+      <div className='card tile-aggregate__noncompliant'>
         <h3>{titles.title}</h3>
-        <p>{titles.totalCarts}: {noncompliant_count}</p>
-        <p>{titles.totalRevenue}: ${noncompliant_cart_total}</p>
+        <div className="tile-aggregate__row">
+          <p>{titles.totalCarts}:</p>
+          <p className="tile-aggregate__digits">{noncompliant_count}</p>
+        </div>
+        <div className="tile-aggregate__row">
+          <p>{titles.totalRevenue}:</p>
+          <p className="tile-aggregate__digits">${noncompliant_cart_total}</p>
+        </div>
+
       </div>
     }
-    </div>
+    </article>
   )
 }
 

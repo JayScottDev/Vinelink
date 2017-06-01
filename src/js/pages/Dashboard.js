@@ -7,7 +7,7 @@ import Logs from '../Containers/Logs'
 const Home = (props) => {
   return (
     <div className='dashboard'>
-      <h1>Home</h1>
+      <h2>Dashboard</h2>
         <Totals />
         <States />
         <Graph />
