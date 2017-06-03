@@ -83,8 +83,9 @@ module.exports.settings = async (ctx, next) => {
 
 module.exports.inventory = async (ctx, next) => {
   const shopId = ctx.session.shop_id;
-
   const shop = await Shop.findOne({ where: { id: shopId } });
+  const accessToken = shop.shopify_access_token;
+
   if (!shop) {
     return ctx.respond(404, 'Incorrect username or password');
   }
@@ -93,20 +94,20 @@ module.exports.inventory = async (ctx, next) => {
     shop.sc_username,
     shop.sc_password
   );
+  const response = await scClient.getInventory();
+  const inventoryItems =
+    response.InventoryLocation[0].InventoryProducts.InventoryProduct;
 
-  const inventory = await scClient.getInventory();
+  const inventoryMap = new Map();
 
-  await ctx.respond(200, inventory);
-};
-
-module.exports.products = async (ctx, next) => {
-  const shopId = ctx.session.shop_id;
-  const shop = await Shop.findOne({ where: { id: shopId } });
-  if (!shop) {
-    return ctx.respond(404, 'Incorrect username or password');
+  for (let item of inventoryItems) {
+    inventoryMap.set(
+      item.ProductKey,
+      item.InventoryLevels.InventoryLevel[0].Quantity
+    );
   }
-  const accessToken = shop.shopify_access_token;
-  const products = await request({
+
+  const shopifyResponse = await request({
     method: 'GET',
     url: `https://${shop.myshopify_domain}/admin/products.json`,
     headers: {
@@ -114,18 +115,63 @@ module.exports.products = async (ctx, next) => {
     }
   });
 
-  const parsedProducts = JSON.parse(products);
-
-  const skus = await parsedProducts.products.map(product => {
-    return {
-      brand_key: product.vendor,
-      id: product.variants[0].id,
-      product_key: product.variants[0].sku
-    };
+  const products = JSON.parse(shopifyResponse).products.filter(product => {
+    return product.vendor !== 'VINELINK';
   });
-  console.log(products);
 
-  await ctx.respond(200, products);
+  const productMap = new Map();
+
+  for (let product of products) {
+    productMap.set(product.variants[0].sku, product.variants[0].id);
+  }
+
+  for (let [sku, inventory_quantity] of inventoryMap) {
+    const id = productMap.get(sku);
+    request({
+      method: 'PUT',
+      url: `https://${shop.myshopify_domain}/admin/variants/${id}.json`,
+      headers: {
+        'X-Shopify-Access-Token': accessToken
+      },
+      json: true,
+      body: {
+        variant: {
+          id,
+          inventory_quantity
+        }
+      }
+    });
+  }
+
+  await ctx.respond(200);
+};
+
+module.exports.products = async (ctx, next) => {
+  // const shopId = ctx.session.shop_id;
+  // const shop = await Shop.findOne({ where: { id: shopId } });
+  // if (!shop) {
+  //   return ctx.respond(404, 'Incorrect username or password');
+  // }
+  // const accessToken = shop.shopify_access_token;
+  // const products = await request({
+  //   method: 'GET',
+  //   url: `https://${shop.myshopify_domain}/admin/products.json`,
+  //   headers: {
+  //     'X-Shopify-Access-Token': accessToken
+  //   }
+  // });
+  //
+  // const parsedProducts = JSON.parse(products);
+  //
+  // const skus = await parsedProducts.products.map(product => {
+  //   return {
+  //     id: product.variants[0].id,
+  //     product_key: product.variants[0].sku
+  //   };
+  // });
+  // console.log(products);
+
+  await ctx.respond(200);
 };
 
 module.exports.addProduct = async (ctx, next) => {};

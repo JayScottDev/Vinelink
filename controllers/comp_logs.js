@@ -107,7 +107,7 @@ module.exports.checkOrderCompliance = async (ctx, next) => {
       product: {
         title: 'Compliancy Fee',
         body_html: '<strong>Compliancy Fee<\/strong>',
-        vendor: 'NA',
+        vendor: 'VINELINK',
         product_type: 'FEE',
         variants: [
           {
