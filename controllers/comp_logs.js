@@ -50,7 +50,6 @@ module.exports.checkOrderCompliance = async (ctx, next) => {
   const compliance = compliances[0];
 
   if (!compliance.compliant && !compliance.override) {
-    console.log('SHITS NOT COMPLIANT');
     const log = await ComplianceLog.create({
       shop_id: shopId,
       cart_total: total,
@@ -96,8 +95,6 @@ module.exports.checkOrderCompliance = async (ctx, next) => {
     location_zip: zip,
     checked_at: Date.now()
   });
-
-  console.log('SHOP -------->', shop.myshopify_domain);
 
   const createProduct = await request({
     method: 'POST',

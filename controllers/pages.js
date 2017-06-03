@@ -55,7 +55,6 @@ module.exports.addscp = async (ctx, next) => {
 };
 
 module.exports.main = async (ctx, next) => {
-  console.log('hitting main controller', ctx.session.shop);
   await ctx.render('landing', {
     apiKey: process.env.API_KEY,
     shop: ctx.session.shop
@@ -84,12 +83,12 @@ module.exports.settings = async (ctx, next) => {
 
 module.exports.inventory = async (ctx, next) => {
   const shopId = ctx.session.shop_id;
-  console.log(ctx.session);
+
   const shop = await Shop.findOne({ where: { id: shopId } });
   if (!shop) {
     return ctx.respond(404, 'Incorrect username or password');
   }
-  console.log('USERNAME', shop.sc_username);
+
   const scClient = await shipCompliant.createClient(
     shop.sc_username,
     shop.sc_password
@@ -109,7 +108,7 @@ module.exports.products = async (ctx, next) => {
   const accessToken = shop.shopify_access_token;
   const products = await request({
     method: 'GET',
-    url: 'https://ship-compliant-dev.myshopify.com/admin/products.json',
+    url: `https://${shop.myshopify_domain}/admin/products.json`,
     headers: {
       'X-Shopify-Access-Token': accessToken
     }
@@ -124,7 +123,7 @@ module.exports.products = async (ctx, next) => {
       product_key: product.variants[0].sku
     };
   });
-  console.log('SKUSSSSSSSSS', skus);
+  console.log(products);
 
   await ctx.respond(200, products);
 };
