@@ -13,7 +13,6 @@ class States extends Component {
     }
   }
   componentDidMount () {
-    console.log('PROPS', this.props);
     this.props.fetchLogsState('/compliance/logs/report/state')
   }
 
@@ -22,8 +21,6 @@ class States extends Component {
   }
 
   render () {
-    console.log(this.props.states);
-
     const { data } = this.props.states
     const compliantStates = data && data.filter(state => {
       return parseInt(state.compliant_count) && !parseInt(state.noncompliant_count)
@@ -32,17 +29,11 @@ class States extends Component {
     const nonCompliantStates = data && data.filter(state => {
       return !parseInt(state.compliant_count) && parseInt(state.noncompliant_count)
     })
-
-
-    console.log('compliant states', compliantStates);
-    console.log('non compliant states', nonCompliantStates);
-
-    console.log('RENDING STATES COMPONENT');
     return (
-      <div className="totals">
+      <section className="totals">
         <TileDetail success data={compliantStates} />
         <TileDetail data={nonCompliantStates} />
-      </div>
+      </section>
     )
   }
 }

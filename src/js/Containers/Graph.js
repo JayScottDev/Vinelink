@@ -1,18 +1,19 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { VictoryChart, VictoryStack, VictoryLine } from 'victory';
 import { fetchLogsDate } from '../actions/'
 
 class Graph extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      compliant: {},
-      noncompliant: {}
+      compliant: [],
+      noncompliant: [],
     }
   }
   componentDidMount () {
-    this.props.fetchDateLog('/compliance/logs/report/date')
+    this.props.fetchLogsDate('/compliance/logs/report/date')
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -20,24 +21,28 @@ class Graph extends Component {
   }
 
   render () {
-    console.log(this.props.logs);
-
-
+    const { data } = this.props.dates
+    const compliant = data && data.map(date => {
+      return {date: date.checked_day, count: date.compliant_count}
+    })
+    const noncompliant = data && data.map(date => {
+      return {date: date.checked_day, count: date.noncompliant_count}
+    })
     return (
-      <div className="logs">
-      <table>
-        <thead>
-          <tr>
-            <th>Status</th>
-            <th>State</th>
-            <th>Total Cart Value</th>
-            <th>Tax Addition</th>
-            <th>Date &amp; Time Stamp</th>
-          </tr>
-        </thead>
-
-      </table>
-      </div>
+      <section className='graph'>
+        <article>
+          <div className='card'>
+          {compliant && noncompliant &&
+            <VictoryChart>
+              <VictoryStack>
+                <VictoryLine name='line-1' data={compliant} x="date" y="count"/>
+                <VictoryLine name='line-2' data={noncompliant} x="date" y="count"/>
+              </VictoryStack>
+            </VictoryChart>
+          }
+          </div>
+        </article>
+      </section>
     )
   }
 }

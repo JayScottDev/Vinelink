@@ -13,12 +13,12 @@ const App = ({ match }) => {
   return (
     <div className="app">
       <Nav />
-      <div className="app__container">
+      <section className="app__container">
         <Route exact path="/dashboard" component={Dashboard}/>
         <Route path="/settings" component={Settings}/>
         <Route path="/export" component={Export}/>
         <Route path="/install" component={Install} />
-      </div>
+      </section>
     </div>
   )
 }

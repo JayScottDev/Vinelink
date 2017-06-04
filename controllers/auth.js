@@ -1,32 +1,36 @@
-'use strict'
+'use strict';
 
 const crypto = require('crypto');
-var bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 const request = require('request-promise');
 const models = require('../lib/postgres').models;
 const Shop = models.shop;
 const shipCompliant = require('../lib/ship_compliant');
-const sync = require('./compliance').syncShopCompliance
+const sync = require('./compliance').syncShopCompliance;
 
 module.exports.install = async function (ctx, next) {
   const shop = ctx.query.shop;
-  const scopes = 'read_orders,read_products,write_orders,write_products,write_script_tags';
+  const scopes =
+    'read_orders,read_products,write_orders,write_products,write_script_tags';
   ctx.session.nonce = crypto.randomBytes(48).toString('hex');
-  const install_url =
-    `http://${shop}/admin/oauth/authorize?client_id=${process.env.API_KEY}&scope=${scopes}&redirect_uri=https://${process.env.APP_URL}/compliancy-connector/auth&state=${ctx.session.nonce}`;
-  await ctx.render('iframe', { layout: false, url: install_url })
-}
+  console.log('NONCE', ctx.session.nonce);
+  const install_url = `http://${shop}/admin/oauth/authorize?client_id=${process.env.API_KEY}&scope=${scopes}&redirect_uri=https://${process.env.APP_URL}/compliancy-connector/auth&state=${ctx.session.nonce}`;
+  await ctx.render('iframe', { layout: false, url: install_url });
+};
 
 module.exports.auth = async function auth (ctx, next) {
   const { hmac, code, state, shop } = ctx.query;
   const verify = crypto.createHmac('sha256', process.env.API_SECRET.toString());
-  const data = Object.keys(ctx.query).map(function (key) {
-    return key !== 'hmac' && `${key}=${ctx.query[key]}`
-  }).filter(Boolean).join('&');
+  const data = Object.keys(ctx.query)
+    .map(function (key) {
+      return key !== 'hmac' && `${key}=${ctx.query[key]}`;
+    })
+    .filter(Boolean)
+    .join('&');
   verify.update(data);
   const validHmac = verify.digest('hex') === hmac;
   const validNonce = ctx.session.nonce === state;
-  const re =  /(([a-z])|([0-9])|\.|-)+(.myshopify.com)/g;
+  const re = /(([a-z])|([0-9])|\.|-)+(.myshopify.com)/g;
   const validShop = re.test(shop);
   const reqBody = {
     client_id: process.env.API_KEY,
@@ -40,18 +44,18 @@ module.exports.auth = async function auth (ctx, next) {
       method: 'POST',
       json: true,
       body: reqBody
-    })
+    });
     ctx.session.access_token = body.access_token;
     ctx.session.shop = shop;
     ctx.redirect('/compliancy-connector');
   }
-}
+};
 
 // LOGIN
 
 module.exports.login = async function (ctx, next) {
   const { username, password } = ctx.request.body;
-  const shop = await Shop.findOne({username});
+  const shop = await Shop.findOne({ username });
   if (!shop) {
     return ctx.respond(404, 'Incorrect username or password');
   }
@@ -61,19 +65,21 @@ module.exports.login = async function (ctx, next) {
 
   // Check if password matches one stored in db
   const appPasswordHash = await bcrypt.hash(password, 10);
-  const validPassword = await bcrypt.compare(password, shop.dataValues.password)
+  const validPassword = await bcrypt.compare(
+    password,
+    shop.dataValues.password
+  );
   if (!validPassword) {
     return ctx.respond(404, 'Incorrect username or password');
   }
 
   // if valid username and password, store the shop id and store id in a session and redirectto the dashboard
-  ctx.session.shopify_store_id = shop.dataValues.shopify_shop_id
+  ctx.session.shopify_store_id = shop.dataValues.shopify_shop_id;
   console.log('ID FROM AUTH ======>', shop.dataValues.id);
-  ctx.session.shop_id = shop.dataValues.id
+  ctx.session.shop_id = shop.dataValues.id;
   console.log('AUTH SESSION!!!!!!!!!', ctx.session);
   ctx.redirect('/compliancy-connector/dashboard');
-}
-
+};
 
 // SIGNUP
 
@@ -85,7 +91,8 @@ module.exports.signup = async function (ctx, next) {
     username,
     password,
     sc_username,
-    sc_password } = ctx.request.body;
+    sc_password
+  } = ctx.request.body;
 
   // validate ship compliant credentials
   const scClient = await shipCompliant.createClient(sc_username, sc_password);
@@ -97,19 +104,22 @@ module.exports.signup = async function (ctx, next) {
   console.log(validCredentials);
 
   if (!validCredentials) {
-    return ctx.respond(404, 'We could not reach ship compliant with credentials provided');
+    return ctx.respond(
+      404,
+      'We could not reach ship compliant with credentials provided'
+    );
   }
 
   // get store id
   const body = await request({
     uri: `https://${ctx.session.shop}/admin/shop.json`,
     headers: {
-      'X-Shopify-Access-Token': ctx.session.access_token,
+      'X-Shopify-Access-Token': ctx.session.access_token
     }
   });
 
   const { shop } = JSON.parse(body);
-  ctx.session.shopify_store_id = shop.id
+  ctx.session.shopify_store_id = shop.id;
   const appPasswordHash = await bcrypt.hash(password, 10);
   const scPasswordHash = await bcrypt.hash(sc_password, 10);
 
@@ -126,14 +136,12 @@ module.exports.signup = async function (ctx, next) {
     last_name,
     sc_username,
     sc_password,
-    shopify_access_token: ctx.session.access_token,
+    shopify_access_token: ctx.session.access_token
   });
-  ctx.session.shop_id = newShop.dataValues.id
+  ctx.session.shop_id = newShop.dataValues.id;
 
   // sync state compliance with ship compliant
-  const complianceSync = await sync(ctx, undefined, newShop.dataValues.id)
+  const complianceSync = await sync(ctx, undefined, newShop.dataValues.id);
   console.log(complianceSync);
   ctx.redirect('/compliancy-connector/dashboard');
-
-
-}
+};

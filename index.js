@@ -96,10 +96,6 @@ app.use(async (ctx, next) => {
 });
 
 
-app.use(async (ctx, next) => {
-  console.log('INDEX SESSION !!!!!!!!!!!!!', ctx.session)
-  await next()
-})
 
 // ROUTING
 app.use(router.routes());
