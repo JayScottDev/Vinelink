@@ -48,16 +48,22 @@ router.get('/compliance/list', controllers.compliance.listShopCompliance);
 router.post('/compliance/sync', controllers.compliance.syncShopCompliance);
 router.put('/compliance', controllers.compliance.updateShopCompliance);
 
+
+// ORDERS
+
+router.post('/orders/create', controllers.order.createOrder);
+
 // INVENTORY
 
 router.get('/compliance/inventory', controllers.pages.inventory);
 router.get('/compliance/products', controllers.pages.products);
 
+
 /*SEND ORDER TO SHIP COMPLIANT -
   We're using a webhook here, so when a customer completes a checkout, we'll send that to ship compliant
 */
 
-router.post('/compliancy-connector/checkouts', controllers.order.sendToSC);
+// router.post('/compliancy-connector/checkouts', controllers.order.sendToSC);
 
 //APP ZIP CHECK
 const constants = require('./constants');
