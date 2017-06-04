@@ -17,6 +17,15 @@ const Status = props => {
       .then(response => response.json())
       .then(data => console.log(data.data));
   }
+
+  function syncCompliance () {
+    fetch('/compliance/sync', {
+      method: 'POST',
+      credentials: 'same-origin'
+    })
+      .then(response => response.json())
+      .then(data => console.log(data));
+  }
   return (
     <div className="status">
       <h1>Status</h1>
@@ -26,6 +35,10 @@ const Status = props => {
 
       <button onClick={getProducts}>
         GET PRODUCTS
+      </button>
+
+      <button onClick={syncCompliance}>
+        SYNC COMPLIANCE
       </button>
     </div>
   );

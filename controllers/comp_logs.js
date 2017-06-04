@@ -31,7 +31,7 @@ module.exports.checkOrderCompliance = async (ctx, next) => {
 
   const state = await zipToState(zip);
   if (!state) {
-    return ctx.respond(404, 'State could not be found from zip code');
+    return ctx.respond(200, { validZip: false });
   }
 
   const shop = await Shop.findOne({ where: { myshopify_domain } });

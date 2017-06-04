@@ -7,13 +7,15 @@ const ShopCompliance = models.shop_compliance;
 const states = process.env.STATES_LIST.split(',');
 
 module.exports.syncShopCompliance = async (ctx = {}, next = {}, ...args) => {
+  const shopId = ctx.session.shop_id;
 
-  const shopId = args[0].toString();
-
-  const shop = await Shop.findOne({ where: { id: shopId }});
+  const shop = await Shop.findOne({ where: { id: shopId } });
 
   try {
-    const scClient = await shipCompliant.createClient(shop.sc_username, shop.sc_password);
+    const scClient = await shipCompliant.createClient(
+      shop.sc_username,
+      shop.sc_password
+    );
     if (!scClient) {
       throw 'Cannot connect to ShipCompliant';
     }
@@ -37,8 +39,12 @@ module.exports.syncShopCompliance = async (ctx = {}, next = {}, ...args) => {
 };
 
 module.exports.listShopCompliance = async (ctx, next) => {
-
-  const { sort = 'state', order = 'ASC', limit = 100, offset = 0 } = ctx.request.query;
+  const {
+    sort = 'state',
+    order = 'ASC',
+    limit = 100,
+    offset = 0
+  } = ctx.request.query;
   if (!['ASC', 'DESC'].includes(order)) {
     return ctx.respond(400, 'Query parameter order must be "ASC" or "DESC"');
   }
@@ -54,7 +60,6 @@ module.exports.listShopCompliance = async (ctx, next) => {
 };
 
 module.exports.updateShopCompliance = async (ctx, next) => {
-
   const shopId = ctx.session.shop_id;
   const { state, override } = ctx.request.body;
 
@@ -63,7 +68,9 @@ module.exports.updateShopCompliance = async (ctx, next) => {
     return ctx.respond(400, 'Invalid override value.');
   }
 
-  const comp = await ShopCompliance.findOne({ where: { state, shop_id: shopId }});
+  const comp = await ShopCompliance.findOne({
+    where: { state, shop_id: shopId }
+  });
   comp.override = override;
   await comp.save();
 
