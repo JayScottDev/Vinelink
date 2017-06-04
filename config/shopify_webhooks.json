@@ -1,8 +1,7 @@
 {
   "webhooks": [
     {
-      "topic": "orders/create",
-      "path": "orders/create"
+      "topic": "orders/create"
     }
   ]
 }

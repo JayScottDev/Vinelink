@@ -45,7 +45,7 @@ router.post('/compliance/sync', controllers.compliance.syncShopCompliance);
 router.put('/compliance', controllers.compliance.updateShopCompliance);
 
 // ORDERS
-router.get('/orders/create', controllers.order.createOrder);
+router.post('/orders/create', controllers.order.createOrder);
 
 /*SEND ORDER TO SHIP COMPLIANT -
   We're using a webhook here, so when a customer completes a checkout, we'll send that to ship compliant

@@ -10,7 +10,6 @@
     "lint": "./node_modules/.bin/eslint --ignore-path .gitignore ."
   },
   "pre-commit": [
-    "lint"
   ],
   "author": "",
   "license": "ISC",
