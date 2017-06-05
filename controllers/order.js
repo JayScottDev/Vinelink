@@ -27,10 +27,16 @@ module.exports.createOrder = async ctx => {
     ctx.respond(200, 'Successful');
 
     const shopifyOrder = ctx.request.body;
-    [shopifyOrder.line_items, shopifyOrder.total_tax] = cleanLineItems(shopifyOrder.line_items);
+    [shopifyOrder.line_items, shopifyOrder.total_tax] = cleanLineItems(
+      shopifyOrder.line_items
+    );
 
-    const shop = await Shop.findOne({ where: { myshopify_domain: myshopifyDomain }});
-    const compliances = await shop.getCompliance({ where: { state: shopifyOrder.shipping_address.province_code } });
+    const shop = await Shop.findOne({
+      where: { myshopify_domain: myshopifyDomain }
+    });
+    const compliances = await shop.getCompliance({
+      where: { state: shopifyOrder.shipping_address.province_code }
+    });
     if (!compliances.length) {
       console.error();
     }
@@ -47,19 +53,27 @@ module.exports.createOrder = async ctx => {
       location_zip: shopifyOrder.shipping_address.zip,
       compliant: compliance.compliant,
       override: compliance.override,
-      ordered_at: Date.now(),
+      ordered_at: Date.now()
     });
 
     if (compliance.compliant || compliance.override === 'auto') {
-      const scClient = await shipCompliant.createClient(shop.sc_username, shop.sc_password);
+      const scClient = await shipCompliant.createClient(
+        shop.sc_username,
+        shop.sc_password
+      );
       if (!scClient) {
         throw 'Cannot connect to ShipCompliant';
       }
-      const result = await scClient.checkComplianceAndCommitSalesOrder(shopifyOrder);
+      const result = await scClient.checkComplianceAndCommitSalesOrder(
+        shopifyOrder
+      );
       if (result.error) {
-        console.error(`Error committing sales order ${shopifyOrder.id} with ShipCompliant at ${moment().toISOString()}`);
-        console.error(result.error);
+        console.error(
+          `Error committing sales order ${shopifyOrder.id} with ShipCompliant at ${moment().toISOString()}`
+        );
       }
+
+      console.log('SUCCESS!!!', result.success);
       order.success = result.success;
     } else {
       // Currently an edge case
@@ -84,18 +98,22 @@ function cleanLineItems (lineItems) {
     if (_.get(item, 'properties.length')) {
       let price = item.price;
       for (let child of item.properties) {
+        if (child.name === 'Recurring Order') {
+          continue;
+        }
         items.push({
           price,
           sku: /SKU:\s([a-zA-Z0-9]*)/i.exec(child.value)[1].trim(),
-          vendor: /Vendor:\s([a-zA-Z0-9]*)/i.exec(child.value)[1].trim() || item.vendor,
+          vendor: /Vendor:\s([a-zA-Z0-9]*)/i.exec(child.value)[1].trim() ||
+            item.vendor,
           quantity: Number(/Quantity:\s([0-9]*)/i.exec(child.value)[1].trim())
         });
-        price = "0.00";
+        price = '0.00';
       }
-    // if tax line item
+      // if tax line item
     } else if (item.sku === 'TAX') {
       tax = item.price;
-    // if not bundle
+      // if not bundle
     } else {
       items.push(item);
     }
