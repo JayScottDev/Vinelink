@@ -13,7 +13,24 @@ const Shop = models.shop;
 const Order = models.order;
 
 module.exports.listOrders = async ctx => {
-  // AUTH
+  const {
+    sort = 'created_at',
+    order = 'DESC',
+    limit = 50,
+    offset = 0
+  } = ctx.request.query;
+  if (!['ASC', 'DESC'].includes(order)) {
+    return ctx.respond(400, 'Query parameter `order` must be "ASC" or "DESC"');
+  }
+  const shopId = ctx.session.shop_id;
+  const orders = await Order.findAll({
+    where: { shop_id: shopId },
+    order: [[sort, order], ['created_at', 'DESC']],
+    limit: limit,
+    offset: offset
+  });
+
+  return ctx.respond(200, orders);
 };
 
 // Cron endpoint

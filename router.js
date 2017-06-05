@@ -51,7 +51,7 @@ router.put('/compliance', controllers.compliance.updateShopCompliance);
 
 // ORDERS
 
-router.post('/orders/list', controllers.order.listOrders);
+router.get('/orders/list', controllers.order.listOrders);
 router.post('/orders/create', controllers.order.createOrder); // Shopify Webhook endpoint
 router.get('/orders/sync', controllers.order.syncOrders); // Cron task
 
