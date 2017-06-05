@@ -20,18 +20,31 @@ module.exports = (sequelize) => {
       allowNull: false,
       unique: 'order',
     },
-    tracking_number: {
+    shopify_order_no: {
+      type: Sequelize.STRING,
+    },
+    tracking_numbers: {
+      type: Sequelize.ARRAY(Sequelize.STRING),
+      defaultValue: []
+    },
+    shipping_service: {
+      type: Sequelize.STRING,
+    },
+    shopify_fulfillment_id: {
       type: Sequelize.STRING,
     },
     success: {
       type: Sequelize.BOOLEAN,
+    },
+    status: {
+      type: Sequelize.ENUM('InProcess', 'PaymentAccepted', 'SentToFulfillment', 'Shipped', 'Delivered', 'Voided'),
     },
     compliant: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
     },
     override: {
-      type: Sequelize.ENUM('manual', 'auto')
+      type: Sequelize.ENUM('manual', 'auto'),
     },
     quarantined: {
       type: Sequelize.BOOLEAN,
@@ -46,6 +59,9 @@ module.exports = (sequelize) => {
       type: Sequelize.STRING,
     },
     ordered_at: {
+      type: Sequelize.DATE
+    },
+    last_synced_at: {
       type: Sequelize.DATE
     },
   }, {
