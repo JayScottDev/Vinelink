@@ -115,6 +115,7 @@ module.exports.inventory = async (ctx, next) => {
     }
   });
 
+  //Parse and filter out tax items
   const products = JSON.parse(shopifyResponse).products.filter(product => {
     return product.vendor !== 'VINELINK';
   });
@@ -147,30 +148,6 @@ module.exports.inventory = async (ctx, next) => {
 };
 
 module.exports.products = async (ctx, next) => {
-  // const shopId = ctx.session.shop_id;
-  // const shop = await Shop.findOne({ where: { id: shopId } });
-  // if (!shop) {
-  //   return ctx.respond(404, 'Incorrect username or password');
-  // }
-  // const accessToken = shop.shopify_access_token;
-  // const products = await request({
-  //   method: 'GET',
-  //   url: `https://${shop.myshopify_domain}/admin/products.json`,
-  //   headers: {
-  //     'X-Shopify-Access-Token': accessToken
-  //   }
-  // });
-  //
-  // const parsedProducts = JSON.parse(products);
-  //
-  // const skus = await parsedProducts.products.map(product => {
-  //   return {
-  //     id: product.variants[0].id,
-  //     product_key: product.variants[0].sku
-  //   };
-  // });
-  // console.log(products);
-
   await ctx.respond(200);
 };
 
