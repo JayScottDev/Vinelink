@@ -13,7 +13,6 @@ module.exports.install = async function (ctx, next) {
   const scopes =
     'read_orders,read_products,write_orders,write_products,write_script_tags';
   ctx.session.nonce = crypto.randomBytes(48).toString('hex');
-  console.log('NONCE', ctx.session.nonce);
   const install_url = `http://${shop}/admin/oauth/authorize?client_id=${process.env.API_KEY}&scope=${scopes}&redirect_uri=https://${process.env.APP_URL}/compliancy-connector/auth&state=${ctx.session.nonce}`;
   await ctx.render('iframe', { layout: false, url: install_url });
 };
@@ -60,9 +59,6 @@ module.exports.login = async function (ctx, next) {
     return ctx.respond(404, 'Incorrect username or password');
   }
 
-  console.log('SHOP', shop);
-  console.log('PASSWORD', shop.dataValues.password);
-
   // Check if password matches one stored in db
   const appPasswordHash = await bcrypt.hash(password, 10);
   const validPassword = await bcrypt.compare(
@@ -75,9 +71,7 @@ module.exports.login = async function (ctx, next) {
 
   // if valid username and password, store the shop id and store id in a session and redirectto the dashboard
   ctx.session.shopify_store_id = shop.dataValues.shopify_shop_id;
-  console.log('ID FROM AUTH ======>', shop.dataValues.id);
   ctx.session.shop_id = shop.dataValues.id;
-  console.log('AUTH SESSION!!!!!!!!!', ctx.session);
   ctx.redirect('/compliancy-connector/dashboard');
 };
 
@@ -101,7 +95,6 @@ module.exports.signup = async function (ctx, next) {
   }
 
   const validCredentials = await scClient.test();
-  console.log(validCredentials);
 
   if (!validCredentials) {
     return ctx.respond(
@@ -142,6 +135,5 @@ module.exports.signup = async function (ctx, next) {
 
   // sync state compliance with ship compliant
   const complianceSync = await sync(ctx, undefined, newShop.dataValues.id);
-  console.log(complianceSync);
   ctx.redirect('/compliancy-connector/dashboard');
 };

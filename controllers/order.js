@@ -73,7 +73,6 @@ module.exports.createOrder = async ctx => {
         );
       }
 
-      console.log('SUCCESS!!!', result.success);
       order.success = result.success;
     } else {
       // Currently an edge case

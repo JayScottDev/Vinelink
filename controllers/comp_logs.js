@@ -41,6 +41,8 @@ module.exports.checkOrderCompliance = async (ctx, next) => {
   const shopId = shop.id;
   const accessToken = shop.shopify_access_token;
   const shopDomain = shop.myshopify_domain;
+  const scUser = shop.sc_username;
+  const scPass = shop.sc_password;
 
   const compliances = await shop.getCompliance({ where: { state } });
   if (!compliances.length) {
@@ -68,9 +70,9 @@ module.exports.checkOrderCompliance = async (ctx, next) => {
   const taxReq = {
     Request: {
       Security: {
-        PartnerKey: '',
-        Password: process.env.SC_PASSWORD,
-        Username: process.env.SC_USER
+        PartnerKey: process.env.SC_PARTNER_KEY,
+        Password: scPass,
+        Username: scUser
       },
       Address: {
         Zip1: zip
