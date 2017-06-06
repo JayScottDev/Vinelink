@@ -4,7 +4,6 @@ const shipCompliant = require('../lib/ship_compliant');
 const models = require('../lib/postgres').models;
 const Shop = models.shop;
 const ShopCompliance = models.shop_compliance;
-const states = process.env.STATES_LIST.split(',');
 
 module.exports.syncShopCompliance = async (ctx, next = {}) => {
   const shopId = ctx.session.shop_id;
@@ -37,6 +36,45 @@ module.exports.syncShopCompliance = async (ctx, next = {}) => {
     return ctx.respond(500, 'Error Syncing');
   }
 };
+
+module.exports.syncAllCompliances = async ctx => {
+  if (!ctx.request.headers['x-appengine-cron']) {
+    return ctx.respond(401, 'Unauthorized');
+  }
+  syncAllCompliances();
+  return ctx.respond(200, 'Sync started');
+};
+
+async function syncAllCompliances () {
+  const shops = await Shop.findAll();
+  for (let shop of shops) {
+    try {
+      const scClient = await shipCompliant.createClient(
+        shop.sc_username,
+        shop.sc_password
+      );
+      if (!scClient) {
+        throw 'Cannot connect to ShipCompliant';
+      }
+      const compByState = await scClient.getStateCompliancies();
+
+      for (let state in compByState) {
+        const comp = compByState[state];
+        await ShopCompliance.upsert({
+          shop_id: shop.id,
+          state: state,
+          compliant: comp.compliant,
+          override: comp.override,
+          checked_at: Date.now()
+        });
+      }
+
+    } catch (e) {
+      console.error(`Error with compliance sync for shop ${shop.id}`);
+      console.error(e.stack);
+    }
+  }
+}
 
 module.exports.listShopCompliance = async (ctx, next) => {
   const {

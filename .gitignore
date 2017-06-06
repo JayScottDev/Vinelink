@@ -1,9 +1,11 @@
 .config
 node_modules
+dist
 .git
 local.env
-dist
 *.orig
 *.tmp.*
 *.tmp
 local.*
+production.env
+cloud_sql_proxy

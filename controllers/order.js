@@ -7,10 +7,75 @@ const moment = require('moment');
 const utils = require('../utils');
 const constants = require('../constants');
 const shipCompliant = require('../lib/ship_compliant');
+const shopify = require('../lib/shopify');
 const models = require('../lib/postgres').models;
 const Shop = models.shop;
 const Order = models.order;
 
+module.exports.listOrders = async ctx => {
+  const {
+    sort = 'created_at',
+    order = 'DESC',
+    limit = 50,
+    offset = 0
+  } = ctx.request.query;
+  if (!['ASC', 'DESC'].includes(order)) {
+    return ctx.respond(400, 'Query parameter `order` must be "ASC" or "DESC"');
+  }
+  const shopId = ctx.session.shop_id;
+  const orders = await Order.findAll({
+    where: { shop_id: shopId },
+    order: [[sort, order], ['created_at', 'DESC']],
+    limit: limit,
+    offset: offset
+  });
+
+  return ctx.respond(200, orders);
+};
+
+// Cron endpoint
+module.exports.syncOrders = async ctx => {
+  if (!ctx.request.headers['x-appengine-cron'] && !ctx.session.shop_id) {
+    return ctx.respond(401, 'Unauthorized');
+  }
+
+  const scClientsMap = {};
+
+  const unfulfilled = await Order.findAll({
+    where: { status: { $in: [ null, 'InProcess', 'PaymentAccepted', 'SentToFulfillment' ] } },
+    order: [['shop_id', 'ASC']]
+  });
+
+  for (const order of unfulfilled) {
+    try {
+      if (!scClientsMap[order.shop_id]) {
+        const shop = await Shop.findById(order.shop_id);
+        scClientsMap[order.shop_id] = await shipCompliant.createClient(shop.sc_username, shop.sc_password);
+      }
+      const scClient = scClientsMap[order.shop_id];
+      const scOrder = await scClient.getSalesOrder(order.order_key);
+
+      if ((scOrder.status !== order.status) || (scOrder.tracking.length > order.tracking_numbers.length)) {
+        order.status = scOrder.status;
+        order.tracking_numbers = scOrder.tracking;
+        order.shipping_service = scOrder.shipping_service;
+        order.save();
+
+        if (order.tracking_numbers.length) {
+          shopify.syncFulfillments(order);
+        }
+      }
+    } catch (e) {
+      console.error(`Error syncing order ${order.order_key}`);
+      console.error(e);
+    }
+  }
+
+  return ctx.respond(200, 'Successfully synced');
+};
+
+
+// Shopify Webhook Endpoint
 module.exports.createOrder = async ctx => {
   try {
     const {
@@ -49,11 +114,13 @@ module.exports.createOrder = async ctx => {
       tax_total: shopifyOrder.total_tax,
       tax_value: shopifyOrder.total_tax,
       order_key: shopifyOrder.id,
+      shopify_order_no: shopifyOrder.name,
       location_state: shopifyOrder.shipping_address.province_code,
       location_zip: shopifyOrder.shipping_address.zip,
       compliant: compliance.compliant,
       override: compliance.override,
-      ordered_at: Date.now()
+      ordered_at: Date.now(),
+      status: 'PaymentAccepted',
     });
 
     if (compliance.compliant || compliance.override === 'auto') {
