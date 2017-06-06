@@ -58,6 +58,13 @@ module.exports = (sequelize) => {
     location_zip: {
       type: Sequelize.STRING,
     },
+    cancelled: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false,
+    },
+    cancelled_at: {
+      type: Sequelize.DATE
+    },
     ordered_at: {
       type: Sequelize.DATE
     },
