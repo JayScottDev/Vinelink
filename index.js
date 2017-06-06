@@ -14,7 +14,6 @@ const parseString = require('xml2js').parseString;
 const js2xmlparser = require('js2xmlparser');
 const path = require('path');
 
-const shipcompliant = require('./shipcompliantmethods');
 const router = require('./router');
 
 const sg = require('./lib/email');
@@ -110,6 +109,6 @@ app.use(async ctx => {
   await send(ctx, 'index.html', { root: __dirname + '/dist' });
 });
 
-app.listen(process.env.PORT, function () {
+app.listen(process.env.PORT, function() {
   console.log(`Listening on port ${process.env.PORT}...`);
 });

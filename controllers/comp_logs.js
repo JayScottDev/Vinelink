@@ -15,7 +15,7 @@ const gcs = require('@google-cloud/storage')({
 const zipToState = require('../lib/zip_to_state');
 const email = require('../lib/email');
 const models = require('../lib/postgres').models;
-const getSalesTax = require('../shipcompliantmethods.js').getSalesTax;
+const shipCompliant = require('../lib/ship_compliant');
 const Shop = models.shop;
 const ShopCompliance = models.shop_compliance;
 const ComplianceLog = models.compliance_log;
@@ -67,31 +67,20 @@ module.exports.checkOrderCompliance = async (ctx, next) => {
     return ctx.respond(200, { compliant: false });
   }
 
-  const taxReq = {
-    Request: {
-      Security: {
-        PartnerKey: process.env.SC_PARTNER_KEY,
-        Password: scPass,
-        Username: scUser
-      },
-      Address: {
-        Zip1: zip
-      },
-      TaxSaleType: 'Offsite'
-    }
-  };
+  const scClient = await shipCompliant.createClient(
+    shop.sc_username,
+    shop.sc_password
+  );
 
-  const tax = await getSalesTax(taxReq);
-  const taxPercent =
-    tax.GetSalesTaxRatesByAddressResult.TaxRates.WineSalesTaxPercent;
-  const totalTax = (await taxPercent) * 0.01 * (total * 0.01);
+  const tax = await scClient.getTax(zip);
+  const totalTax = tax * 0.01 * (total * 0.01);
 
   const log = await ComplianceLog.create({
     shop_id: shopId,
     cart_total: total,
     compliant: compliance.compliant,
     override: compliance.override,
-    tax_percent: taxPercent,
+    tax_percent: tax,
     tax_value: totalTax,
     location_state: state,
     location_zip: zip,
@@ -364,7 +353,7 @@ module.exports.generateLogExport = async ctx => {
   return ctx.respond(200, 'Export process started.');
 };
 
-async function generateAndEmailLogExport (shopId, start, end) {
+async function generateAndEmailLogExport(shopId, start, end) {
   try {
     // Retrieve all logs from DB
     const logs = await ComplianceLog.findAll({

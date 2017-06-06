@@ -6,7 +6,7 @@ const Shop = models.shop;
 const ShopCompliance = models.shop_compliance;
 const states = process.env.STATES_LIST.split(',');
 
-module.exports.syncShopCompliance = async (ctx = {}, next = {}, ...args) => {
+module.exports.syncShopCompliance = async (ctx, next = {}) => {
   const shopId = ctx.session.shop_id;
 
   const shop = await Shop.findOne({ where: { id: shopId } });

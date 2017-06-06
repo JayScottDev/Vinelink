@@ -8,7 +8,7 @@ const Shop = models.shop;
 const shipCompliant = require('../lib/ship_compliant');
 const sync = require('./compliance').syncShopCompliance;
 
-module.exports.install = async function (ctx, next) {
+module.exports.install = async function(ctx, next) {
   const shop = ctx.query.shop;
   const scopes =
     'read_orders,read_products,write_orders,write_products,write_script_tags';
@@ -17,11 +17,11 @@ module.exports.install = async function (ctx, next) {
   await ctx.render('iframe', { layout: false, url: install_url });
 };
 
-module.exports.auth = async function auth (ctx, next) {
+module.exports.auth = async function auth(ctx, next) {
   const { hmac, code, state, shop } = ctx.query;
   const verify = crypto.createHmac('sha256', process.env.API_SECRET.toString());
   const data = Object.keys(ctx.query)
-    .map(function (key) {
+    .map(function(key) {
       return key !== 'hmac' && `${key}=${ctx.query[key]}`;
     })
     .filter(Boolean)
@@ -52,7 +52,7 @@ module.exports.auth = async function auth (ctx, next) {
 
 // LOGIN
 
-module.exports.login = async function (ctx, next) {
+module.exports.login = async function(ctx, next) {
   const { username, password } = ctx.request.body;
   const shop = await Shop.findOne({ username });
   if (!shop) {
@@ -70,14 +70,14 @@ module.exports.login = async function (ctx, next) {
   }
 
   // if valid username and password, store the shop id and store id in a session and redirectto the dashboard
-  ctx.session.shopify_store_id = shop.dataValues.shopify_shop_id;
-  ctx.session.shop_id = shop.dataValues.id;
+  ctx.session.shopify_store_id = shop.shopify_shop_id;
+  ctx.session.shop_id = shop.id;
   ctx.redirect('/compliancy-connector/dashboard');
 };
 
 // SIGNUP
 
-module.exports.signup = async function (ctx, next) {
+module.exports.signup = async function(ctx, next) {
   const {
     first_name,
     last_name,
@@ -114,7 +114,6 @@ module.exports.signup = async function (ctx, next) {
   const { shop } = JSON.parse(body);
   ctx.session.shopify_store_id = shop.id;
   const appPasswordHash = await bcrypt.hash(password, 10);
-  const scPasswordHash = await bcrypt.hash(sc_password, 10);
 
   // create new shop
   const newShop = await Shop.create({
@@ -127,13 +126,16 @@ module.exports.signup = async function (ctx, next) {
     shopify_shop_id: shop.id,
     first_name,
     last_name,
-    sc_username,
-    sc_password,
+    sc_username: 'vinelinkapp@gmail.com',
+    sc_password: 'M3t0nymy!',
     shopify_access_token: ctx.session.access_token
   });
-  ctx.session.shop_id = newShop.dataValues.id;
+
+  console.log('<------- shop id -------->', newShop.id);
+  ctx.session.shop_id = newShop.id;
 
   // sync state compliance with ship compliant
-  const complianceSync = await sync(ctx, undefined, newShop.dataValues.id);
+  const complianceSync = await sync(ctx);
+  console.log('compliance sync result', complianceSync);
   ctx.redirect('/compliancy-connector/dashboard');
 };
