@@ -42,7 +42,11 @@ module.exports.syncOrders = async ctx => {
   const scClientsMap = {};
 
   const unfulfilled = await Order.findAll({
-    where: { status: { $in: [ null, 'InProcess', 'PaymentAccepted', 'SentToFulfillment' ] } },
+    where: {
+      status: {
+        $in: [null, 'InProcess', 'PaymentAccepted', 'SentToFulfillment']
+      }
+    },
     order: [['shop_id', 'ASC']]
   });
 
@@ -50,12 +54,18 @@ module.exports.syncOrders = async ctx => {
     try {
       if (!scClientsMap[order.shop_id]) {
         const shop = await Shop.findById(order.shop_id);
-        scClientsMap[order.shop_id] = await shipCompliant.createClient(shop.sc_username, shop.sc_password);
+        scClientsMap[order.shop_id] = await shipCompliant.createClient(
+          shop.sc_username,
+          shop.sc_password
+        );
       }
       const scClient = scClientsMap[order.shop_id];
       const scOrder = await scClient.getSalesOrder(order.order_key);
 
-      if ((scOrder.status !== order.status) || (scOrder.tracking.length > order.tracking_numbers.length)) {
+      if (
+        scOrder.status !== order.status ||
+        scOrder.tracking.length > order.tracking_numbers.length
+      ) {
         order.status = scOrder.status;
         order.tracking_numbers = scOrder.tracking;
         order.shipping_service = scOrder.shipping_service;
@@ -73,7 +83,6 @@ module.exports.syncOrders = async ctx => {
 
   return ctx.respond(200, 'Successfully synced');
 };
-
 
 // Shopify Webhook Endpoint
 module.exports.createOrder = async ctx => {
@@ -103,10 +112,10 @@ module.exports.createOrder = async ctx => {
       where: { state: shopifyOrder.shipping_address.province_code }
     });
     if (!compliances.length) {
-      console.error();
+      console.error('NO COMPLIANT STATE');
     }
     const compliance = compliances[0];
-
+    console.log('----- creating order ---------');
     const order = await Order.create({
       shop_id: shop.id,
       cart_total: shopifyOrder.total_price,
@@ -120,8 +129,10 @@ module.exports.createOrder = async ctx => {
       compliant: compliance.compliant,
       override: compliance.override,
       ordered_at: Date.now(),
-      status: 'PaymentAccepted',
+      status: 'PaymentAccepted'
     });
+
+    console.log('----- order created ---------');
 
     if (compliance.compliant || compliance.override === 'auto') {
       const scClient = await shipCompliant.createClient(
@@ -131,10 +142,17 @@ module.exports.createOrder = async ctx => {
       if (!scClient) {
         throw 'Cannot connect to ShipCompliant';
       }
+
+      console.log('---- sending order to ship compliant -------');
       const result = await scClient.checkComplianceAndCommitSalesOrder(
         shopifyOrder
       );
-      if (result.error) {
+
+      console.log('WEB HOOK RESULT', result);
+      if (result.errors) {
+        for (let error of result.errors.Error) {
+          console.log('ERROR: ------> ', error);
+        }
         console.error(
           `Error committing sales order ${shopifyOrder.id} with ShipCompliant at ${moment().toISOString()}`
         );
@@ -156,7 +174,7 @@ module.exports.createOrder = async ctx => {
 };
 
 // convert child line items into top level items
-function cleanLineItems (lineItems) {
+function cleanLineItems(lineItems) {
   const items = [];
   let tax;
   for (let item of lineItems) {
@@ -169,7 +187,7 @@ function cleanLineItems (lineItems) {
         }
         items.push({
           price,
-          sku: /SKU:\s([a-zA-Z0-9]*)/i.exec(child.value)[1].trim(),
+          sku: /SKU:\s([a-zA-Z0-9\-]*)/i.exec(child.value)[1].trim(),
           vendor: /Vendor:\s([a-zA-Z0-9]*)/i.exec(child.value)[1].trim() ||
             item.vendor,
           quantity: Number(/Quantity:\s([0-9]*)/i.exec(child.value)[1].trim())
