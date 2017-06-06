@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const _ = require('lodash');
 const moment = require('moment');
 
+const email = require('../lib/email');
 const utils = require('../utils');
 const constants = require('../constants');
 const shipCompliant = require('../lib/ship_compliant');
@@ -186,3 +187,66 @@ function cleanLineItems (lineItems) {
   }
   return [items, tax];
 }
+
+// Shopify Webhook Endpoint
+module.exports.cancelOrder = async ctx => {
+  try {
+    const {
+      'x-shopify-shop-domain': myshopifyDomain,
+      'x-shopify-hmac-sha256': hmac
+    } = ctx.request.headers;
+
+    // Authenticate webhook request
+    const verify = crypto.createHmac('sha256', String(process.env.API_SECRET));
+    const signature = verify.update(ctx.request.rawBody).digest('base64');
+    if (hmac !== signature) {
+      return ctx.respond(401, 'Unauthorized');
+    }
+    ctx.respond(200, 'Successful');
+
+    const orderKey = ctx.request.body.id;
+
+    // check if order has already been sent to fulfillment
+    const shop = await Shop.findOne({
+      where: { myshopify_domain: myshopifyDomain }
+    });
+    const scClient = await shipCompliant.createClient(
+      shop.sc_username,
+      shop.sc_password
+    );
+
+    const scOrder = await scClient.getSalesOrder(orderKey);
+
+    if (['SentToFulfillment', 'Shipped', 'Delivered'].includes(scOrder.status)) {
+      email.sendEmail({
+        to_email: shop.email,
+        to_name: `${shop.first_name} ${shop.last_name}`,
+        type: 'order_cancel_failure',
+        params: {
+          order_key: orderKey,
+          order_status: scOrder.status
+        }
+      });
+    } else {
+      // else, void the order with SC
+      const { success, errors } = await scClient.voidSalesOrder(orderKey);
+      if (errors) {
+        console.error(`Error voiding order ${orderKey} for ${myshopifyDomain}`);
+        console.error(errors);
+      }
+      if (success) {
+        const order = await Order.findOne({ where: { order_key: orderKey }});
+        if (order) {
+          order.cancelled = true;
+          order.cancelled_at = Date.now();
+          order.save();
+        }
+      }
+    }
+
+
+  } catch (e) {
+    console.error(`Error cancelling order `);
+    console.error(e.stack || e);
+  }
+};

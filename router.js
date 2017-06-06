@@ -30,7 +30,7 @@ router.post('/compliance/check', controllers.comp_logs.checkOrderCompliance);
 router.get('/compliance/logs', controllers.comp_logs.getComplianceLogs);
 router.get('/compliance/logs/report/state', controllers.comp_logs.logsReportByState);
 router.get('/compliance/logs/report/date', controllers.comp_logs.logsReportByDate);
-router.get('/compliance/logs/report/total',controllers.comp_logs.logsAggregateTotal);
+router.get('/compliance/logs/report/total', controllers.comp_logs.logsAggregateTotal);
 router.post('/compliance/logs/export', controllers.comp_logs.generateLogExport);
 
 // SHOP-STATE COMPLIANCE
@@ -45,6 +45,7 @@ router.put('/compliance', controllers.compliance.updateShopCompliance);
 
 router.get('/orders/list', controllers.order.listOrders);
 router.post('/orders/create', controllers.order.createOrder); // Shopify Webhook endpoint
+router.post('/orders/cancel', controllers.order.cancelOrder); // Shopify Webhook endpoint
 router.get('/orders/sync', controllers.order.syncOrders); // Cron task
 
 // INVENTORY
