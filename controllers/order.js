@@ -35,7 +35,7 @@ module.exports.listOrders = async ctx => {
 
 // Cron endpoint
 module.exports.syncOrders = async ctx => {
-  if (!ctx.request.headers['X-Appengine-Cron'] && !ctx.session.shop_id) {
+  if (!ctx.request.headers['x-appengine-cron'] && !ctx.session.shop_id) {
     return ctx.respond(401, 'Unauthorized');
   }
 

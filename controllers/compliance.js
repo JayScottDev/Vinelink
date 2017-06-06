@@ -4,7 +4,6 @@ const shipCompliant = require('../lib/ship_compliant');
 const models = require('../lib/postgres').models;
 const Shop = models.shop;
 const ShopCompliance = models.shop_compliance;
-const states = process.env.STATES_LIST.split(',');
 
 module.exports.syncShopCompliance = async (ctx = {}, next = {}, ...args) => {
   const shopId = ctx.session.shop_id;
