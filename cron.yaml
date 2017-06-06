@@ -1,0 +1,6 @@
+# cron jobs
+
+cron:
+- description: Sync orders tracking
+  url: /orders/sync
+  schedule: every 1 hours
