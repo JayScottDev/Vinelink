@@ -47,7 +47,8 @@ app.use(async (ctx, next) => {
       status: 500,
       data: 'Internal Server Error'
     };
-    console.error(e);
+    console.error(e.message);
+    console.error(e.stack || e);
   }
 });
 
