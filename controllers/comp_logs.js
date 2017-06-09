@@ -21,7 +21,7 @@ const ShopCompliance = models.shop_compliance;
 const ComplianceLog = models.compliance_log;
 
 module.exports.checkOrderCompliance = async (ctx, next) => {
-  const myshopify_domain = ctx.header.origin.split('/')[2];
+  const domain = ctx.header.origin.split('/')[2];
   const { zip, total } = ctx.request.body;
   ctx.response.set('Access-Control-Allow-Origin', '*');
 
@@ -34,7 +34,11 @@ module.exports.checkOrderCompliance = async (ctx, next) => {
     return ctx.respond(200, { validZip: false });
   }
 
-  const shop = await Shop.findOne({ where: { myshopify_domain } });
+  const shop = await Shop.findOne({
+    where: {
+      $or: [{ myshopify_domain: domain }, { custom_domain: domain }]
+    }
+  });
   if (!shop) {
     return ctx.respond(404, 'Shop by that ID not found');
   }
@@ -96,13 +100,13 @@ module.exports.checkOrderCompliance = async (ctx, next) => {
     json: true,
     body: {
       product: {
-        title: 'Compliancy Fee',
-        body_html: '<strong>Compliancy Fee<\/strong>',
+        title: 'State Wine Tax',
+        body_html: '<strong>State Wine Tax<\/strong>',
         vendor: 'VINELINK',
         product_type: 'FEE',
         variants: [
           {
-            option1: 'State Name',
+            option1: `${state}`,
             price: totalTax,
             sku: 'TAX'
           }
