@@ -1,0 +1,24 @@
+config:
+  target: https://vinelink-167517.appspot.com
+  processor: ./zip_check.js
+  payload:
+    path: test_data/random_zips.csv
+    fields:
+      - zip
+  phases:
+    # limited by 2 req/sec call limit on shopify API
+    - duration: 100
+      arrivalRate: 2
+
+scenarios:
+  - flow:
+    - post:
+        url: "/compliance/check"
+        beforeRequest: setJSONBody
+        headers:
+          Origin: "https://deen-brothers-wine-2.myshopify.com/"
+        json:
+          currency: USD
+          shop_id: 1
+          zip: "{{ zip }}"
+          total: 1200.00
