@@ -20,6 +20,7 @@ module.exports.syncShopCompliance = async (ctx, next = {}) => {
     }
     const compByState = await scClient.getStateCompliancies();
     for (let state in compByState) {
+      console.log('STATE ----->', state);
       const comp = compByState[state];
       await ShopCompliance.upsert({
         shop_id: shopId,
@@ -45,7 +46,7 @@ module.exports.syncAllCompliances = async ctx => {
   return ctx.respond(200, 'Sync started');
 };
 
-async function syncAllCompliances () {
+async function syncAllCompliances() {
   const shops = await Shop.findAll();
   for (let shop of shops) {
     try {
@@ -68,7 +69,6 @@ async function syncAllCompliances () {
           checked_at: Date.now()
         });
       }
-
     } catch (e) {
       console.error(`Error with compliance sync for shop ${shop.id}`);
       console.error(e.stack);

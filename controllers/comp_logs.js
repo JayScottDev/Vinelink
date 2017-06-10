@@ -24,7 +24,6 @@ module.exports.checkOrderCompliance = async (ctx, next) => {
   const domain = ctx.header.origin.split('/')[2];
   const { zip, total } = ctx.request.body;
   ctx.response.set('Access-Control-Allow-Origin', '*');
-
   if (!zip || !total) {
     return ctx.respond(400, 'Missing required body parameter(s)');
   }
@@ -93,7 +92,7 @@ module.exports.checkOrderCompliance = async (ctx, next) => {
 
   const createProduct = await request({
     method: 'POST',
-    url: `${ctx.header.origin}/admin/products.json`,
+    url: `https://${shopDomain}/admin/products.json`,
     headers: {
       'X-Shopify-Access-Token': accessToken
     },

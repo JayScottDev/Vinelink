@@ -126,7 +126,7 @@ module.exports.signup = async function(ctx, next) {
     shopify_shop_id: shop.id,
     first_name,
     last_name,
-    sc_username: 'vinelinkapp@gmail.com',
+    sc_username: 'metonymydigital@gmail.com',
     sc_password: 'M3t0nymy!',
     shopify_access_token: ctx.session.access_token
   });
