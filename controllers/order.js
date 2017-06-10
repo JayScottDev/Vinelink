@@ -51,6 +51,8 @@ module.exports.syncOrders = async ctx => {
     order: [['shop_id', 'ASC']]
   });
 
+  const toSync = [];
+
   for (const order of unfulfilled) {
     try {
       if (!scClientsMap[order.shop_id]) {
@@ -73,13 +75,18 @@ module.exports.syncOrders = async ctx => {
         order.save();
 
         if (order.tracking_numbers.length) {
-          shopify.syncFulfillments(order);
+          toSync.push(order);
         }
       }
     } catch (e) {
       console.error(`Error syncing order ${order.order_key}`);
       console.error(e);
     }
+  }
+
+  for (let order of toSync) {
+    await shopify.syncFulfillments(order);
+    sleep(1000); // to respect the Shopify API call limit
   }
 
   return ctx.respond(200, 'Successfully synced');
@@ -175,7 +182,7 @@ module.exports.createOrder = async ctx => {
 };
 
 // convert child line items into top level items
-function cleanLineItems(lineItems) {
+function cleanLineItems (lineItems) {
   const items = [];
   let tax;
   for (let item of lineItems) {
