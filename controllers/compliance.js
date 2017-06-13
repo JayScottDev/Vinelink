@@ -46,7 +46,7 @@ module.exports.syncAllCompliances = async ctx => {
   return ctx.respond(200, 'Sync started');
 };
 
-async function syncAllCompliances() {
+async function syncAllCompliances () {
   const shops = await Shop.findAll();
   for (let shop of shops) {
     try {
