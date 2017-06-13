@@ -242,7 +242,7 @@ module.exports.cancelOrder = async ctx => {
 
     const scOrder = await scClient.getSalesOrder(orderKey);
 
-    if (['SentToFulfillment', 'Shipped', 'Delivered'].includes(scOrder.status)) {
+    if (['Shipped', 'Delivered'].includes(scOrder.status)) {
       email.sendEmail({
         to_email: shop.email,
         to_name: `${shop.first_name} ${shop.last_name}`,
