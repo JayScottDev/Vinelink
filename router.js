@@ -22,7 +22,7 @@ router.post('/compliancy-connector/signup', controllers.auth.signup);
 
 //ADD SHIP COMPLIANT CREDENTIALS
 
-router.get('/test/shop', controllers.shop.test);
+// router.get('/test/shop', controllers.shop.test);
 
 // ORDER COMPLIANCE AND LOGS
 

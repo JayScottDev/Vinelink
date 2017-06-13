@@ -1,4 +1,20 @@
 runtime: nodejs
 env: flex
+
+resources:
+  cpu: .5
+
+automatic_scaling:
+  min_num_instances: 2
+  max_num_instances: 40
+
+health_check:
+  enable_health_check: True
+  check_interval_sec: 5
+  timeout_sec: 4
+  unhealthy_threshold: 2
+  healthy_threshold: 3
+  restart_threshold: 12
+
 beta_settings:
   cloud_sql_instances: vinelink-167517:us-central1:vinelink-1

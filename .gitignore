@@ -9,3 +9,4 @@ local.env
 local.*
 production.env
 cloud_sql_proxy
+artillery_report*

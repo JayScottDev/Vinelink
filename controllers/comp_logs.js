@@ -346,7 +346,7 @@ module.exports.logsAggregateTotal = async (ctx, next) => {
     ]
   });
 
-  return ctx.respond(200, report.dataValues);
+  return ctx.respond(200, report && report.dataValues);
 };
 
 module.exports.generateLogExport = async ctx => {
