@@ -103,6 +103,11 @@ module.exports.checkOrderCompliance = async (ctx, next) => {
         body_html: '<strong>State Wine Tax<\/strong>',
         vendor: 'VINELINK',
         product_type: 'FEE',
+        images: [
+          {
+            src: 'https://cdn.shopify.com/s/files/1/2021/4773/files/Vector_Smart_Object_copy.png?2879857385645178993'
+          }
+        ],
         variants: [
           {
             option1: `${state}`,
