@@ -120,10 +120,10 @@ module.exports.createOrder = async ctx => {
       where: { state: shopifyOrder.shipping_address.province_code }
     });
     if (!compliances.length) {
-      console.error('NO COMPLIANT STATE');
+      console.error(`No compliance state for ${shop.myshopify_domain}, ${shopifyOrder.shipping_address.province_code}`);
+      return;
     }
     const compliance = compliances[0];
-    console.log('----- creating order ---------');
     const order = await Order.create({
       shop_id: shop.id,
       cart_total: shopifyOrder.total_price,
@@ -140,8 +140,6 @@ module.exports.createOrder = async ctx => {
       status: 'PaymentAccepted'
     });
 
-    console.log('----- order created ---------');
-
     if (compliance.compliant || compliance.override === 'auto') {
       const scClient = await shipCompliant.createClient(
         shop.sc_username,
@@ -151,19 +149,18 @@ module.exports.createOrder = async ctx => {
         throw 'Cannot connect to ShipCompliant';
       }
 
-      console.log('---- sending order to ship compliant -------');
       const result = await scClient.checkComplianceAndCommitSalesOrder(
         shopifyOrder
       );
 
-      console.log('WEB HOOK RESULT', result);
       if (result.errors) {
-        for (let error of result.errors.Error) {
-          console.log('ERROR: ------> ', error);
-        }
-        console.error(
-          `Error committing sales order ${shopifyOrder.id} with ShipCompliant at ${moment().toISOString()}`
-        );
+        console.error(`Error committing sales order ${shopifyOrder.id} with ShipCompliant at ${moment().toISOString()}`);
+        console.error(JSON.stringify(result.errors));
+      }
+
+      if (!result.success && !result.errors) {
+        console.error(`Unsuccessful commit order with ShipCompliant but no errors returned. ${shopifyOrder.order_key}`);
+        console.error(JSON.stringify(result.response));
       }
 
       order.success = result.success;
@@ -242,7 +239,7 @@ module.exports.cancelOrder = async ctx => {
 
     const scOrder = await scClient.getSalesOrder(orderKey);
 
-    if (['SentToFulfillment', 'Shipped', 'Delivered'].includes(scOrder.status)) {
+    if (['Shipped', 'Delivered'].includes(scOrder.status)) {
       email.sendEmail({
         to_email: shop.email,
         to_name: `${shop.first_name} ${shop.last_name}`,
