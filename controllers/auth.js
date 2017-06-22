@@ -9,7 +9,7 @@ const shipCompliant = require('../lib/ship_compliant');
 const sync = require('./compliance').syncShopCompliance;
 const registerWebhooks = require('../lib/shopify').registerWebhooksByShop;
 
-module.exports.install = async function (ctx, next) {
+module.exports.install = async function(ctx, next) {
   const shop = ctx.query.shop;
   const scopes =
     'read_orders,read_products,write_orders,write_products,write_script_tags';
@@ -18,11 +18,11 @@ module.exports.install = async function (ctx, next) {
   await ctx.render('iframe', { layout: false, url: install_url });
 };
 
-module.exports.auth = async function auth (ctx, next) {
+module.exports.auth = async function auth(ctx, next) {
   const { hmac, code, state, shop } = ctx.query;
   const verify = crypto.createHmac('sha256', process.env.API_SECRET.toString());
   const data = Object.keys(ctx.query)
-    .map(function (key) {
+    .map(function(key) {
       return key !== 'hmac' && `${key}=${ctx.query[key]}`;
     })
     .filter(Boolean)
@@ -53,7 +53,7 @@ module.exports.auth = async function auth (ctx, next) {
 
 // LOGIN
 
-module.exports.login = async function (ctx, next) {
+module.exports.login = async function(ctx, next) {
   const { username, password } = ctx.request.body;
   const shop = await Shop.findOne({ username });
   if (!shop) {
@@ -78,7 +78,7 @@ module.exports.login = async function (ctx, next) {
 
 // SIGNUP
 
-module.exports.signup = async function (ctx, next) {
+module.exports.signup = async function(ctx, next) {
   const {
     first_name,
     last_name,
@@ -134,11 +134,9 @@ module.exports.signup = async function (ctx, next) {
 
   await registerWebhooks(newShop);
 
-  console.log('<------- shop id -------->', newShop.id);
   ctx.session.shop_id = newShop.id;
 
   // sync state compliance with ship compliant
   const complianceSync = await sync(ctx);
-  console.log('compliance sync result', complianceSync);
   ctx.redirect('/compliancy-connector/dashboard');
 };
