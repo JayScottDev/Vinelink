@@ -14,7 +14,7 @@ module.exports.install = async function(ctx, next) {
   const scopes =
     'read_orders,read_products,write_orders,write_products,write_script_tags';
   ctx.session.nonce = crypto.randomBytes(48).toString('hex');
-  const install_url = `http://${shop}/admin/oauth/authorize?client_id=${process.env.API_KEY}&scope=${scopes}&redirect_uri=https://${process.env.APP_URL}/compliancy-connector/auth&state=${ctx.session.nonce}`;
+  const install_url = `http://${shop}/admin/oauth/authorize?client_id=${process.env.API_KEY}&scope=${scopes}&redirect_uri=https://${process.env.APP_URL}/app/auth&state=${ctx.session.nonce}`;
   await ctx.render('iframe', { layout: false, url: install_url });
 };
 
@@ -47,7 +47,7 @@ module.exports.auth = async function auth(ctx, next) {
     });
     ctx.session.access_token = body.access_token;
     ctx.session.shop = shop;
-    ctx.redirect('/compliancy-connector');
+    ctx.redirect('/app');
   }
 };
 
@@ -73,7 +73,7 @@ module.exports.login = async function(ctx, next) {
   // if valid username and password, store the shop id and store id in a session and redirectto the dashboard
   ctx.session.shopify_store_id = shop.shopify_shop_id;
   ctx.session.shop_id = shop.id;
-  ctx.redirect('/compliancy-connector/dashboard');
+  ctx.redirect('/app/dashboard');
 };
 
 // SIGNUP
@@ -138,5 +138,5 @@ module.exports.signup = async function(ctx, next) {
 
   // sync state compliance with ship compliant
   const complianceSync = await sync(ctx);
-  ctx.redirect('/compliancy-connector/dashboard');
+  ctx.redirect('/app/dashboard');
 };
