@@ -78,7 +78,8 @@ app.use(
     viewPath: `${__dirname}/views`,
     partialsPath: `${__dirname}/views/partials`,
     layoutsPath: `${__dirname}/views/layouts`,
-    defaultLayout: `main`
+    defaultLayout: `main`,
+    cache: app.env !== 'development'
   })
 );
 

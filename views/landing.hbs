@@ -1,4 +1,19 @@
-<div>
-  <a href="/app/login">Login</a>
-  <a href="/app/signup">Sign Up!</a>
+<div class="landing">
+  <section class="landing__inner">
+    <img src="logo.svg" alt="Vine Link" class="landing__logo">
+    <h1 class="landing__header">Vinelink</h1>
+    <form class="login-form">
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input name="username" id="login-username" />
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="login-password"/>
+      </div>
+      <button type="submit" name="login" class="btn btn--primary">Login</button>
+    </form>
+  </section>
+
+  <p>Don't have an account? Sign up <a href="/app/signup">here</a>.</p>
 </div>

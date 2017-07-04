@@ -8,7 +8,7 @@ const Shop = models.shop;
 const shipCompliant = require('../lib/ship_compliant');
 
 module.exports.main = async (ctx, next) => {
-  console.log('well we know this is getting hit atleast', ctx.session.shop);
+  console.log('serving landing page');
   await ctx.render('landing', {
     apiKey: process.env.API_KEY,
     shop: ctx.session.shop

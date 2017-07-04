@@ -6,7 +6,6 @@ const moment = require('moment');
 
 const email = require('../lib/email');
 const utils = require('../utils');
-const constants = require('../constants');
 const shipCompliant = require('../lib/ship_compliant');
 const shopify = require('../lib/shopify');
 const models = require('../lib/postgres').models;
@@ -120,7 +119,9 @@ module.exports.createOrder = async ctx => {
       where: { state: shopifyOrder.shipping_address.province_code }
     });
     if (!compliances.length) {
-      console.error(`No compliance state for ${shop.myshopify_domain}, ${shopifyOrder.shipping_address.province_code}`);
+      console.error(
+        `No compliance state for ${shop.myshopify_domain}, ${shopifyOrder.shipping_address.province_code}`
+      );
       return;
     }
     const compliance = compliances[0];
@@ -154,12 +155,16 @@ module.exports.createOrder = async ctx => {
       );
 
       if (result.errors) {
-        console.error(`Error committing sales order ${shopifyOrder.id} with ShipCompliant at ${moment().toISOString()}`);
+        console.error(
+          `Error committing sales order ${shopifyOrder.id} with ShipCompliant at ${moment().toISOString()}`
+        );
         console.error(JSON.stringify(result.errors));
       }
 
       if (!result.success && !result.errors) {
-        console.error(`Unsuccessful commit order with ShipCompliant but no errors returned. ${shopifyOrder.order_key}`);
+        console.error(
+          `Unsuccessful commit order with ShipCompliant but no errors returned. ${shopifyOrder.order_key}`
+        );
         console.error(JSON.stringify(result.response));
       }
 
@@ -179,7 +184,7 @@ module.exports.createOrder = async ctx => {
 };
 
 // convert child line items into top level items
-function cleanLineItems (lineItems) {
+function cleanLineItems(lineItems) {
   const items = [];
   let tax;
   for (let item of lineItems) {
@@ -257,7 +262,7 @@ module.exports.cancelOrder = async ctx => {
         console.error(errors);
       }
       if (success) {
-        const order = await Order.findOne({ where: { order_key: orderKey }});
+        const order = await Order.findOne({ where: { order_key: orderKey } });
         if (order) {
           order.cancelled = true;
           order.cancelled_at = Date.now();
@@ -265,8 +270,6 @@ module.exports.cancelOrder = async ctx => {
         }
       }
     }
-
-
   } catch (e) {
     console.error(`Error cancelling order `);
     console.error(e.stack || e);

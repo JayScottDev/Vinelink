@@ -1,46 +1,45 @@
-<div class="column 4">
-  <article>
-    <div class="card">
-      <h1>{{title}}</h1>
-      <h2>VineLink Info</h2>
-      <form action="/compliancy-connector/signup" method="POST">
-        <div class="row">
-          <label>First name: </label>
-          <input type="text" name="first_name" placeholder="first name" />
-        </div>
-        <div class="row">
-          <label>Last name: </label>
-          <input type="text" name="last_name" placeholder="last name" />
-        </div>
-        <div class="row">
-          <label>Email: </label>
-          <input type="email" name="email" placeholder="email" />
-        </div>
-        <div class="row">
-          <label>Username: </label>
-          <input type="text" name="username" placeholder="username" />
-        </div>
-        <div class="row">
-          <label>Password: </label>
-          <input type="password" name="password" placeholder="password" />
-        </div>
-        <div class="row">
-          <label>Confirm password: </label>
-          <input type="password" name="password_confirm" placeholder="confirm password" />
-        </div> 
+<div class="sign-up">
+  <section class="sign-up__inner ">
+    <h2 class="sign-up__header">Sign up</h2>
 
-        <h2>Ship Compliant Info</h2>
+    <form action="/compliancy-connector/signup" method="POST">
+      <h3 class="sign-up__sub-header">Personal information</h3>
+      <div class="form-group">
+        <label>First name:</label>
+        <input type="text" name="first_name" autofocus required/>
+      </div>
+      <div class="form-group">
+        <label>Last name:</label>
+        <input type="text" name="last_name" required/>
+      </div>
 
-        <div class="row">
-          <label>Ship Compliant username: </label>
-          <input type="text" name="sc_username" placeholder="ship compliant username" />
-        </div>
-        <div class="row">
-          <label>Ship Compliant password: </label>
-          <input type="password" name="sc_password" placeholder="ship compliant password" />
-        </div>
-        <button type="submit" class="secondary">Submit</button>
-      </form>
-    </div>
-  </article>
+      <h3 class="sign-up__sub-header">Account information</h3>
+      <div class="form-group">
+        <label>Email:</label>
+        <input type="email" name="email" required />
+      </div>
+      <div class="form-group">
+        <label>Username:</label>
+        <input type="text" name="username" required />
+      </div>
+      <div class="form-group">
+        <label>Password:</label>
+        <input type="password" name="password" required />
+      </div>
+      <div class="form-group">
+        <label>Confirm password:</label>
+        <input type="password" name="password_confirm" required />
+      </div>
+      <h3 class="sign-up__sub-header">ShipCompliant information</h3>
+      <div class="form-group">
+        <label>ShipCompliant username:</label>
+        <input type="text" name="sc_username" required />
+      </div>
+      <div class="form-group">
+        <label>ShipCompliant password:</label>
+        <input type="password" name="sc_password" required />
+      </div>
+      <button type="submit" class="btn btn--primary">Submit</button>
+    </form>
+  </section>
 </div>

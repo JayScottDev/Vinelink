@@ -67,7 +67,4 @@ router.get('/compliance/products', controllers.pages.products);
 
 // router.post('/compliancy-connector/checkouts', controllers.order.sendToSC);
 
-//APP ZIP CHECK
-const constants = require('./constants');
-
 module.exports = router;
