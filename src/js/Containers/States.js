@@ -1,49 +1,62 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { fetchLogsState } from '../actions/'
-import TileDetail from '../Components/TileDetail'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { fetchLogsState } from '../actions/';
+import TileDetail from '../Components/TileDetail';
+import { Layout } from '@shopify/polaris';
 
 class States extends Component {
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
       compliant: {},
       noncompliant: {}
-    }
+    };
   }
-  componentDidMount () {
-    this.props.fetchLogsState('/compliance/logs/report/state')
-  }
-
-  shouldComponentUpdate (nextProps, nextState) {
-    return this.props.states.data !== nextProps.states.data
+  componentDidMount() {
+    this.props.fetchLogsState('/compliance/logs/report/state');
   }
 
-  render () {
-    const { data } = this.props.states
-    const compliantStates = data && data.filter(state => {
-      return parseInt(state.compliant_count) && !parseInt(state.noncompliant_count)
-    })
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props.states.data !== nextProps.states.data;
+  }
 
-    const nonCompliantStates = data && data.filter(state => {
-      return !parseInt(state.compliant_count) && parseInt(state.noncompliant_count)
-    })
+  render() {
+    const { data } = this.props.states;
+    const compliantStates =
+      data &&
+      data.filter(state => {
+        return (
+          parseInt(state.compliant_count) && !parseInt(state.noncompliant_count)
+        );
+      });
+
+    const nonCompliantStates =
+      data &&
+      data.filter(state => {
+        return (
+          !parseInt(state.compliant_count) && parseInt(state.noncompliant_count)
+        );
+      });
     return (
-      <section className="totals">
-        <TileDetail success data={compliantStates} />
-        <TileDetail data={nonCompliantStates} />
-      </section>
-    )
+      <Layout>
+        <Layout.Section>
+          <TileDetail success data={compliantStates} />
+        </Layout.Section>
+        <Layout.Section>
+          <TileDetail data={nonCompliantStates} />
+        </Layout.Section>
+      </Layout>
+    );
   }
 }
 
-function mapStateToProps (state) {
-  return { states: state.state }
+function mapStateToProps(state) {
+  return { states: state.state };
 }
 
-function mapDispatchToProps (dispatch) {
-  return { fetchLogsState: bindActionCreators(fetchLogsState, dispatch) }
+function mapDispatchToProps(dispatch) {
+  return { fetchLogsState: bindActionCreators(fetchLogsState, dispatch) };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(States)
+export default connect(mapStateToProps, mapDispatchToProps)(States);

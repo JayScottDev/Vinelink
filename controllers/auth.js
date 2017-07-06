@@ -131,13 +131,17 @@ module.exports.signup = async function(ctx, next) {
     sc_username,
     sc_password,
     shopify_access_token: ctx.session.access_token
+  }).catch(err => {
+    console.log(err.errors[0]);
+    const message = { field: err.errors[0].path, status: 'failure' };
+    ctx.body = JSON.stringify(message);
   });
 
-  await registerWebhooks(newShop);
-
-  ctx.session.shop_id = newShop.id;
-
-  // sync state compliance with ship compliant
-  const complianceSync = await sync(ctx);
-  ctx.redirect('/app/dashboard');
+  if (newShop) {
+    await registerWebhooks(newShop);
+    ctx.session.shop_id = newShop.id;
+    // sync state compliance with ship compliant
+    const complianceSync = await sync(ctx);
+    ctx.respond(200);
+  }
 };

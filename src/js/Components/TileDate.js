@@ -1,63 +1,63 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { fetchLogsDate } from '../actions/'
-import TileDetail from '../Components/TileDetail'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { fetchLogsDate } from '../actions/';
+import { Card } from '@shopify/polaris';
 
 class Dates extends Component {
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
       compliant: {},
       noncompliant: {}
-    }
+    };
   }
-  componentDidMount () {
-    this.props.fetchLogsDate('/compliance/logs/report/date')
-  }
-
-  shouldComponentUpdate (nextProps, nextState) {
-    return this.props.dates.data !== nextProps.dates.data
+  componentDidMount() {
+    this.props.fetchLogsDate('/compliance/logs/report/date');
   }
 
-  render () {
-    console.log(this.props.dates);
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props.dates.data !== nextProps.dates.data;
+  }
 
-    const { data } = this.props.dates
+  render() {
+    const { data } = this.props.dates;
 
-    const rows = data && data.map(row => {
-      return (
-        <tr>
-          <td></td>
-        </tr>
-      )
-    })
+    const rows =
+      data &&
+      data.map(row => {
+        return (
+          <tr>
+            <td />
+          </tr>
+        );
+      });
 
     return (
-      <div className="date">
-      <table>
-        <thead>
-          <tr>
-            <th>Status</th>
-            <th>State</th>
-            <th>Total Cart Value</th>
-            <th>Tax Addition</th>
-            <th>Date &amp; Time Stamp</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-      </div>
-    )
+      <Card sectioned>
+        <table>
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>State</th>
+              <th>Total Cart Value</th>
+              <th>Tax Addition</th>
+              <th>Date & Time Stamp</th>
+            </tr>
+          </thead>
+          <tbody />
+        </table>
+      </Card>
+    );
   }
 }
 
-function mapStateToProps (state) {
-  return { dates: state.date }
+function mapStateToProps(state) {
+  return { dates: state.date };
 }
 
-function mapDispatchToProps (dispatch) {
-  return { fetchLogsDate: bindActionCreators(fetchLogsDate, dispatch) }
+function mapDispatchToProps(dispatch) {
+  return { fetchLogsDate: bindActionCreators(fetchLogsDate, dispatch) };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dates)
+export default connect(mapStateToProps, mapDispatchToProps)(Dates);
