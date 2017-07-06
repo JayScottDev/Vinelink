@@ -5,7 +5,9 @@ $border: #ddd;
 $text: #637381;
 $heading: #212B35;
 $blue: #007ACE;
+$red: #ED6347;
 $indigo: #5C6AC4;
+$light-red: #FBEAE5;
 
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
@@ -96,6 +98,13 @@ a {
   color: $blue;
 }
 
+.error {
+  color: $red;
+  margin-bottom: 30px;
+	font-size: 12px;
+	margin-top: 10px;
+}
+
 .btn {
   border-radius: 5px;
   padding: 10px 30px;
@@ -126,6 +135,11 @@ a {
     padding-left: 10px;
     font-size: 1em;
   }
+
+	.input-error {
+		border: 1px solid $red;
+		background-color: $light-red;
+	}
 }
 
 .landing {
@@ -153,7 +167,7 @@ a {
   }
 
   &__header {
-    margin-bottom: 60px;
+    margin-bottom: 44px;
   }
 
   button {
@@ -182,10 +196,19 @@ a {
     margin-bottom: 30px;
   }
 
-  &__header {
-    margin-bottom: 60px;
-    align-self: flex-start;
-  }
+	&__heading {
+		display: flex;
+		flex-flow: column;
+		width: 100%;
+		margin-bottom: 40px;
+	}
+
+	&__logo {
+		width: 60px;
+		align-self: center;
+		margin-bottom: 30px;
+
+	}
 
   &__sub-header {
     margin: 30px 0;

@@ -73,6 +73,7 @@ module.exports.login = async function(ctx, next) {
   // if valid username and password, store the shop id and store id in a session and redirectto the dashboard
   ctx.session.shopify_store_id = shop.shopify_shop_id;
   ctx.session.shop_id = shop.id;
+  console.log('SUCCESS');
   ctx.redirect('/app/dashboard');
 };
 
@@ -127,8 +128,8 @@ module.exports.signup = async function(ctx, next) {
     shopify_shop_id: shop.id,
     first_name,
     last_name,
-    sc_username: 'metonymydigital@gmail.com',
-    sc_password: 'M3t0nymy!',
+    sc_username,
+    sc_password,
     shopify_access_token: ctx.session.access_token
   });
 

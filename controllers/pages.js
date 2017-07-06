@@ -20,7 +20,10 @@ module.exports.login = async (ctx, next) => {
 };
 
 module.exports.signup = async (ctx, next) => {
-  await ctx.render('signup');
+  await ctx.render('signup', {
+    apiKey: process.env.API_KEY,
+    shop: ctx.session.shop
+  });
 };
 
 module.exports.reports = async (ctx, next) => {
