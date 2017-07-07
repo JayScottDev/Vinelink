@@ -1,0 +1,74 @@
+{
+  "data": [
+  {
+    "location_state": "OK",
+    "compliant_cart_total": null,
+    "noncompliant_cart_total": 49791,
+    "compliant_count": "0",
+    "noncompliant_count": "7"
+  },
+  {
+    "location_state": "RI",
+    "compliant_cart_total": null,
+    "noncompliant_cart_total": 9998,
+    "compliant_count": "0",
+    "noncompliant_count": "2"
+  },
+  {
+    "location_state": "KY",
+    "compliant_cart_total": null,
+    "noncompliant_cart_total": 93986,
+    "compliant_count": "0",
+    "noncompliant_count": "14"
+  },
+  {
+    "location_state": "VA",
+    "compliant_cart_total": null,
+    "noncompliant_cart_total": 44991,
+    "compliant_count": "0",
+    "noncompliant_count": "7"
+  },
+  {
+    "location_state": "MS",
+    "compliant_cart_total": null,
+    "noncompliant_cart_total": 24597,
+    "compliant_count": "0",
+    "noncompliant_count": "3"
+  },
+  {
+    "location_state": "AK",
+    "compliant_cart_total": null,
+    "noncompliant_cart_total": 38798,
+    "compliant_count": "0",
+    "noncompliant_count": "2"
+  },
+  {
+    "location_state": "MT",
+    "compliant_cart_total": null,
+    "noncompliant_cart_total": 120.32,
+    "compliant_count": "0",
+    "noncompliant_count": "1"
+  },
+  {
+    "location_state": "CA",
+    "compliant_cart_total": 554937,
+    "noncompliant_cart_total": null,
+    "compliant_count": "52",
+    "noncompliant_count": "0"
+  },
+  {
+    "location_state": "MN",
+    "compliant_cart_total": 201377,
+    "noncompliant_cart_total": null,
+    "compliant_count": "21",
+    "noncompliant_count": "0"
+  },
+  {
+    "location_state": "NY",
+    "compliant_cart_total": 162380,
+    "noncompliant_cart_total": null,
+    "compliant_count": "19",
+    "noncompliant_count": "0"
+  }
+]
+}

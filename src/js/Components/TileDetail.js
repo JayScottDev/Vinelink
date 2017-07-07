@@ -29,7 +29,7 @@ const TileDetail = props => {
       );
     });
   return (
-    <Card>
+    <Card sectioned>
       <h3>{titles.title}</h3>
       <table>
         <thead>

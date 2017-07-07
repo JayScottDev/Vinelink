@@ -5,6 +5,10 @@ import { fetchLogsState } from '../actions/';
 import TileDetail from '../Components/TileDetail';
 import { Layout } from '@shopify/polaris';
 
+import '../../styles/states.scss';
+
+import states from '../../data/states';
+
 class States extends Component {
   constructor(props) {
     super(props);
@@ -22,7 +26,7 @@ class States extends Component {
   }
 
   render() {
-    const { data } = this.props.states;
+    const { data } = states;
     const compliantStates =
       data &&
       data.filter(state => {
@@ -39,14 +43,10 @@ class States extends Component {
         );
       });
     return (
-      <Layout>
-        <Layout.Section>
-          <TileDetail success data={compliantStates} />
-        </Layout.Section>
-        <Layout.Section>
-          <TileDetail data={nonCompliantStates} />
-        </Layout.Section>
-      </Layout>
+      <section className="states">
+        <TileDetail success data={compliantStates} />
+        <TileDetail data={nonCompliantStates} />
+      </section>
     );
   }
 }

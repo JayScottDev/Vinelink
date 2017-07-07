@@ -5,6 +5,8 @@ import moment from 'moment';
 import { fetchLogsLog } from '../actions/';
 import { Card } from '@shopify/polaris';
 
+import logs from '../../data/logs';
+
 class Logs extends Component {
   constructor(props) {
     super(props);
@@ -28,13 +30,11 @@ class Logs extends Component {
   }
 
   render() {
-    const { data } = this.props.logs;
-    console.log('DATA ------->', data);
+    const { data } = logs;
     const rows =
       data &&
       data.map((row, i) => {
         const status = row.compliant ? 'compliant' : 'denied';
-        console.log('ROW------>', row);
         return (
           <tr key={i}>
             <td>{status}</td>

@@ -23,11 +23,13 @@ const TileAggregate = props => {
     noncompliant_cart_total
   } = props.data ? props.data : {};
   return (
-    <Card sectioned>
+    <Card
+      sectioned
+      title={props.success ? compliant.title : nonCompliant.title}
+    >
 
       {props.success &&
         <div className="card tile-aggregate__compliant">
-          <h3>{titles.title}</h3>
           <div className="tile-aggregate__row">
             <p>{titles.totalCarts}:</p>
             <p className="tile-aggregate__digits">{compliant_count}</p>
@@ -39,7 +41,6 @@ const TileAggregate = props => {
         </div>}
       {!props.success &&
         <div className="card tile-aggregate__noncompliant">
-          <h3>{titles.title}</h3>
           <div className="tile-aggregate__row">
             <p>{titles.totalCarts}:</p>
             <p className="tile-aggregate__digits">{noncompliant_count}</p>

@@ -5,6 +5,8 @@ import { VictoryChart, VictoryStack, VictoryLine } from 'victory';
 import { fetchLogsDate } from '../actions/';
 import { Card } from '@shopify/polaris';
 
+import dates from '../../data/dates';
+
 class Graph extends Component {
   constructor(props) {
     super(props);

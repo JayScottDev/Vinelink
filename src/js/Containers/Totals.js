@@ -5,6 +5,10 @@ import { fetchLogsTotal } from '../actions/';
 import TileAggregate from '../Components/TileAggregate';
 import { Layout } from '@shopify/polaris';
 
+import '../../styles/totals.scss';
+
+import totals from '../../data/totals';
+
 class Totals extends Component {
   constructor(props) {
     super(props);
@@ -23,14 +27,10 @@ class Totals extends Component {
 
   render() {
     return (
-      <Layout sectioned>
-        <Layout.Section>
-          <TileAggregate success data={this.props.totals.data} />
-        </Layout.Section>
-        <Layout.Section>
-          <TileAggregate data={this.props.totals.data} />
-        </Layout.Section>
-      </Layout>
+      <section className="totals">
+        <TileAggregate success data={totals.data} />
+        <TileAggregate data={totals.data} />
+      </section>
     );
   }
 }
