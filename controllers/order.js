@@ -248,6 +248,8 @@ module.exports.cancelOrder = async ctx => {
         to_name: `${shop.first_name} ${shop.last_name}`,
         type: 'order_cancel_failure',
         params: {
+          first_name: shop.first_name,
+          last_name: shop.last_name,
           order_key: orderKey,
           order_status: scOrder.status
         }
