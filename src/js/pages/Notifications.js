@@ -1,13 +1,13 @@
 import React from 'react';
+import { Card } from '@shopify/polaris';
 
 const Notifications = props => {
   return (
-    <div className="notifications">
-      <h1>Notifications</h1>
+    <Card sectioned title="Notifications">
       <h2>Notification settings</h2>
       <p>You are currently subscribed to all notifications</p>
       <button>Unsubscribe from all emails</button>
-    </div>
+    </Card>
   );
 };
 

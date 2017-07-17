@@ -1,5 +1,6 @@
 import React from 'react';
 import fetch from 'isomorphic-fetch';
+import { Card } from '@shopify/polaris';
 
 const Status = props => {
   function getInventory () {
@@ -27,14 +28,13 @@ const Status = props => {
       .then(data => console.log(data));
   }
   return (
-    <div className="status">
-      <h1>Status</h1>
+    <Card sectioned title="Status">
       <button onClick={getInventory}>CHECK INVENTORY</button>
 
       <button onClick={getProducts}>GET PRODUCTS</button>
 
       <button onClick={syncCompliance}>SYNC COMPLIANCE</button>
-    </div>
+    </Card>
   );
 };
 

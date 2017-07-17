@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { VictoryLabel, VictoryAxis, VictoryLine } from 'victory';
 import { fetchLogsDate } from '../actions/';
-import { Card } from '@shopify/polaris';
-import { Layout } from '@shopify/polaris';
+import { Layout, Card } from '@shopify/polaris';
 
 import dates from '../../data/dates';
 

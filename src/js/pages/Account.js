@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { FormLayout, TextField, Checkbox } from '@shopify/polaris';
 
 class Account extends Component {
   constructor (props) {
@@ -36,42 +37,43 @@ class Account extends Component {
         <p>You are currently on the Free Plan</p>
         <button>Upgrade account</button>
         <h2>Change password</h2>
-        <form onSubmit={this.handleSubmit}>
-          <label htmlFor="currentPassword">Current password</label>
-          <input
-            type="password"
+        <FormLayout>
+          <TextField
+            label="Current password"
+            type="passord"
             name="currentPassword"
             value={this.state.currentPassword}
             placeholder="Current password"
             onChange={this.handleChange}
           />
-          <label htmlFor="newPassword">New password</label>
-          <input
+          <TextField
+            label="New password"
             type="password"
             name="newPassword"
-            value={this.state.newPassword}
+            value={this.state.password}
             placeholder="New password"
             onChange={this.handleChange}
           />
-          <label htmlFor="confirmPassword">Confirm password</label>
-          <input
+          <TextField
+            label="Confirm password"
             type="password"
             name="confirmPassword"
             value={this.state.confirmPassword}
             placeholder="Confirm password"
             onChange={this.handleChange}
           />
-        </form>
+        </FormLayout>
         <h2>Delete account</h2>
         <p>
           USE WITH CAUTION. Delete your accdount and all of your data. You will
           not be able to undo this action
         </p>
-        <p>
-          I understand that by deleting my account I will lose all my data and
-          settings
-        </p>
-        <input type="checkbox" name="confirmDelete" />
+        <Checkbox
+          label="I understand that by deleting my account I will lose all my data and
+        settings"
+          name="confirmDelete"
+        />
+
         <button>Delete my account</button>
       </div>
     );

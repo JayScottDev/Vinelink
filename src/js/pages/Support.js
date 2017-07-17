@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { FormLayout, TextField, Card } from '@shopify/polaris';
 
 class Support extends Component {
   constructor (props) {
@@ -32,8 +33,7 @@ class Support extends Component {
 
   render () {
     return (
-      <div className="support">
-        <h1>Support details</h1>
+      <Card sectioned title="Support details">
         <h2>Need some help?</h2>
         <p>
           Start with our <Link to="/settings/faq">FAQ</Link>. Most, if not all,
@@ -41,23 +41,25 @@ class Support extends Component {
         </p>
 
         <h2>Contact us. We usually respond within 24 &ndash; 48 hours.</h2>
-        <form onSubmit={this.handleSubmit}>
-          <input
-            type="text"
+        <FormLayout>
+          <TextField
+            label="First name"
             name="first"
             value={this.state.first}
             placeholder="First name"
             onChange={this.handleChange}
           />
-          <input
-            type="text"
+
+          <TextField
+            label="Last name"
             name="last"
             value={this.state.last}
             placeholder="Last name"
             onChange={this.handleChange}
           />
-          <input
-            type="text"
+
+          <TextField
+            label="email"
             name="email"
             value={this.state.email}
             placeholder="Email"
@@ -70,8 +72,8 @@ class Support extends Component {
             onChange={this.handleChange}
           />
           <button>Submit</button>
-        </form>
-      </div>
+        </FormLayout>
+      </Card>
     );
   }
 }

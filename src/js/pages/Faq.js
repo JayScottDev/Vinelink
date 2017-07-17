@@ -1,11 +1,11 @@
 import React from 'react';
+import { Card } from '@shopify/polaris';
 
 const Faq = props => {
   return (
-    <div className="faq">
-      <h1>FAQ</h1>
+    <Card sectioned title="FAQ">
       <h2>TODO: NEED COMPS AND CONTENT FOR FAQ</h2>
-    </div>
+    </Card>
   );
 };
 

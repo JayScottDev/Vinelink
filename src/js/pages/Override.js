@@ -1,9 +1,9 @@
 import React from 'react';
+import { Card } from '@shopify/polaris';
 
 const Override = props => {
   return (
-    <div className="override">
-      <h1>Override States</h1>
+    <Card sectioned title="Override states">
       <h2>Caution!</h2>
       <p>
         These settings will automatically send order through regardless of
@@ -19,7 +19,7 @@ const Override = props => {
         </thead>
         <tbody />
       </table>
-    </div>
+    </Card>
   );
 };
 

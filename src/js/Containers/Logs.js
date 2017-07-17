@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import { fetchLogsLog } from '../actions/';
-import { Card } from '@shopify/polaris';
-import { Layout } from '@shopify/polaris';
+import { Layout, Card } from '@shopify/polaris';
 
 import logs from '../../data/logs';
 

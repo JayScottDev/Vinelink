@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { FormLayout, TextField } from '@shopify/polaris';
 
 class Profile extends Component {
   constructor (props) {
@@ -32,44 +33,41 @@ class Profile extends Component {
 
   render () {
     return (
-      <div className="profile">
-        <h1>Profile Details</h1>
-        <form onSubmit={this.handleSubmit}>
-          <label htmlFor="first">First name</label>
-          <input
-            type="text"
+      <Card title="Profile Details" sectioned>
+        <FormLayout>
+          <TextField
+            label="First name"
             name="first"
             value={this.state.first}
             placeholder="First name"
             onChange={this.handleChange}
           />
-          <label htmlFor="last">Last name</label>
-          <input
-            type="text"
+          <TextField
+            label="Last name"
             name="last"
             value={this.state.last}
             placeholder="Last name"
             onChange={this.handleChange}
           />
-          <label htmlFor="email">Email</label>
-          <input
-            type="text"
+          <TextField
+            label="Email"
+            type="email"
             name="email"
             value={this.state.email}
             placeholder="Email"
             onChange={this.handleChange}
           />
-          <label htmlFor="emailConfirm">Confirm email</label>
-          <input
-            type="text"
+          <TextField
+            label="Confirm email"
+            type="email"
             name="emailConfirm"
             value={this.state.emailConfirm}
             placeholder="Confirm email"
             onChange={this.handleChange}
           />
           <button type="submit">Submit</button>
-        </form>
-      </div>
+        </FormLayout>
+      </Card>
     );
   }
 }
