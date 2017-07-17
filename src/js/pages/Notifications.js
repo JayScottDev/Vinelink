@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 
-const Notifications = (props) => {
+const Notifications = props => {
   return (
     <div className="notifications">
       <h1>Notifications</h1>
@@ -8,7 +8,7 @@ const Notifications = (props) => {
       <p>You are currently subscribed to all notifications</p>
       <button>Unsubscribe from all emails</button>
     </div>
-  )
-}
+  );
+};
 
-export default Notifications
+export default Notifications;

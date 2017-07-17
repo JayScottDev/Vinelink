@@ -10,8 +10,6 @@ const el = document.getElementById('root');
 const apiKey = 'cc4a45f80b5b09aa143cab3065972dd1';
 const shopOrigin = 'https://vine-link-dev.myshopify.com'; // TODO: should not be hard coded
 
-console.log(window.location);
-
 render(
   <Provider store={store}>
     <BrowserRouter basename="/compliancy-connector">

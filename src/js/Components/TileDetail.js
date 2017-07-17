@@ -20,11 +20,15 @@ const TileDetail = props => {
     props.data.map((row, i) => {
       return (
         <tr>
-          <td>{row.location_state}</td>
+          <td>
+            {row.location_state}
+          </td>
           <td>
             {parseInt(row.compliant_count) || parseInt(row.noncompliant_count)}
           </td>
-          <td>${row.compliant_cart_total || row.noncompliant_cart_total}</td>
+          <td>
+            ${row.compliant_cart_total || row.noncompliant_cart_total}
+          </td>
         </tr>
       );
     });
@@ -37,16 +41,24 @@ const TileDetail = props => {
         <thead>
           <tr>
             <th>state</th>
-            <th>{titles.colTwo}</th>
-            <th>{titles.colThree}</th>
+            <th>
+              {titles.colTwo}
+            </th>
+            <th>
+              {titles.colThree}
+            </th>
           </tr>
         </thead>
         <tbody>
           {rows}
         </tbody>
       </table>
-      <p>{titles.totalCarts}</p>
-      <p>{titles.totalRevenue}</p>
+      <p>
+        {titles.totalCarts}
+      </p>
+      <p>
+        {titles.totalRevenue}
+      </p>
     </Card>
   );
 };

@@ -9,7 +9,7 @@ import { Layout } from '@shopify/polaris';
 import logs from '../../data/logs';
 
 class Logs extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       compliant: {},
@@ -18,7 +18,7 @@ class Logs extends Component {
 
     this.formatDate = this.formatDate.bind(this);
   }
-  componentDidMount() {
+  componentDidMount () {
     this.props.fetchLogsLog('/compliance/logs');
   }
 
@@ -26,11 +26,11 @@ class Logs extends Component {
   //   return this.props.logs !== nextProps.logs
   // }
 
-  formatDate(date) {
+  formatDate (date) {
     return moment(date).format('MMM DD [@] h:mm a');
   }
 
-  render() {
+  render () {
     const { data } = logs;
     const rows =
       data &&
@@ -38,11 +38,21 @@ class Logs extends Component {
         const status = row.compliant ? 'compliant' : 'denied';
         return (
           <tr key={i}>
-            <td>{status}</td>
-            <td>{row.location_state}</td>
-            <td>{row.cart_total}</td>
-            <td>{row.tax_value || 'n/a'}</td>
-            <td>{this.formatDate(row.checked_at)}</td>
+            <td>
+              {status}
+            </td>
+            <td>
+              {row.location_state}
+            </td>
+            <td>
+              {row.cart_total}
+            </td>
+            <td>
+              {row.tax_value || 'n/a'}
+            </td>
+            <td>
+              {this.formatDate(row.checked_at)}
+            </td>
           </tr>
         );
       });
@@ -62,7 +72,9 @@ class Logs extends Component {
                   <th>Date & Time Stamp</th>
                 </tr>
               </thead>
-              <tbody>{rows}</tbody>
+              <tbody>
+                {rows}
+              </tbody>
             </table>}
         </Card>
       </Layout.Section>
@@ -70,11 +82,11 @@ class Logs extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return { logs: state.log };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps (dispatch) {
   return { fetchLogsLog: bindActionCreators(fetchLogsLog, dispatch) };
 }
 

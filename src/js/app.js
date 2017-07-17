@@ -14,14 +14,14 @@ class App extends Component {
   static contextTypes = {
     easdk: PropTypes.object
   };
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       open: true,
       confirmed: false
     };
   }
-  render() {
+  render () {
     return (
       <Page>
         <Nav />

@@ -111,6 +111,6 @@ app.use(async ctx => {
   await send(ctx, 'index.html', { root: __dirname + '/dist' });
 });
 
-app.listen(process.env.PORT, function() {
+app.listen(process.env.PORT, function () {
   console.log(`Listening on port ${process.env.PORT}...`);
 });

@@ -27,29 +27,43 @@ const TileAggregate = props => {
       sectioned
       title={props.success ? compliant.title : nonCompliant.title}
     >
-
       {props.success &&
         <div className="card tile-aggregate__compliant">
           <div className="tile-aggregate__row">
-            <p>{titles.totalCarts}:</p>
-            <p className="tile-aggregate__digits">{compliant_count}</p>
+            <p>
+              {titles.totalCarts}:
+            </p>
+            <p className="tile-aggregate__digits">
+              {compliant_count}
+            </p>
           </div>
           <div className="tile-aggregate__row">
-            <p>{titles.totalRevenue}:</p>
-            <p className="tile-aggregate__digits">${compliant_cart_total}</p>
+            <p>
+              {titles.totalRevenue}:
+            </p>
+            <p className="tile-aggregate__digits">
+              ${compliant_cart_total}
+            </p>
           </div>
         </div>}
       {!props.success &&
         <div className="card tile-aggregate__noncompliant">
           <div className="tile-aggregate__row">
-            <p>{titles.totalCarts}:</p>
-            <p className="tile-aggregate__digits">{noncompliant_count}</p>
+            <p>
+              {titles.totalCarts}:
+            </p>
+            <p className="tile-aggregate__digits">
+              {noncompliant_count}
+            </p>
           </div>
           <div className="tile-aggregate__row">
-            <p>{titles.totalRevenue}:</p>
-            <p className="tile-aggregate__digits">${noncompliant_cart_total}</p>
+            <p>
+              {titles.totalRevenue}:
+            </p>
+            <p className="tile-aggregate__digits">
+              ${noncompliant_cart_total}
+            </p>
           </div>
-
         </div>}
     </Card>
   );

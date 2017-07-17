@@ -1,11 +1,14 @@
-import React from 'react'
+import React from 'react';
 
-const Override = (props) => {
+const Override = props => {
   return (
     <div className="override">
       <h1>Override States</h1>
       <h2>Caution!</h2>
-      <p>These settings will automatically send order through regardless of compliance by state.</p>
+      <p>
+        These settings will automatically send order through regardless of
+        compliance by state.
+      </p>
       <h2>Override summary</h2>
       <table>
         <thead>
@@ -14,11 +17,10 @@ const Override = (props) => {
             <th>Complicancy status</th>
           </tr>
         </thead>
-        <tbody>
-        </tbody>
+        <tbody />
       </table>
     </div>
-  )
-}
+  );
+};
 
-export default Override
+export default Override;

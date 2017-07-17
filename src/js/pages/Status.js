@@ -29,17 +29,11 @@ const Status = props => {
   return (
     <div className="status">
       <h1>Status</h1>
-      <button onClick={getInventory}>
-        CHECK INVENTORY
-      </button>
+      <button onClick={getInventory}>CHECK INVENTORY</button>
 
-      <button onClick={getProducts}>
-        GET PRODUCTS
-      </button>
+      <button onClick={getProducts}>GET PRODUCTS</button>
 
-      <button onClick={syncCompliance}>
-        SYNC COMPLIANCE
-      </button>
+      <button onClick={syncCompliance}>SYNC COMPLIANCE</button>
     </div>
   );
 };

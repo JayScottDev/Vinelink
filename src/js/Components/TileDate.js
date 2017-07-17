@@ -5,22 +5,22 @@ import { fetchLogsDate } from '../actions/';
 import { Card } from '@shopify/polaris';
 
 class Dates extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       compliant: {},
       noncompliant: {}
     };
   }
-  componentDidMount() {
+  componentDidMount () {
     this.props.fetchLogsDate('/compliance/logs/report/date');
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate (nextProps, nextState) {
     return this.props.dates.data !== nextProps.dates.data;
   }
 
-  render() {
+  render () {
     const { data } = this.props.dates;
 
     const rows =
@@ -52,11 +52,11 @@ class Dates extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return { dates: state.date };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps (dispatch) {
   return { fetchLogsDate: bindActionCreators(fetchLogsDate, dispatch) };
 }
 

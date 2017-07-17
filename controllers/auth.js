@@ -9,20 +9,22 @@ const shipCompliant = require('../lib/ship_compliant');
 const sync = require('./compliance').syncShopCompliance;
 const registerWebhooks = require('../lib/shopify').registerWebhooksByShop;
 
-module.exports.install = async function(ctx, next) {
+module.exports.install = async function (ctx, next) {
   const shop = ctx.query.shop;
   const scopes =
     'read_orders,read_products,write_orders,write_products,write_script_tags';
   ctx.session.nonce = crypto.randomBytes(48).toString('hex');
-  const install_url = `http://${shop}/admin/oauth/authorize?client_id=${process.env.API_KEY}&scope=${scopes}&redirect_uri=https://${process.env.APP_URL}/app/auth&state=${ctx.session.nonce}`;
+  const install_url = `http://${shop}/admin/oauth/authorize?client_id=${process
+    .env.API_KEY}&scope=${scopes}&redirect_uri=https://${process.env
+    .APP_URL}/app/auth&state=${ctx.session.nonce}`;
   await ctx.render('iframe', { layout: false, url: install_url });
 };
 
-module.exports.auth = async function auth(ctx, next) {
+module.exports.auth = async function auth (ctx, next) {
   const { hmac, code, state, shop } = ctx.query;
   const verify = crypto.createHmac('sha256', process.env.API_SECRET.toString());
   const data = Object.keys(ctx.query)
-    .map(function(key) {
+    .map(function (key) {
       return key !== 'hmac' && `${key}=${ctx.query[key]}`;
     })
     .filter(Boolean)
@@ -53,7 +55,7 @@ module.exports.auth = async function auth(ctx, next) {
 
 // LOGIN
 
-module.exports.login = async function(ctx, next) {
+module.exports.login = async function (ctx, next) {
   const { username, password } = ctx.request.body;
   const shop = await Shop.findOne({ username });
   if (!shop) {
@@ -79,7 +81,7 @@ module.exports.login = async function(ctx, next) {
 
 // SIGNUP
 
-module.exports.signup = async function(ctx, next) {
+module.exports.signup = async function (ctx, next) {
   const {
     first_name,
     last_name,

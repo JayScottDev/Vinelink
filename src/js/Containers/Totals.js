@@ -12,22 +12,22 @@ import totals from '../../data/totals';
 console.log(totals);
 
 class Totals extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       compliant: {},
       noncompliant: {}
     };
   }
-  componentDidMount() {
+  componentDidMount () {
     this.props.fetchLogsTotal('/compliance/logs/report/total');
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate (nextProps, nextState) {
     return this.props.totals !== nextProps.totals;
   }
 
-  render() {
+  render () {
     return (
       <Layout.Section>
         <Stack distribution="fillEvenly">
@@ -39,11 +39,11 @@ class Totals extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return { totals: state.total };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps (dispatch) {
   return { fetchLogsTotal: bindActionCreators(fetchLogsTotal, dispatch) };
 }
 

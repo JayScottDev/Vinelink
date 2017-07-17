@@ -100,12 +100,13 @@ module.exports.checkOrderCompliance = async (ctx, next) => {
     body: {
       product: {
         title: 'State Wine Tax',
-        body_html: '<strong>State Wine Tax<\/strong>',
+        body_html: '<strong>State Wine Tax</strong>',
         vendor: 'VINELINK',
         product_type: 'FEE',
         images: [
           {
-            src: 'https://cdn.shopify.com/s/files/1/2021/4773/files/Vector_Smart_Object_copy.png?2879857385645178993'
+            src:
+              'https://cdn.shopify.com/s/files/1/2021/4773/files/Vector_Smart_Object_copy.png?2879857385645178993'
           }
         ],
         variants: [
@@ -361,7 +362,7 @@ module.exports.generateLogExport = async ctx => {
   return ctx.respond(200, 'Export process started.');
 };
 
-async function generateAndEmailLogExport(shopId, start, end) {
+async function generateAndEmailLogExport (shopId, start, end) {
   try {
     // Retrieve all logs from DB
     const logs = await ComplianceLog.findAll({
@@ -381,7 +382,10 @@ async function generateAndEmailLogExport(shopId, start, end) {
     // Upload to storage
     const myBucket = gcs.bucket('vinelink');
     const file = myBucket.file(
-      `compliance_checks_${moment(end).format('YYYYMMDD')}_${uuid().replace(/-/g, '')}.csv`
+      `compliance_checks_${moment(end).format('YYYYMMDD')}_${uuid().replace(
+        /-/g,
+        ''
+      )}.csv`
     );
     await file.save(csv);
     const urls = await file.getSignedUrl({
@@ -398,6 +402,8 @@ async function generateAndEmailLogExport(shopId, start, end) {
       to_name: `${shop.first_name} ${shop.last_name}`,
       type: 'logs_export',
       params: {
+        first_name: shop.first_name,
+        last_name: shop.last_name,
         file_url: urls[0]
       }
     });

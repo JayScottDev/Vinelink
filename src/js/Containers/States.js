@@ -10,22 +10,22 @@ import '../../styles/states.scss';
 import states from '../../data/states';
 
 class States extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       compliant: {},
       noncompliant: {}
     };
   }
-  componentDidMount() {
+  componentDidMount () {
     this.props.fetchLogsState('/compliance/logs/report/state');
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate (nextProps, nextState) {
     return this.props.states.data !== nextProps.states.data;
   }
 
-  render() {
+  render () {
     const { data } = states;
     const compliantStates =
       data &&
@@ -53,11 +53,11 @@ class States extends Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return { states: state.state };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps (dispatch) {
   return { fetchLogsState: bindActionCreators(fetchLogsState, dispatch) };
 }
 

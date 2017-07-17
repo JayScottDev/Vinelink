@@ -3,6 +3,7 @@
 const crypto = require('crypto');
 const _ = require('lodash');
 const moment = require('moment');
+const sleep = require('system-sleep');
 
 const email = require('../lib/email');
 const utils = require('../utils');
@@ -84,8 +85,14 @@ module.exports.syncOrders = async ctx => {
   }
 
   for (let order of toSync) {
-    await shopify.syncFulfillments(order);
-    sleep(1000); // to respect the Shopify API call limit
+    try {
+      await shopify.syncFulfillments(order);
+      sleep(1000); // to respect the Shopify API call limit
+    } catch (e) {
+      console.error(
+        `Order sync failed for this order ${order.order_key} ${order.shopify_order_no}`
+      );
+    }
   }
 
   return ctx.respond(200, 'Successfully synced');
@@ -120,7 +127,8 @@ module.exports.createOrder = async ctx => {
     });
     if (!compliances.length) {
       console.error(
-        `No compliance state for ${shop.myshopify_domain}, ${shopifyOrder.shipping_address.province_code}`
+        `No compliance state for ${shop.myshopify_domain}, ${shopifyOrder
+          .shipping_address.province_code}`
       );
       return;
     }
@@ -156,12 +164,10 @@ module.exports.createOrder = async ctx => {
 
       if (result.errors) {
         console.error(
-          `Error committing sales order ${shopifyOrder.id} with ShipCompliant at ${moment().toISOString()}`
+          `Error committing sales order ${shopifyOrder.order_key} with ShipCompliant at ${moment().toISOString()}`
         );
         console.error(JSON.stringify(result.errors));
-      }
-
-      if (!result.success && !result.errors) {
+      } else if (!result.success) {
         console.error(
           `Unsuccessful commit order with ShipCompliant but no errors returned. ${shopifyOrder.order_key}`
         );
@@ -184,7 +190,7 @@ module.exports.createOrder = async ctx => {
 };
 
 // convert child line items into top level items
-function cleanLineItems(lineItems) {
+function cleanLineItems (lineItems) {
   const items = [];
   let tax;
   for (let item of lineItems) {
@@ -198,7 +204,8 @@ function cleanLineItems(lineItems) {
         items.push({
           price,
           sku: /SKU:\s([a-zA-Z0-9\-]*)/i.exec(child.value)[1].trim(),
-          vendor: /Vendor:\s([a-zA-Z0-9]*)/i.exec(child.value)[1].trim() ||
+          vendor:
+            /Vendor:\s([a-zA-Z0-9]*)/i.exec(child.value)[1].trim() ||
             item.vendor,
           quantity: Number(/Quantity:\s([0-9]*)/i.exec(child.value)[1].trim())
         });
@@ -250,6 +257,8 @@ module.exports.cancelOrder = async ctx => {
         to_name: `${shop.first_name} ${shop.last_name}`,
         type: 'order_cancel_failure',
         params: {
+          first_name: shop.first_name,
+          last_name: shop.last_name,
           order_key: orderKey,
           order_status: scOrder.status
         }

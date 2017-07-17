@@ -1,31 +1,31 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
 class Account extends Component {
   constructor (props) {
-    super(props)
+    super(props);
     this.state = {
       currentPassword: '',
       newPassword: '',
-      confirmPassword: '',
-    }
-    this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
+      confirmPassword: ''
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange (e) {
-    const target = e.target
-    const value = target.value
-    const name = target.name
+    const target = e.target;
+    const value = target.value;
+    const name = target.name;
 
     this.setState({
       [name]: value
-    })
+    });
   }
 
   handleSubmit (e) {
-    e.preventDefault()
-    const { first, last, email } = this.state
-    console.log('submitting', first, last, email)
+    e.preventDefault();
+    const { first, last, email } = this.state;
+    console.log('submitting', first, last, email);
   }
 
   render () {
@@ -52,24 +52,30 @@ class Account extends Component {
             value={this.state.newPassword}
             placeholder="New password"
             onChange={this.handleChange}
-            />
+          />
           <label htmlFor="confirmPassword">Confirm password</label>
           <input
-          type="password"
-          name="confirmPassword"
-          value={this.state.confirmPassword}
-          placeholder="Confirm password"
-          onChange={this.handleChange}
+            type="password"
+            name="confirmPassword"
+            value={this.state.confirmPassword}
+            placeholder="Confirm password"
+            onChange={this.handleChange}
           />
         </form>
         <h2>Delete account</h2>
-        <p>USE WITH CAUTION. Delete your accdount and all of your data. You will not be able to undo this action</p>
-        <p>I understand that by deleting my account I will lose all my data and settings</p>
+        <p>
+          USE WITH CAUTION. Delete your accdount and all of your data. You will
+          not be able to undo this action
+        </p>
+        <p>
+          I understand that by deleting my account I will lose all my data and
+          settings
+        </p>
         <input type="checkbox" name="confirmDelete" />
         <button>Delete my account</button>
       </div>
-    )
+    );
   }
 }
 
-export default Account
+export default Account;

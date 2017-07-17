@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 
-const Login = (props) => {
+const Login = props => {
   return (
     <div className="login">
       <h1>Login</h1>
@@ -10,7 +10,7 @@ const Login = (props) => {
         <button type="submit">Login</button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

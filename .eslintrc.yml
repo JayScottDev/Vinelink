@@ -10,6 +10,7 @@ parserOptions:
       arrowFunctions: true
       classes: true
       modules: true
+parser: babel-eslint
 rules:
     no-empty:
         - 2
@@ -53,6 +54,7 @@ rules:
         - 2
         - anonymous: always
           named: always
+          asyncArrow: always
     wrap-iife: 2
     comma-style:
         - 2

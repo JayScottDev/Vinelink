@@ -9,22 +9,22 @@ import { Layout } from '@shopify/polaris';
 import dates from '../../data/dates';
 
 class Graph extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       compliant: [],
       noncompliant: []
     };
   }
-  componentDidMount() {
+  componentDidMount () {
     this.props.fetchLogsDate('/compliance/logs/report/date');
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate (nextProps, nextState) {
     return this.props.dates.data !== nextProps.dates.data;
   }
 
-  render() {
+  render () {
     const { data } = this.props.dates;
     const compliant =
       data &&
@@ -47,7 +47,6 @@ class Graph extends Component {
           {compliant &&
             noncompliant &&
             <svg style={styles.parent} viewBox="0 0 450 350">
-
               {/* Define labels */}
               <VictoryLabel
                 x={25}
@@ -205,7 +204,8 @@ const getStyles = () => {
       display: 'inline',
       padding: 0,
       margin: 20,
-      fontFamily: "'-apple-system','BlinkMacSystemFont','San Francisco','Roboto','Segoe UI','Helvetica Neue',sans-serif;",
+      fontFamily:
+        "'-apple-system','BlinkMacSystemFont','San Francisco','Roboto','Segoe UI','Helvetica Neue',sans-serif;",
       width: '100%',
       height: 'auto'
     },
@@ -267,11 +267,11 @@ const getStyles = () => {
   };
 };
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return { dates: state.date };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps (dispatch) {
   return { fetchLogsDate: bindActionCreators(fetchLogsDate, dispatch) };
 }
 
