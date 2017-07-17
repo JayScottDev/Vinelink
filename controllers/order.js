@@ -3,6 +3,7 @@
 const crypto = require('crypto');
 const _ = require('lodash');
 const moment = require('moment');
+const sleep = require('system-sleep');
 
 const email = require('../lib/email');
 const utils = require('../utils');
@@ -85,8 +86,12 @@ module.exports.syncOrders = async ctx => {
   }
 
   for (let order of toSync) {
-    await shopify.syncFulfillments(order);
-    sleep(1000); // to respect the Shopify API call limit
+    try {
+      await shopify.syncFulfillments(order);
+      sleep(1000); // to respect the Shopify API call limit
+    } catch (e) {
+      console.error(`Order sync failed for this order ${order.order_key} ${order.shopify_order_no}`);
+    }
   }
 
   return ctx.respond(200, 'Successfully synced');
@@ -154,11 +159,9 @@ module.exports.createOrder = async ctx => {
       );
 
       if (result.errors) {
-        console.error(`Error committing sales order ${shopifyOrder.id} with ShipCompliant at ${moment().toISOString()}`);
+        console.error(`Error committing sales order ${shopifyOrder.order_key} with ShipCompliant at ${moment().toISOString()}`);
         console.error(JSON.stringify(result.errors));
-      }
-
-      if (!result.success && !result.errors) {
+      } else if (!result.success) {
         console.error(`Unsuccessful commit order with ShipCompliant but no errors returned. ${shopifyOrder.order_key}`);
         console.error(JSON.stringify(result.response));
       }
@@ -245,6 +248,8 @@ module.exports.cancelOrder = async ctx => {
         to_name: `${shop.first_name} ${shop.last_name}`,
         type: 'order_cancel_failure',
         params: {
+          first_name: shop.first_name,
+          last_name: shop.last_name,
           order_key: orderKey,
           order_status: scOrder.status
         }

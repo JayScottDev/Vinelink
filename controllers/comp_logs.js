@@ -361,7 +361,7 @@ module.exports.generateLogExport = async ctx => {
   return ctx.respond(200, 'Export process started.');
 };
 
-async function generateAndEmailLogExport(shopId, start, end) {
+async function generateAndEmailLogExport (shopId, start, end) {
   try {
     // Retrieve all logs from DB
     const logs = await ComplianceLog.findAll({
@@ -398,7 +398,9 @@ async function generateAndEmailLogExport(shopId, start, end) {
       to_name: `${shop.first_name} ${shop.last_name}`,
       type: 'logs_export',
       params: {
-        file_url: urls[0]
+        first_name: shop.first_name,
+        last_name: shop.last_name,
+        file_url: urls[0],
       }
     });
   } catch (e) {

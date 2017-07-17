@@ -14,7 +14,9 @@
     "build:prod": "webpack --config webpack.config.js",
     "deploy": "npm run build:prod && gcloud app deploy"
   },
-  "pre-commit": [],
+  "pre-commit": [
+    "lint"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
