@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchLogsState } from '../actions/';
 import TileDetail from '../Components/TileDetail';
-import { Layout } from '@shopify/polaris';
+import { Layout, Stack } from '@shopify/polaris';
 
 import '../../styles/states.scss';
 
@@ -43,10 +43,12 @@ class States extends Component {
         );
       });
     return (
-      <section className="states">
-        <TileDetail success data={compliantStates} />
-        <TileDetail data={nonCompliantStates} />
-      </section>
+      <Layout.Section>
+        <Stack distribution="fillEvenly" alignment="fill">
+          <TileDetail success data={compliantStates} />
+          <TileDetail data={nonCompliantStates} />
+        </Stack>
+      </Layout.Section>
     );
   }
 }

@@ -3,11 +3,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchLogsTotal } from '../actions/';
 import TileAggregate from '../Components/TileAggregate';
-import { Layout } from '@shopify/polaris';
+import { Layout, Stack } from '@shopify/polaris';
 
 import '../../styles/totals.scss';
 
 import totals from '../../data/totals';
+
+console.log(totals);
 
 class Totals extends Component {
   constructor(props) {
@@ -27,10 +29,12 @@ class Totals extends Component {
 
   render() {
     return (
-      <section className="totals">
-        <TileAggregate success data={totals.data} />
-        <TileAggregate data={totals.data} />
-      </section>
+      <Layout.Section>
+        <Stack distribution="fillEvenly">
+          <TileAggregate success data={totals.data} />
+          <TileAggregate data={totals.data} />
+        </Stack>
+      </Layout.Section>
     );
   }
 }

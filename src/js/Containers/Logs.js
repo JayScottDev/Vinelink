@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import { fetchLogsLog } from '../actions/';
 import { Card } from '@shopify/polaris';
+import { Layout } from '@shopify/polaris';
 
 import logs from '../../data/logs';
 
@@ -48,21 +49,23 @@ class Logs extends Component {
     console.log('LOGS RENDER FUNCTION');
     console.log('ROWS', rows);
     return (
-      <Card sectioned>
-        {rows &&
-          <table>
-            <thead>
-              <tr>
-                <th>Status</th>
-                <th>State</th>
-                <th>Total Cart Value</th>
-                <th>Tax Addition</th>
-                <th>Date & Time Stamp</th>
-              </tr>
-            </thead>
-            <tbody>{rows}</tbody>
-          </table>}
-      </Card>
+      <Layout.Section>
+        <Card sectioned>
+          {rows &&
+            <table>
+              <thead>
+                <tr>
+                  <th>Status</th>
+                  <th>State</th>
+                  <th>Total Cart Value</th>
+                  <th>Tax Addition</th>
+                  <th>Date & Time Stamp</th>
+                </tr>
+              </thead>
+              <tbody>{rows}</tbody>
+            </table>}
+        </Card>
+      </Layout.Section>
     );
   }
 }

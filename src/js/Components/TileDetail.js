@@ -29,8 +29,10 @@ const TileDetail = props => {
       );
     });
   return (
-    <Card sectioned>
-      <h3>{titles.title}</h3>
+    <Card
+      sectioned
+      title={props.success ? compliant.title : nonCompliant.title}
+    >
       <table>
         <thead>
           <tr>
