@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FormLayout, TextField, Checkbox } from '@shopify/polaris';
+import { FormLayout, TextField, Checkbox, Card } from '@shopify/polaris';
 
 class Account extends Component {
   constructor (props) {
@@ -31,8 +31,7 @@ class Account extends Component {
 
   render () {
     return (
-      <div className="account">
-        <h1>Account details</h1>
+      <Card sectioned title="Account details">
         <h2>Current account status</h2>
         <p>You are currently on the Free Plan</p>
         <button>Upgrade account</button>
@@ -73,9 +72,8 @@ class Account extends Component {
         settings"
           name="confirmDelete"
         />
-
         <button>Delete my account</button>
-      </div>
+      </Card>
     );
   }
 }

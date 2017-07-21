@@ -7,12 +7,12 @@ import { EmbeddedApp } from '@shopify/polaris/embedded';
 import App from './App.js';
 
 const el = document.getElementById('root');
-const apiKey = 'cc4a45f80b5b09aa143cab3065972dd1';
+const apiKey = '637b07d0402be00361d34e632d98be0f';
 const shopOrigin = 'https://vine-link-dev.myshopify.com'; // TODO: should not be hard coded
 
 render(
   <Provider store={store}>
-    <BrowserRouter basename="/compliancy-connector">
+    <BrowserRouter basename="/app">
       <EmbeddedApp shopOrigin={shopOrigin} apiKey={apiKey} forceRedirect>
         <App />
       </EmbeddedApp>

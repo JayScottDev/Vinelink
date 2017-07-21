@@ -12,7 +12,7 @@ const PATHS = {
 console.log(`${PATHS.src}/styles/preauth.scss`);
 
 module.exports = {
-  devtool: 'cheap-source-map',
+  devtool: 'cheap-module-eval-source-map',
 
   entry: path.resolve(PATHS.src, 'js/index.js'),
   output: {
@@ -67,11 +67,11 @@ module.exports = {
     ]
   },
   plugins: [
-    new ExtractTextPlugin('main.css'),
-    new HtmlWebpackPlugin({
-      template: './views/layouts/authorized.hbs',
-      alwaysWriteToDisk: true
-    }),
-    new HtmlWebpackHarddiskPlugin()
+    new ExtractTextPlugin('main.css')
+    // new HtmlWebpackPlugin({
+    //   template: './views/layouts/authorized.hbs',
+    //   alwaysWriteToDisk: true
+    // }),
+    // new HtmlWebpackHarddiskPlugin()
   ]
 };
