@@ -12,7 +12,7 @@ const shopOrigin = 'https://vine-link-dev.myshopify.com'; // TODO: should not be
 
 render(
   <Provider store={store}>
-    <BrowserRouter basename="/app">
+    <BrowserRouter basename="/">
       <EmbeddedApp shopOrigin={shopOrigin} apiKey={apiKey} forceRedirect>
         <App />
       </EmbeddedApp>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FormLayout, TextField } from '@shopify/polaris';
+import { FormLayout, TextField, Card } from '@shopify/polaris';
 
 class Profile extends Component {
   constructor (props) {

@@ -22,19 +22,17 @@ const Settings = props => {
           </Card>
         </Layout.Section>
         <Layout.Section>
-          <Card sectioned>
-            <Route path={`${match.url}/profile`} component={Profile} />
-            <Route path={`${match.url}/account`} component={Account} />
-            <Route
-              path={`${match.url}/notifications`}
-              component={Notifications}
-            />
-            <Route path={`${match.url}/billing`} component={Billing} />
-            <Route path={`${match.url}/support`} component={Support} />
-            <Route path={`${match.url}/faq`} component={Faq} />
-            <Route path={`${match.url}/override`} component={Override} />
-            <Route path={`${match.url}/status`} component={Status} />
-          </Card>
+          <Route path={`${match.url}/profile`} component={Profile} />
+          <Route path={`${match.url}/account`} component={Account} />
+          <Route
+            path={`${match.url}/notifications`}
+            component={Notifications}
+          />
+          <Route path={`${match.url}/billing`} component={Billing} />
+          <Route path={`${match.url}/support`} component={Support} />
+          <Route path={`${match.url}/faq`} component={Faq} />
+          <Route path={`${match.url}/override`} component={Override} />
+          <Route path={`${match.url}/status`} component={Status} />
         </Layout.Section>
       </Layout>
     </Page>

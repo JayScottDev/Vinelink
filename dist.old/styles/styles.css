@@ -1,0 +1,172 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans|Oswald");
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline; }
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block; }
+
+body {
+  line-height: 1; }
+
+ol, ul {
+  list-style: none; }
+
+blockquote, q {
+  quotes: none; }
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+body {
+  box-sizing: border-box;
+  font-size: 16px;
+  font-family: 'Open Sans', sans-serif;
+  color: #637381; }
+
+h1, h2, h3, h4 {
+  font-family: 'Oswald', sans-serif;
+  color: #212B35; }
+
+h1 {
+  font-size: 5.61em; }
+
+h2 {
+  font-size: 4.209em; }
+
+h3 {
+  font-size: 3.157em; }
+
+h4 {
+  font-size: 2.369em; }
+
+h5 {
+  font-size: 1.777em; }
+
+h6 {
+  font-size: 1.333em; }
+
+a {
+  color: #007ACE; }
+
+.error {
+  color: #ED6347;
+  margin-bottom: 30px;
+  font-size: 12px;
+  margin-top: 10px; }
+
+.btn {
+  border-radius: 5px;
+  padding: 10px 30px;
+  border: none;
+  font-size: 1em; }
+
+.btn--primary {
+  background-color: #5C6AC4;
+  color: #fff; }
+
+.form-group {
+  margin-bottom: 20px; }
+  .form-group label {
+    display: block;
+    margin-bottom: 10px; }
+  .form-group input {
+    border-radius: 3px;
+    border: 1px solid #ddd;
+    box-shadow: 0;
+    outline: none;
+    width: 200px;
+    height: 30px;
+    padding-left: 10px;
+    font-size: 1em; }
+  .form-group .input-error {
+    border: 1px solid #ED6347;
+    background-color: #FBEAE5; }
+
+.landing {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%; }
+  .landing__inner {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    background-color: #fff;
+    padding: 60px 100px;
+    box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    margin-bottom: 30px; }
+  .landing__logo {
+    width: 60px;
+    margin-bottom: 15px; }
+  .landing__header {
+    margin-bottom: 44px; }
+  .landing button {
+    margin: 0 auto;
+    position: relative; }
+
+.sign-up {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 60px 0 30px; }
+  .sign-up__inner {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    background-color: #fff;
+    padding: 60px 100px;
+    box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    margin-bottom: 30px; }
+  .sign-up__heading {
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+    margin-bottom: 40px; }
+  .sign-up__logo {
+    width: 60px;
+    align-self: center;
+    margin-bottom: 30px; }
+  .sign-up__sub-header {
+    margin: 30px 0;
+    font-size: 1.777em; }
+  .sign-up__sub-header:first-of-type {
+    margin-top: 0; }
+  .sign-up input {
+    width: 500px; }
+
+/*# sourceMappingURL=styles.css.map */

@@ -23,7 +23,7 @@ class App extends Component {
   }
   render () {
     return (
-      <Page>
+      <Page title="Vinelink">
         <Nav />
         <section className="app__container">
           <Route exact path="/dashboard" component={Dashboard} />
