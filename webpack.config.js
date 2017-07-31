@@ -9,11 +9,8 @@ const PATHS = {
   src: path.resolve(__dirname, 'src'),
   dist: path.resolve(__dirname, 'dist')
 };
-console.log(`${PATHS.src}/styles/preauth.scss`);
 
 module.exports = {
-  devtool: 'cheap-source-map',
-
   entry: path.resolve(PATHS.src, 'js/index.js'),
   output: {
     path: PATHS.dist,

@@ -45,7 +45,7 @@ class Graph extends Component {
         <Card sectioned>
           {compliant &&
             noncompliant &&
-            <svg style={styles.parent} viewBox="0 0 450 350">
+            <svg style={styles.parent} viewBox="0 0 450 310">
               {/* Define labels */}
               <VictoryLabel
                 x={25}
@@ -68,14 +68,6 @@ class Graph extends Component {
                   standalone={false}
                   style={styles.axisYears}
                   tickValues={tickValues}
-                  tickFormat={x => {
-                    if (x.getFullYear() === 2000) {
-                      return x.getFullYear();
-                    }
-                    if (x.getFullYear() % 5 === 0) {
-                      return x.getFullYear().toString().slice(2);
-                    }
-                  }}
                 />
 
                 {/*
@@ -84,7 +76,7 @@ class Graph extends Component {
          */}
                 <VictoryAxis
                   dependentAxis
-                  domain={[-10, 15]}
+                  domain={[0, 100]}
                   offsetX={50}
                   orientation="left"
                   standalone={false}
@@ -95,13 +87,17 @@ class Graph extends Component {
                 <VictoryLine
                   data={dataSetOne}
                   domain={{
-                    x: [new Date(1999, 1, 1), new Date(2016, 1, 1)],
-                    y: [-10, 15]
+                    x: [new Date(2017, 4, 1), new Date(2017, 7, 31)],
+                    y: [0, 100]
                   }}
-                  interpolation="monotoneX"
+                  interpolation="linear"
                   scale={{ x: 'time', y: 'linear' }}
                   standalone={false}
                   style={styles.lineOne}
+                  animate={{
+                    duration: 3000,
+                    onLoad: { duration: 2000 }
+                  }}
                 />
 
                 {/*
@@ -113,13 +109,17 @@ class Graph extends Component {
                 <VictoryLine
                   data={dataSetTwo}
                   domain={{
-                    x: [new Date(1999, 1, 1), new Date(2016, 1, 1)],
-                    y: [0, 50]
+                    x: [new Date(2017, 4, 1), new Date(2017, 7, 31)],
+                    y: [0, 100]
                   }}
-                  interpolation="monotoneX"
+                  interpolation="linear"
                   scale={{ x: 'time', y: 'linear' }}
                   standalone={false}
                   style={styles.lineTwo}
+                  animate={{
+                    duration: 3000,
+                    onLoad: { duration: 2000 }
+                  }}
                 />
               </g>
             </svg>}
@@ -131,61 +131,44 @@ class Graph extends Component {
 
 const getDataSetOne = () => {
   return [
-    { x: new Date(2000, 1, 1), y: 12 },
-    { x: new Date(2000, 6, 1), y: 10 },
-    { x: new Date(2000, 12, 1), y: 11 },
-    { x: new Date(2001, 1, 1), y: 5 },
-    { x: new Date(2002, 1, 1), y: 4 },
-    { x: new Date(2003, 1, 1), y: 6 },
-    { x: new Date(2004, 1, 1), y: 5 },
-    { x: new Date(2005, 1, 1), y: 7 },
-    { x: new Date(2006, 1, 1), y: 8 },
-    { x: new Date(2007, 1, 1), y: 9 },
-    { x: new Date(2008, 1, 1), y: -8.5 },
-    { x: new Date(2009, 1, 1), y: -9 },
-    { x: new Date(2010, 1, 1), y: 5 },
-    { x: new Date(2013, 1, 1), y: 1 },
-    { x: new Date(2014, 1, 1), y: 2 },
-    { x: new Date(2015, 1, 1), y: -5 }
+    { x: new Date(2017, 4, 2), y: 32 },
+    { x: new Date(2017, 4, 20), y: 20 },
+    { x: new Date(2017, 5, 18), y: 12 },
+    { x: new Date(2017, 5, 21), y: 42 },
+    { x: new Date(2017, 5, 30), y: 26 },
+    { x: new Date(2017, 6, 4), y: 33 },
+    { x: new Date(2017, 6, 12), y: 48 },
+    { x: new Date(2017, 6, 27), y: 51 },
+    { x: new Date(2017, 7, 4), y: 33 },
+    { x: new Date(2017, 7, 13), y: 56 }
   ];
 };
 
 const getDataSetTwo = () => {
   return [
-    { x: new Date(2000, 1, 1), y: 5 },
-    { x: new Date(2003, 1, 1), y: 6 },
-    { x: new Date(2004, 1, 1), y: 4 },
-    { x: new Date(2005, 1, 1), y: 10 },
-    { x: new Date(2006, 1, 1), y: 12 },
-    { x: new Date(2007, 2, 1), y: 48 },
-    { x: new Date(2008, 1, 1), y: 19 },
-    { x: new Date(2009, 1, 1), y: 31 },
-    { x: new Date(2011, 1, 1), y: 49 },
-    { x: new Date(2014, 1, 1), y: 40 },
-    { x: new Date(2015, 1, 1), y: 21 }
+    { x: new Date(2017, 4, 2), y: 12 },
+    { x: new Date(2017, 4, 20), y: 21 },
+    { x: new Date(2017, 5, 18), y: 17 },
+    { x: new Date(2017, 5, 21), y: 32 },
+    { x: new Date(2017, 5, 30), y: 15 },
+    { x: new Date(2017, 6, 4), y: 11 },
+    { x: new Date(2017, 6, 12), y: 37 },
+    { x: new Date(2017, 6, 27), y: 32 },
+    { x: new Date(2017, 7, 4), y: 15 },
+    { x: new Date(2017, 7, 13), y: 39 }
   ];
 };
 
 const getTickValues = () => {
   return [
-    new Date(1999, 1, 1),
-    new Date(2000, 1, 1),
-    new Date(2001, 1, 1),
-    new Date(2002, 1, 1),
-    new Date(2003, 1, 1),
-    new Date(2004, 1, 1),
-    new Date(2005, 1, 1),
-    new Date(2006, 1, 1),
-    new Date(2007, 1, 1),
-    new Date(2008, 1, 1),
-    new Date(2009, 1, 1),
-    new Date(2010, 1, 1),
-    new Date(2011, 1, 1),
-    new Date(2012, 1, 1),
-    new Date(2013, 1, 1),
-    new Date(2014, 1, 1),
-    new Date(2015, 1, 1),
-    new Date(2016, 1, 1)
+    new Date(2017, 4, 1),
+    new Date(2017, 4, 15),
+    new Date(2017, 5, 1),
+    new Date(2017, 5, 15),
+    new Date(2017, 6, 1),
+    new Date(2017, 6, 15),
+    new Date(2017, 7, 1),
+    new Date(2017, 7, 15)
   ];
 };
 
@@ -211,34 +194,30 @@ const getStyles = () => {
     title: {
       textAnchor: 'start',
       verticalAnchor: 'end',
-      fill: '#000000',
+      fill: '#212b36',
       fontFamily: 'inherit',
-      fontSize: '18px',
-      fontWeight: 'bold'
+      fontSize: 14
+      // fontWeight: 'bold'
     },
 
     // INDEPENDENT AXIS
     axisYears: {
       axis: { stroke: GRAY_COLOR, strokeWidth: 1 },
       ticks: {
-        size: tick => {
-          const tickSize = tick.getFullYear() % 2 === 0 ? 10 : 5;
-          return tickSize;
-        },
         stroke: GRAY_COLOR,
         strokeWidth: 1
       },
       tickLabels: {
         fill: TEXT_COLOR,
         fontFamily: 'inherit',
-        fontSize: 10
+        fontSize: 8
       }
     },
 
     // DATA SET ONE
     axisOne: {
       grid: {
-        stroke: tick => (tick === -10 ? 'transparent' : GRAY_COLOR),
+        stroke: GRAY_COLOR,
         strokeWidth: 1
       },
       axis: { stroke: GRAY_COLOR, strokeWidth: 0 },
@@ -252,8 +231,7 @@ const getStyles = () => {
     labelOne: {
       fill: HEADER_COLOR,
       fontFamily: 'inherit',
-      fontSize: 14,
-      fontWeight: 500
+      fontSize: 10
     },
     lineOne: {
       data: { stroke: PURPLE_COLOR, strokeWidth: 1.5 }

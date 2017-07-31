@@ -30,7 +30,10 @@ if (process.env.NODE_ENV === 'development') {
     history: true,
     noInfo: true,
     publicPath: '/',
-    contentBase: path.resolve(__dirname, 'dist')
+    contentBase: path.resolve(__dirname, 'dist'),
+    headers: {
+      'Content-Length': 70
+    }
   };
 
   app.use(webpackDevMiddleware(compiler, WEBPACK_CONFIG));

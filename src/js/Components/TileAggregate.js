@@ -1,6 +1,8 @@
 import React from 'react';
 import { Card } from '@shopify/polaris';
 
+import '../../styles/tile-aggregate.scss';
+
 const TileAggregate = props => {
   const compliant = {
     title: 'Successful carts & revenue',

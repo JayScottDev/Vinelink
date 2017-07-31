@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import { fetchLogsLog } from '../actions/';
-import { Layout, Card } from '@shopify/polaris';
+import { Layout, Card, Badge, Pagination } from '@shopify/polaris';
 
 import logs from '../../data/logs';
 
@@ -11,15 +11,105 @@ class Logs extends Component {
   constructor (props) {
     super(props);
     this.state = {
-      compliant: {},
-      noncompliant: {}
+      currentPage: 0,
+      pages: 0,
+      rowsPerPage: 10,
+      rows: []
     };
 
     this.formatDate = this.formatDate.bind(this);
+    this.formatCurrancy = this.formatCurrancy.bind(this);
+    this.setPages = this.setPages.bind(this);
+    this.getPrevious = this.getPrevious.bind(this);
+    this.getNext = this.getNext.bind(this);
+    this.getIndices = this.getIndices.bind(this);
+    this.getRows = this.getRows.bind(this);
   }
+
   componentDidMount () {
-    this.props.fetchLogsLog('/compliance/logs');
+    this.setPages();
+    this.getRows();
   }
+
+  componentDidUpdate (prevProps, prevState) {
+    if (
+      this.state.pages !== prevState.pages ||
+      this.state.currentPage !== prevState.currentPage
+    ) {
+      this.getRows();
+    }
+  }
+
+  setPages () {
+    const { data } = logs;
+    const pages = Math.ceil(data.length / this.state.rowsPerPage);
+    this.setState({ pages });
+  }
+
+  getPrevious () {
+    const { currentPage, pages } = this.state;
+    if (currentPage > 0) {
+      this.setState({
+        currentPage: currentPage - 1
+      });
+    }
+  }
+
+  getNext () {
+    const { currentPage, pages } = this.state;
+    if (currentPage - 1 < pages) {
+      this.setState({
+        currentPage: this.state.currentPage + 1
+      });
+    }
+  }
+
+  getIndices () {
+    const { currentPage, rowsPerPage } = this.state;
+    console.log('CURRENT PAGE', currentPage);
+    const firstIndex = currentPage * rowsPerPage;
+    const secondIndex = firstIndex + rowsPerPage;
+    return [firstIndex, secondIndex];
+  }
+
+  getRows () {
+    const indecies = this.getIndices();
+    const start = indecies[0];
+    const end = indecies[1];
+    const { data } = logs;
+    console.log('DATA', this.props.data);
+    let page = this.state.pages > 1 ? data.slice(start, end) : data;
+    const rows = page.map((row, i) => {
+      const status = row.compliant ? 'compliant' : 'denied';
+      return (
+        <tr key={i}>
+          <td>
+            <Badge status={status === 'compliant' ? 'success' : 'warning'}>
+              {status}
+            </Badge>
+          </td>
+          <td>
+            {row.location_state}
+          </td>
+          <td>
+            ${this.formatCurrancy(row.cart_total)}
+          </td>
+          <td>
+            ${isNaN(row.tax_value) ? 'n/a' : row.tax_value.toFixed(2)}
+          </td>
+          <td>
+            {this.formatDate(row.checked_at)}
+          </td>
+        </tr>
+      );
+    });
+
+    this.setState({ rows });
+  }
+
+  // componentDidMount () {
+  //   this.props.fetchLogsLog('/compliance/logs');
+  // }
 
   // shouldComponentUpdate (nextProps, nextState) {
   //   return this.props.logs !== nextProps.logs
@@ -29,34 +119,14 @@ class Logs extends Component {
     return moment(date).format('MMM DD [@] h:mm a');
   }
 
+  formatCurrancy (amount) {
+    console.log(amount.toString().split('').reverse());
+    return amount / 100;
+  }
+
   render () {
-    const { data } = logs;
-    const rows =
-      data &&
-      data.map((row, i) => {
-        const status = row.compliant ? 'compliant' : 'denied';
-        return (
-          <tr key={i}>
-            <td>
-              {status}
-            </td>
-            <td>
-              {row.location_state}
-            </td>
-            <td>
-              {row.cart_total}
-            </td>
-            <td>
-              {row.tax_value || 'n/a'}
-            </td>
-            <td>
-              {this.formatDate(row.checked_at)}
-            </td>
-          </tr>
-        );
-      });
     console.log('LOGS RENDER FUNCTION');
-    console.log('ROWS', rows);
+    const { rows } = this.state;
     return (
       <Layout.Section>
         <Card sectioned>
@@ -75,6 +145,14 @@ class Logs extends Component {
                 {rows}
               </tbody>
             </table>}
+
+          <Pagination
+            hasPrevious
+            onPrevious={this.getPrevious}
+            hasNext
+            onNext={this.getNext}
+            plain={false}
+          />
         </Card>
       </Layout.Section>
     );

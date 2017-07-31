@@ -7,8 +7,9 @@ import Install from './pages/Install';
 import Settings from './pages/Settings';
 import Export from './pages/Export';
 import Profile from './pages/Profile';
-
 import Nav from './site/Nav';
+
+import '../styles/app.scss';
 
 class App extends Component {
   static contextTypes = {
@@ -22,11 +23,12 @@ class App extends Component {
     };
   }
   render () {
+    console.log('APP PROPS', this.props);
     return (
       <Page title="Vinelink">
         <Nav />
         <section className="app__container">
-          <Route exact path="/dashboard" component={Dashboard} />
+          <Route path="/dashboard" component={Dashboard} />
           <Route path="/settings" component={Settings} />
           <Route path="/export" component={Export} />
           <Route path="/install" component={Install} />
