@@ -129,7 +129,7 @@ class Logs extends Component {
     const { rows } = this.state;
     return (
       <Layout.Section>
-        <Card sectioned>
+        <Card sectioned title="Zip check line items">
           {rows &&
             <table>
               <thead>

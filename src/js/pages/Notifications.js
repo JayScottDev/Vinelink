@@ -6,7 +6,7 @@ const Notifications = props => {
     <Card sectioned title="Notifications">
       <h2>Notification settings</h2>
       <p>You are currently subscribed to all notifications</p>
-      <button>Unsubscribe from all emails</button>
+      <button className="btn btn--submit">Unsubscribe from all emails</button>
     </Card>
   );
 };

@@ -1,41 +1,20 @@
 import React, { Component } from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, Switch } from 'react-router-dom';
 import * as PropTypes from 'prop-types';
 import { Page } from '@shopify/polaris';
-import Dashboard from './pages/Dashboard';
-import Install from './pages/Install';
-import Settings from './pages/Settings';
-import Export from './pages/Export';
-import Profile from './pages/Profile';
-import Nav from './site/Nav';
+import Main from './pages/Main';
 
 import '../styles/app.scss';
 
-class App extends Component {
-  static contextTypes = {
+const App = props => {
+  const contextTypes = {
     easdk: PropTypes.object
   };
-  constructor (props) {
-    super(props);
-    this.state = {
-      open: true,
-      confirmed: false
-    };
-  }
-  render () {
-    console.log('APP PROPS', this.props);
-    return (
-      <Page title="Vinelink">
-        <Nav />
-        <section className="app__container">
-          <Route path="/dashboard" component={Dashboard} />
-          <Route path="/settings" component={Settings} />
-          <Route path="/export" component={Export} />
-          <Route path="/install" component={Install} />
-        </section>
-      </Page>
-    );
-  }
-}
+  return (
+    <Page title="Vinelink">
+      <Main />
+    </Page>
+  );
+};
 
 export default App;

@@ -12,6 +12,9 @@ const FETCH_TOTAL_FAILURE = 'FETCH_TOTAL_FAILURE';
 const FETCH_LOG_REQUEST = 'FETCH_LOG_REQUEST';
 const FETCH_LOG_SUCCESS = 'FETCH_LOG_SUCCESS';
 const FETCH_LOG_FAILURE = 'FETCH_LOG_FAILURE';
+const FETCH_SHOP_REQUEST = 'FETCH_SHOP_REQUEST';
+const FETCH_SHOP_SUCCESS = 'FETCH_SHOP_SUCCESS';
+const FETCH_SHOP_FAILURE = 'FETCH_SHOP_FAILURE';
 
 const initialState = {
   isLoading: false,
@@ -126,9 +129,31 @@ const log = (state = initialState, action) => {
   return state;
 };
 
-export default combineReducers({
-  state,
-  date,
-  total,
-  log
-});
+const shopHandlers = {
+  [FETCH_SHOP_REQUEST]: (state, actions) => {
+    return Object.assign({}, state, {
+      isLoading: true
+    });
+  },
+  [FETCH_SHOP_SUCCESS]: (state, action) => {
+    return Object.assign({}, state, {
+      isLoading: false,
+      data: action.response.data
+    });
+  },
+  [FETCH_SHOP_FAILURE]: (state, action) => {
+    return Object.assign({}, state, {
+      isLoading: false,
+      err: action.error
+    });
+  }
+};
+
+const shop = (state = initialState, action) => {
+  if (shopHandlers[action.type]) {
+    return shopHandlers[action.type](state, action);
+  }
+  return state;
+};
+
+export { state, date, total, log, shop };

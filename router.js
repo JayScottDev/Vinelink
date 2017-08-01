@@ -56,6 +56,11 @@ router.post('/orders/create', controllers.order.createOrder); // Shopify Webhook
 router.post('/orders/cancel', controllers.order.cancelOrder); // Shopify Webhook endpoint
 router.get('/orders/sync', controllers.order.syncOrders); // Cron task
 
+// SHOP
+
+router.get('/shop/shopinfo', controllers.shop.getShopInfo);
+router.post('/shop/update', controllers.shop.updateShop); // Shopify Webhook endpoint
+
 // INVENTORY
 
 router.get('/compliance/inventory', controllers.pages.inventory);

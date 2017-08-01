@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Route, Link, Switch } from 'react-router-dom';
 import { Page, Layout, Card } from '@shopify/polaris';
 import Profile from './Profile';
 import Account from './Account';
@@ -11,13 +11,15 @@ import Override from './Override';
 import Status from './Status';
 import SubNav from '../Components/SubNav';
 
+import '../../styles/settings.scss';
+
 const Settings = props => {
   const { match } = props;
   return (
     <Page title="Settings">
       <Layout>
         <Layout.Section secondary>
-          <Card sectioned>
+          <Card sectioned title="Settings">
             <SubNav match={match} />
           </Card>
         </Layout.Section>

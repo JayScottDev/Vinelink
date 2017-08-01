@@ -1,8 +1,11 @@
 $sky: #DFE4E8;
+$indigo: #5C6AC4;
+$white: #fff;
 
 table {
   width: 100%;
   margin-bottom: 30px;
+  padding: 0 15px;
 }
 
 th {
@@ -24,4 +27,16 @@ tr:last-of-type {
 
 .align-right {
   // text-align: right;
+}
+
+.btn {
+  border-radius: 5px;
+  padding: 10px 30px;
+  border: none;
+  font-size: 1em;
+}
+
+.btn--submit {
+  background-color: $indigo;
+  color: $white;
 }

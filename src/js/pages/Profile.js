@@ -65,7 +65,9 @@ class Profile extends Component {
             placeholder="Confirm email"
             onChange={this.handleChange}
           />
-          <button type="submit">Submit</button>
+          <button type="submit" className="btn btn--submit">
+            Submit
+          </button>
         </FormLayout>
       </Card>
     );

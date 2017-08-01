@@ -1,3 +1,6 @@
+$green: #50B83C;
+$red: #ED6347;
+
 .tile-aggregate {
 
   &__row {
@@ -9,5 +12,13 @@
   &__digits {
     font-size: 32px;
     font-weight: 800;
+  }
+
+  &__compliant &__digits {
+    color: $green;
+  }
+
+  &__noncompliant &__digits {
+    color: $red;
   }
 }

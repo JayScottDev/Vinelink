@@ -72,7 +72,7 @@ class Account extends Component {
         settings"
           name="confirmDelete"
         />
-        <button>Delete my account</button>
+        <button className="btn btn--submit">Delete my account</button>
       </Card>
     );
   }

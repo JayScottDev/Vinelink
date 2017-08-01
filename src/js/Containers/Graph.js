@@ -42,18 +42,11 @@ class Graph extends Component {
     const tickValues = getTickValues();
     return (
       <Layout.Section>
-        <Card sectioned>
+        <Card sectioned title="Zip checks over time">
           {compliant &&
             noncompliant &&
-            <svg style={styles.parent} viewBox="0 0 450 310">
+            <svg style={styles.parent} viewBox="0 35 450 285">
               {/* Define labels */}
-              <VictoryLabel
-                x={25}
-                y={24}
-                style={styles.title}
-                text="Zip Checks over time"
-              />
-
               <VictoryLabel
                 x={25}
                 y={55}
@@ -186,6 +179,7 @@ const getStyles = () => {
       display: 'inline',
       padding: 0,
       margin: 20,
+      marginTop: 0,
       fontFamily:
         "'-apple-system','BlinkMacSystemFont','San Francisco','Roboto','Segoe UI','Helvetica Neue',sans-serif;",
       width: '100%',

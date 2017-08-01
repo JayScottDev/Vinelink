@@ -1,9 +1,22 @@
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
-import reducer from '../reducers/index.js';
+import { routerReducer, routerMiddleware } from 'react-router-redux';
+import { state, date, total, log, shop } from '../reducers/index.js';
 import APIMiddleware from '../middleware/api';
 
-let store = createStore(reducer, applyMiddleware(APIMiddleware, logger));
+const middleware = routerMiddleware(history);
+
+let store = createStore(
+  combineReducers({
+    state,
+    date,
+    total,
+    log,
+    shop,
+    router: routerReducer
+  }),
+  applyMiddleware(APIMiddleware, logger, middleware)
+);
 
 export { store };
