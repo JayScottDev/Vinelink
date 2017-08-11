@@ -8,7 +8,7 @@
   "main": "index.js",
   "scripts": {
     "start": ". config/index.env && . config/production.env && node index.js",
-    "dev": "NODE_ENV=development . config/index.env && . config/local.env && nodemon index.js",
+    "dev": "NODE_ENV=development . config/index.env && . config/local.env && nodemon --inspect index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "./node_modules/.bin/eslint --ignore-path .gitignore .",
     "build:prod": "webpack --config webpack.config.js",
@@ -74,6 +74,7 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
+    "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.28.1",
     "eslint": "^3.19.0",
     "extract-text-webpack-plugin": "^2.1.0",

@@ -15,6 +15,9 @@ const FETCH_LOG_FAILURE = 'FETCH_LOG_FAILURE';
 const FETCH_SHOP_REQUEST = 'FETCH_SHOP_REQUEST';
 const FETCH_SHOP_SUCCESS = 'FETCH_SHOP_SUCCESS';
 const FETCH_SHOP_FAILURE = 'FETCH_SHOP_FAILURE';
+const FETCH_STATE_COMPLIANCE_REQUEST = 'FETCH_STATE_COMPLIANCE_REQUEST';
+const FETCH_STATE_COMPLIANCE_SUCCESS = 'FETCH_STATE_COMPLIANCE_SUCCESS';
+const FETCH_STATE_COMPLIANCE_FAILURE = 'FETCH_STATE_COMPLIANCE_FAILURE';
 
 const initialState = {
   isLoading: false,
@@ -156,4 +159,32 @@ const shop = (state = initialState, action) => {
   return state;
 };
 
-export { state, date, total, log, shop };
+const stateComplianceHandlers = {
+  [FETCH_STATE_COMPLIANCE_REQUEST]: (state, actions) => {
+    return Object.assign({}, state, {
+      isLoading: true
+    });
+  },
+  [FETCH_STATE_COMPLIANCE_SUCCESS]: (state, action) => {
+    console.log('ACTION', action);
+    return Object.assign({}, state, {
+      isLoading: false,
+      data: action.response.data
+    });
+  },
+  [FETCH_STATE_COMPLIANCE_FAILURE]: (state, action) => {
+    return Object.assign({}, state, {
+      isLoading: false,
+      err: action.error
+    });
+  }
+};
+
+const stateCompliance = (state = initialState, action) => {
+  if (stateComplianceHandlers[action.type]) {
+    return stateComplianceHandlers[action.type](state, action);
+  }
+  return state;
+};
+
+export { state, date, total, log, shop, stateCompliance };

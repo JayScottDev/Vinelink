@@ -12,7 +12,7 @@ const Home = props => {
         <Totals />
         <States />
         <Graph />
-        <Logs />
+        <Logs rowsPerPage={10} />
       </Layout>
     </Page>
   );

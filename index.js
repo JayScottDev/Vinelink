@@ -32,7 +32,7 @@ if (process.env.NODE_ENV === 'development') {
     publicPath: '/',
     contentBase: path.resolve(__dirname, 'dist'),
     headers: {
-      'Content-Length': 70
+      'Content-Length': 1
     }
   };
 

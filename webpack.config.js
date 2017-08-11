@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 
@@ -58,13 +58,20 @@ module.exports = {
       },
       {
         test: /\.(jpg|png)$/,
-        loader: 'file-loader'
+        loader: 'file-loader',
+        options: '[path][name].[ext]'
       },
       { test: /\.hbs$/, loader: 'handlebars-loader' }
     ]
   },
   plugins: [
     new ExtractTextPlugin('main.css'),
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(__dirname, 'public/img/logo.svg'),
+        to: `${PATHS.dist}/img`
+      }
+    ]),
     new HtmlWebpackPlugin({
       template: './views/layouts/authorized.hbs',
       alwaysWriteToDisk: true

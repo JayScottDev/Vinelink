@@ -1,15 +1,10 @@
 const callAPIMiddleware = ({ dispatch, getState }) => {
   return next => action => {
-    const {
-      types,
-      callAPI,
-      shouldCallAPI = () => true,
-      payload = {}
-    } = action
+    const { types, callAPI, shouldCallAPI = () => true, payload = {} } = action;
 
     if (!types) {
       // Normal action: pass it on
-      return next(action)
+      return next(action);
     }
 
     if (
@@ -17,36 +12,46 @@ const callAPIMiddleware = ({ dispatch, getState }) => {
       types.length !== 3 ||
       !types.every(type => typeof type === 'string')
     ) {
-      throw new Error('Expected an array of three string types.')
+      throw new Error('Expected an array of three string types.');
     }
 
     if (typeof callAPI !== 'function') {
-      throw new Error('Expected callAPI to be a function.')
+      throw new Error('Expected callAPI to be a function.');
     }
 
     if (!shouldCallAPI(getState())) {
-      return
+      return;
     }
 
-    const [ requestType, successType, failureType ] = types
+    const [requestType, successType, failureType] = types;
 
-    dispatch(Object.assign({}, payload, {
-      type: requestType
-    }))
+    dispatch(
+      Object.assign({}, payload, {
+        type: requestType
+      })
+    );
 
     return callAPI()
-    .then(response => response.json())
-    .then(data =>
-      dispatch(Object.assign({}, payload, {
-        response: data,
-        type: successType
-      })),
-      error => dispatch(Object.assign({}, payload, {
-        error,
-        type: failureType
-      }))
-    )
-  }
-}
+      .then(response => {
+        return response.json();
+      })
+      .then(
+        data =>
+          dispatch(
+            Object.assign({}, payload, {
+              response: data,
+              type: successType
+            })
+          ),
+        error =>
+          dispatch(
+            Object.assign({}, payload, {
+              error,
+              type: failureType
+            })
+          )
+      );
+  };
+};
 
-export default callAPIMiddleware
+export default callAPIMiddleware;

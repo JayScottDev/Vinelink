@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { FormLayout, TextField, Card } from '@shopify/polaris';
+import '../../styles/support.scss';
 
 class Support extends Component {
   constructor (props) {
@@ -33,47 +34,51 @@ class Support extends Component {
 
   render () {
     return (
-      <Card sectioned title="Support details">
-        <h2>Need some help?</h2>
-        <p>
-          Start with our <Link to="/settings/faq">FAQ</Link>. Most, if not all,
-          commonly asked question should be addressed there.
-        </p>
+      <section className="support">
+        <Card sectioned title="Support details">
+          <div className="support__intro">
+            <h2>Need some help?</h2>
+            <p>
+              Start with our <Link to="/settings/faq">FAQ</Link>. Most, if not
+              all, commonly asked question should be addressed there.
+            </p>
 
-        <h2>Contact us. We usually respond within 24 &ndash; 48 hours.</h2>
-        <FormLayout>
-          <TextField
-            label="First name"
-            name="first"
-            value={this.state.first}
-            placeholder="First name"
-            onChange={this.handleChange}
-          />
+            <p>Contact us. We usually respond within 24 &ndash; 48 hours.</p>
+          </div>
+          <FormLayout>
+            <TextField
+              label="First name"
+              name="first"
+              value={this.state.first}
+              placeholder="First name"
+              onChange={this.handleChange}
+            />
 
-          <TextField
-            label="Last name"
-            name="last"
-            value={this.state.last}
-            placeholder="Last name"
-            onChange={this.handleChange}
-          />
+            <TextField
+              label="Last name"
+              name="last"
+              value={this.state.last}
+              placeholder="Last name"
+              onChange={this.handleChange}
+            />
 
-          <TextField
-            label="email"
-            name="email"
-            value={this.state.email}
-            placeholder="Email"
-            onChange={this.handleChange}
-          />
-          <textarea
-            value={this.state.question}
-            name="question"
-            placeholder="Enter your question here."
-            onChange={this.handleChange}
-          />
-          <button>Submit</button>
-        </FormLayout>
-      </Card>
+            <TextField
+              label="email"
+              name="email"
+              value={this.state.email}
+              placeholder="Email"
+              onChange={this.handleChange}
+            />
+            <textarea
+              value={this.state.question}
+              name="question"
+              placeholder="Enter your question here."
+              onChange={this.handleChange}
+            />
+            <button>Submit</button>
+          </FormLayout>
+        </Card>
+      </section>
     );
   }
 }

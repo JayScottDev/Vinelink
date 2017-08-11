@@ -352,7 +352,7 @@ module.exports.logsAggregateTotal = async (ctx, next) => {
 
 module.exports.generateLogExport = async ctx => {
   // TODO: get shopId
-  const shopId = 1; // ctx.session.shop_id; // FOR TEST ONLY
+  const shopId = ctx.session.shop_id;
   const {
     start = moment().subtract(1, 'year').toDate(),
     end = moment().toDate()

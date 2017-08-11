@@ -4,7 +4,7 @@ import { Page, Layout, Card } from '@shopify/polaris';
 import Profile from './Profile';
 import Account from './Account';
 import Notifications from './Notifications';
-import Billing from './Billing';
+import Integrations from './Integrations';
 import Support from './Support';
 import Faq from './Faq';
 import Override from './Override';
@@ -24,17 +24,22 @@ const Settings = props => {
           </Card>
         </Layout.Section>
         <Layout.Section>
-          <Route path={`${match.url}/profile`} component={Profile} />
-          <Route path={`${match.url}/account`} component={Account} />
-          <Route
-            path={`${match.url}/notifications`}
-            component={Notifications}
-          />
-          <Route path={`${match.url}/billing`} component={Billing} />
-          <Route path={`${match.url}/support`} component={Support} />
-          <Route path={`${match.url}/faq`} component={Faq} />
-          <Route path={`${match.url}/override`} component={Override} />
-          <Route path={`${match.url}/status`} component={Status} />
+          <div className="settings">
+            <Route path={`${match.url}/profile`} component={Profile} />
+            <Route path={`${match.url}/account`} component={Account} />
+            <Route
+              path={`${match.url}/integrations`}
+              component={Integrations}
+            />
+            <Route
+              path={`${match.url}/notifications`}
+              component={Notifications}
+            />z
+            <Route path={`${match.url}/support`} component={Support} />
+            <Route path={`${match.url}/faq`} component={Faq} />
+            <Route path={`${match.url}/override`} component={Override} />
+            <Route path={`${match.url}/status`} component={Status} />
+          </div>
         </Layout.Section>
       </Layout>
     </Page>

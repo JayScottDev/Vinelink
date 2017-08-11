@@ -4,6 +4,8 @@ import * as PropTypes from 'prop-types';
 import { Page } from '@shopify/polaris';
 import Main from './pages/Main';
 
+import '@shopify/polaris/styles.css';
+
 import '../styles/app.scss';
 
 const App = props => {

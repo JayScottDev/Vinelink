@@ -1,6 +1,7 @@
 $sky: #DFE4E8;
 $indigo: #5C6AC4;
 $white: #fff;
+$red: #ED6347;
 
 table {
   width: 100%;
@@ -25,6 +26,21 @@ tr:last-of-type {
   }
 }
 
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column;
+  height: 100vh;
+
+  & img {
+    width: 150px;
+    animation: loaderAnimation 2500ms infinite;
+    animation-timing-function: ease;
+    margin-bottom: 30px;
+  }
+}
+
 .align-right {
   // text-align: right;
 }
@@ -39,4 +55,27 @@ tr:last-of-type {
 .btn--submit {
   background-color: $indigo;
   color: $white;
+}
+
+.btn--delete {
+  color: $white;
+  background-color: $red;
+
+}
+
+.Polaris-Page__Content {
+  margin-top: 3em;
+}
+
+h2 {
+  font-size: 26px;
+  line-height: 32px;
+  font-weight: 400;
+  letter-spacing: auto;
+}
+
+@keyframes loaderAnimation {
+  0%   { opacity:0; }
+  50%  { opacity:1; }
+  100% { opacity:0; }
 }

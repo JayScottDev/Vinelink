@@ -6,7 +6,7 @@ import '../../styles/nav.scss';
 const Nav = props => {
   return (
     <section className="nav">
-      <ul className="nav__list">
+      <ul className="nav__list nav__list--main">
         <li className="nav__item">
           <NavLink to="/dashboard" activeClassName="nav__active">
             Dashboard
@@ -14,9 +14,11 @@ const Nav = props => {
         </li>
         <li className="nav__item">
           <NavLink to="/export" activeClassName="nav__active">
-            Dataexport
+            Data export
           </NavLink>
         </li>
+      </ul>
+      <ul className="nav__list nav__list--secondary">
         <li className="nav__item">
           <NavLink to="/install" activeClassName="nav__active">
             Install snippet

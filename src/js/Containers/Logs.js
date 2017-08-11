@@ -13,7 +13,6 @@ class Logs extends Component {
     this.state = {
       currentPage: 0,
       pages: 0,
-      rowsPerPage: 10,
       rows: []
     };
 
@@ -42,7 +41,7 @@ class Logs extends Component {
 
   setPages () {
     const { data } = logs;
-    const pages = Math.ceil(data.length / this.state.rowsPerPage);
+    const pages = Math.ceil(data.length / this.props.rowsPerPage);
     this.setState({ pages });
   }
 
@@ -65,8 +64,8 @@ class Logs extends Component {
   }
 
   getIndices () {
-    const { currentPage, rowsPerPage } = this.state;
-    console.log('CURRENT PAGE', currentPage);
+    const { currentPage } = this.state;
+    const { rowsPerPage } = this.props;
     const firstIndex = currentPage * rowsPerPage;
     const secondIndex = firstIndex + rowsPerPage;
     return [firstIndex, secondIndex];
@@ -77,7 +76,6 @@ class Logs extends Component {
     const start = indecies[0];
     const end = indecies[1];
     const { data } = logs;
-    console.log('DATA', this.props.data);
     let page = this.state.pages > 1 ? data.slice(start, end) : data;
     const rows = page.map((row, i) => {
       const status = row.compliant ? 'compliant' : 'denied';
@@ -107,25 +105,15 @@ class Logs extends Component {
     this.setState({ rows });
   }
 
-  // componentDidMount () {
-  //   this.props.fetchLogsLog('/compliance/logs');
-  // }
-
-  // shouldComponentUpdate (nextProps, nextState) {
-  //   return this.props.logs !== nextProps.logs
-  // }
-
   formatDate (date) {
     return moment(date).format('MMM DD [@] h:mm a');
   }
 
   formatCurrancy (amount) {
-    console.log(amount.toString().split('').reverse());
     return amount / 100;
   }
 
   render () {
-    console.log('LOGS RENDER FUNCTION');
     const { rows } = this.state;
     return (
       <Layout.Section>

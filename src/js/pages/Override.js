@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { fetchStateComplianceList } from '../actions';
 import { Card } from '@shopify/polaris';
 
 class Override extends Component {
@@ -8,8 +9,11 @@ class Override extends Component {
     super(props);
     this.state = {};
   }
-  componentDidMount () {}
+  componentDidMount () {
+    this.props.fetchStateComplianceList('/compliance/list');
+  }
   render () {
+    console.log('STATES', this.props.stateCompliance);
     return (
       <Card sectioned title="Override states">
         <h2>Caution!</h2>
@@ -33,9 +37,18 @@ class Override extends Component {
 }
 
 const mapStateToProps = state => {
-  return {};
+  return {
+    stateCompliance: state.stateCompliance
+  };
 };
 
-const mapDispatchToProps = dispatch => {};
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchStateComplianceList: bindActionCreators(
+      fetchStateComplianceList,
+      dispatch
+    )
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Override);

@@ -57,7 +57,6 @@ class TileDetail extends Component {
 
   getIndex () {
     const { currentPage, rowsPerPage } = this.state;
-    console.log('CURRENT PAGE', currentPage);
     const firstIndex = currentPage * rowsPerPage;
     const secondIndex = firstIndex + rowsPerPage;
     return [firstIndex, secondIndex];
@@ -67,12 +66,10 @@ class TileDetail extends Component {
     const indecies = this.getIndex();
     const start = indecies[0];
     const end = indecies[1];
-    console.log('DATA', this.props.data);
     let page =
       this.state.pages > 1
         ? this.props.data.slice(start, end)
         : this.props.data;
-    console.log('PAGE', page);
     const rows = page.map((row, i) => {
       return (
         <tr>

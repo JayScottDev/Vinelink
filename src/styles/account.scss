@@ -1,0 +1,11 @@
+.account {
+  h2 {
+    font-size: 20px;
+    line-height: 24px;
+    font-weight: 400;
+    letter-spacing: auto;
+  }
+  &__delete {
+    margin-top: 30px;
+  }
+}

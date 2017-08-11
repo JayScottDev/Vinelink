@@ -9,8 +9,6 @@ import '../../styles/totals.scss';
 
 import totals from '../../data/totals';
 
-console.log(totals);
-
 class Totals extends Component {
   constructor (props) {
     super(props);

@@ -1,21 +1,36 @@
 $ink: #454F5B;
+$nav: #40474c;
+$grey: #828282;
 
 .nav {
-  padding: 30px 0 10px;
+  background-color: $nav;
+  height: 50px;
+  margin-top: 95px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  padding: 0 30px;
+
   &__list {
     list-style: none;
+    padding-left: 0;
+    height: 100%;
   }
   &__item {
     display: inline-block;
-    text-transform: uppercase;
     margin-right: 30px;
-    font-weight: 800;
-    font-size: 22px;
+    font-size: 15px;
+    height: 100%;
   }
 
-  &__item a {
-    color: $ink;
-    padding-bottom: 5px;
+  &__item > a {
+    color: $grey;
+    height: 100%;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
   }
 
   &__item a:active {
@@ -27,7 +42,12 @@ $ink: #454F5B;
   }
 
   &__active {
-    border-bottom: 4px solid $ink;
+    background-color: #f4f6f8;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+    font-weight: 800;
+    color: $grey;
+
   }
 
 }

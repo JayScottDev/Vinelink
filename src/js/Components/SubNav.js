@@ -17,9 +17,6 @@ const SubNav = ({ match }) => {
           <Link to={`${match.url}/notifications`}>Notifications</Link>
         </li>
         <li className="sub-nav__item">
-          <Link to={`${match.url}/billing`}>Billing</Link>
-        </li>
-        <li className="sub-nav__item">
           <Link to={`${match.url}/support`}>Support</Link>
         </li>
         <li className="sub-nav__item">

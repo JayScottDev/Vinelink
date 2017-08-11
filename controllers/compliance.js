@@ -94,6 +94,7 @@ module.exports.listShopCompliance = async (ctx, next) => {
     limit: limit,
     offset: offset
   });
+  console.log('COMPLIANCE ------->', compliances);
   return ctx.respond(200, compliances);
 };
 

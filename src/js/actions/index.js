@@ -68,10 +68,27 @@ const fetchShopInfo = path => {
   };
 };
 
+const fetchStateComplianceList = path => {
+  return {
+    types: [
+      'FETCH_STATE_COMPLIANCE_REQUEST',
+      'FETCH_STATE_COMPLIANCE_SUCCESS',
+      'FETCH_STATE_COMPLIANCE_FAILURE'
+    ],
+    shouldCallAPI: state => true,
+    callAPI: () =>
+      fetch(path, {
+        credentials: 'same-origin'
+      }),
+    payload: {}
+  };
+};
+
 export {
   fetchLogsState,
   fetchLogsDate,
   fetchLogsTotal,
   fetchLogsLog,
-  fetchShopInfo
+  fetchShopInfo,
+  fetchStateComplianceList
 };
