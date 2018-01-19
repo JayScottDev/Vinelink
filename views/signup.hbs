@@ -1,0 +1,46 @@
+<div class="column 4">
+  <article>
+    <div class="card">
+      <h1>{{title}}</h1>
+      <h2>VineLink Info</h2>
+      <form action="/compliancy-connector/signup" method="POST">
+        <div class="row">
+          <label>First name: </label>
+          <input type="text" name="first_name" placeholder="first name" />
+        </div>
+        <div class="row">
+          <label>Last name: </label>
+          <input type="text" name="last_name" placeholder="last name" />
+        </div>
+        <div class="row">
+          <label>Email: </label>
+          <input type="email" name="email" placeholder="email" />
+        </div>
+        <div class="row">
+          <label>Username: </label>
+          <input type="text" name="username" placeholder="username" />
+        </div>
+        <div class="row">
+          <label>Password: </label>
+          <input type="password" name="password" placeholder="password" />
+        </div>
+        <div class="row">
+          <label>Confirm password: </label>
+          <input type="password" name="password_confirm" placeholder="confirm password" />
+        </div> 
+
+        <h2>Ship Compliant Info</h2>
+
+        <div class="row">
+          <label>Ship Compliant username: </label>
+          <input type="text" name="sc_username" placeholder="ship compliant username" />
+        </div>
+        <div class="row">
+          <label>Ship Compliant password: </label>
+          <input type="password" name="sc_password" placeholder="ship compliant password" />
+        </div>
+        <button type="submit" class="secondary">Submit</button>
+      </form>
+    </div>
+  </article>
+</div>

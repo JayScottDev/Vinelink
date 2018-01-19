@@ -1,0 +1,10 @@
+# cron jobs
+
+cron:
+- description: Sync orders tracking
+  url: /orders/sync
+  schedule: every 20 minutes
+- description: Sync shop compliances
+  url: /compliance/tasks/sync
+  schedule: every day 04:00
+  timezone: America/Los_Angeles

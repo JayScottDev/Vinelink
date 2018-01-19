@@ -1,0 +1,46 @@
+{
+  "order": {
+    "map": {
+      "Request.SalesOrder.BillTo.City": "billing_address.city",
+      "Request.SalesOrder.BillTo.Company": "billing_address.company",
+      "Request.SalesOrder.BillTo.Country": "billing_address.country",
+      "Request.SalesOrder.BillTo.FirstName": "billing_address.first_name",
+      "Request.SalesOrder.BillTo.LastName": "billing_address.last_name",
+      "Request.SalesOrder.BillTo.Phone": "billing_address.phone",
+      "Request.SalesOrder.BillTo.State": "billing_address.province_code",
+      "Request.SalesOrder.BillTo.Street1": "billing_address.address1",
+      "Request.SalesOrder.BillTo.Street2": "billing_address.address2",
+      "Request.SalesOrder.BillTo.Zip1": "billing_address.zip",
+      "Request.SalesOrder.CustomerKey": "customer.id",
+      "Request.SalesOrder.ExternalCustomerKey": "customer.id",
+      "Request.SalesOrder.ExternalSalesOrderKey": "id",
+      "Request.SalesOrder.Payments.Payment.Amount": "total_price",
+      "Request.SalesOrder.Payments.Payment.Type": "processing_method",
+      "Request.SalesOrder.Payments.Payment.TransactionID": "checkout_id",
+      "Request.SalesOrder.PurchaseDate": "created_at",
+      "Request.SalesOrder.SalesOrderKey": "id",
+      "Request.SalesOrder.Shipments.Shipment.ShipTo.City": "shipping_address.city",
+      "Request.SalesOrder.Shipments.Shipment.ShipTo.Company": "shipping_address.company",
+      "Request.SalesOrder.Shipments.Shipment.ShipTo.Country": "shipping_address.country",
+      "Request.SalesOrder.Shipments.Shipment.ShipTo.FirstName": "shipping_address.first_name",
+      "Request.SalesOrder.Shipments.Shipment.ShipTo.LastName": "shipping_address.last_name",
+      "Request.SalesOrder.Shipments.Shipment.ShipTo.Phone": "shipping_address.phone",
+      "Request.SalesOrder.Shipments.Shipment.ShipTo.State": "shipping_address.province_code",
+      "Request.SalesOrder.Shipments.Shipment.ShipTo.Street1": "shipping_address.address1",
+      "Request.SalesOrder.Shipments.Shipment.ShipTo.Street2": "shipping_address.address2",
+      "Request.SalesOrder.Shipments.Shipment.ShipTo.Zip1": "shipping_address.zip",
+      "Request.SalesOrder.Shipments.Shipment.Shipping": "shipping_lines[0].price",
+      "Request.SalesOrder.Shipments.Shipment.ShippingKey": "id",
+      "Request.SalesOrder.Shipments.Shipment.SpecialInstructions": "id",
+      "Request.SalesOrder.SalesTaxCollected": "total_tax"
+    },
+    "arrays": {
+      "Request.SalesOrder.Shipments.Shipment.ShipmentItems.ShipmentItem:line_items": {
+        "ProductKey": "sku",
+        "BrandKey": "vendor",
+        "ProductQuantity": "quantity",
+        "ProductUnitPrice": "price"
+      }
+    }
+  }
+}

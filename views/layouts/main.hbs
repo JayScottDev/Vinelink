@@ -1,0 +1,27 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Ship Compliant</title>
+  <script src="https://cdn.shopify.com/s/assets/external/app.js"></script>
+  <script type="text/javascript">
+      ShopifyApp.init({
+        apiKey: '{{apiKey}}',
+        shopOrigin: "https://{{shop}}",
+        debug: true
+      });
+      ShopifyApp.ready(function () {
+        ShopifyApp.Bar.initialize({
+          title: 'Compliancy Connector',
+        });
+      });
+  </script>
+  <link rel="stylesheet" href="/styles/uptown.css">
+</head>
+
+<body>
+
+  {{{body}}}
+
+</body>
+</html>

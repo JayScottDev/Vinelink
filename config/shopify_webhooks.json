@@ -1,0 +1,12 @@
+{
+  "webhooks": [
+    {
+      "topic": "orders/create",
+      "path": "orders/create"
+    },
+    {
+      "topic": "orders/cancelled",
+      "path": "orders/cancel"
+    }
+  ]
+}
