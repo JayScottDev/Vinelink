@@ -7,7 +7,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "start": ". config/index.env",
+    "start": ". config/index.env && . config/production.env && node index.js",
     "dev": "NODE_ENV=development . config/index.env && . config/local.env && nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "./node_modules/.bin/eslint --ignore-path .gitignore .",
