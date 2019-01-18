@@ -1,0 +1,34 @@
+.tile-aggregate__row {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: justify;
+      justify-content: space-between;
+}
+
+.tile-aggregate__compliant {
+  border-top: 4px solid green;
+}
+
+.tile-aggregate__compliant h3 {
+  color: green;
+}
+
+.tile-aggregate__compliant .tile-aggregate__digits {
+  color: green;
+  font-weight: 600;
+}
+
+.tile-aggregate__noncompliant {
+  border-top: 4px solid red;
+}
+
+.tile-aggregate__noncompliant h3 {
+  color: red;
+}
+
+.tile-aggregate__noncompliant .tile-aggregate__digits {
+  color: red;
+  font-weight: 600;
+}
+
+/*# sourceMappingURL=main.css.map*/

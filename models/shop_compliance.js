@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
 module.exports = (sequelize) => {
-  sequelize.define('shop_compliance', {
+  return sequelize.define('shop_compliance', {
     shop_id: {
       type: Sequelize.INTEGER,
       unique: 'shop_state'

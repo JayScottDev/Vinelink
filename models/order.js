@@ -81,4 +81,5 @@ module.exports = (sequelize) => {
       fields: ['shop_id', 'order_key']
     }]
   });
+  return Order;
 };

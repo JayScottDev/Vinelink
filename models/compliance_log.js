@@ -48,4 +48,5 @@ module.exports = (sequelize) => {
       fields: ['shop_id', 'location_state']
     }]
   });
+  return ComplianceLog;
 };
